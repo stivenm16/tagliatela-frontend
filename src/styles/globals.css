@@ -1,0 +1,84 @@
+@import "tailwindcss";
+
+/* 🌐 Base Light Theme Tokens */
+:root {
+  /* Primitive Values */
+  --white: #ffffff;
+  --black: #171717;
+
+  /* Backgrounds */
+  --background: #f3e9d7;
+  --surface: #fdf6ed;
+
+  /* Brand Colors */
+  --brand: #c42832;         /* Red for title */
+  --brand-dark: #460d21;    /* Deep purple for buttons */
+
+  /* Accents */
+  --accent-1: #ad6d6d;
+  --accent-2: #b97a7a;
+
+  /* Borders & Lines */
+  --border: #d9c2af;
+
+  /* Text Colors */
+  --text-primary: #2e0e1a;
+  --text-muted: #7e5e63;
+  --text-inverted: #ffffff;
+
+  /* Status Colors */
+  --success: #64a96a;
+  --error: #c0392b;
+
+  --font-sans: var(--font-geist-sans, Arial, sans-serif);
+  --font-mono: var(--font-geist-mono, monospace);
+}
+
+/* 🌙 Dark Theme Overrides */
+/* @media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --surface: #1a1a1a;
+    --text-primary: #ededed;
+    --text-inverted: #0a0a0a;
+    --border: #333333;
+  }
+} */
+
+/* 💡 Tailwind Theme Mapping */
+@theme inline {
+  /* Backgrounds */
+  --color-background: var(--background);
+  --color-surface: var(--surface);
+
+  /* Brand */
+  --color-brand: var(--brand);
+  --color-brand-dark: var(--brand-dark);
+
+  /* Accents */
+  --color-accent-1: var(--accent-1);
+  --color-accent-2: var(--accent-2);
+
+  /* Borders */
+  --color-border: var(--border);
+
+  /* Text */
+  --color-text-primary: var(--text-primary);
+  --color-text-muted: var(--text-muted);
+  --color-text-inverted: var(--text-inverted);
+
+  /* Status */
+  --color-success: var(--success);
+  --color-error: var(--error);
+
+  /* Fonts */
+  --font-sans: var(--font-sans);
+  --font-mono: var(--font-mono);
+}
+
+/* Base styles */
+body {
+  font-family: var(--font-sans);
+  background: var(--background);
+  color: var(--text-primary);
+}
