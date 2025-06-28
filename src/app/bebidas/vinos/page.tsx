@@ -1,5 +1,11 @@
+import Layout from '@/components/Layout'
+
 const Page = () => {
-  return <div>Page</div>
+  return (
+    <Layout>
+      <h1>Vinos</h1>
+    </Layout>
+  )
 }
 
 export default Page

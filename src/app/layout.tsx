@@ -24,9 +24,9 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" className="h-full">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-background text-accent-2`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-surface-2 text-accent-2 `}
       >
         <ReactQueryClientProvider>{children}</ReactQueryClientProvider>
       </body>

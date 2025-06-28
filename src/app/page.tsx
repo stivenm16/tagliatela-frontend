@@ -21,7 +21,7 @@ const Column = ({ title, items }: Column) => (
         <Link
           href={item.href}
           key={index}
-          className="text-[0.65rem]  text-brand-dark w-[8.5rem] py-2 list-none text-center bg-border"
+          className="text-[0.65rem]  text-brand-dark w-[8.5rem] py-2 list-none text-center bg-accent"
         >
           {item.title}
         </Link>
@@ -78,7 +78,7 @@ const fakeData = [
 ]
 export default function Home() {
   return (
-    <div className="flex flex-col items-center justify-center h-screen gap-10 text-white">
+    <div className="flex flex-col bg-surface-2 items-center justify-center h-screen gap-10 text-white">
       <Image
         src="/next.svg"
         alt="Next.js logo"

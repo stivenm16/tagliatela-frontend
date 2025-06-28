@@ -3,8 +3,10 @@ import Layout from '@/components/Layout'
 const Page = () => {
   return (
     <Layout>
-      <h1>No Disponibles</h1>
+      <p>Recomendados</p>
+      {/* Add more content or components as needed */}
     </Layout>
   )
 }
+
 export default Page
