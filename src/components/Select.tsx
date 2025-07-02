@@ -6,8 +6,8 @@ import { useEffect, useRef, useState } from 'react'
 interface CustomSelectProps {
   label: string
   options: string[]
-  selectedIndex?: number
-  onChange: (index: number) => void
+  selectedIndex?: number | null
+  onChange: (index: number | null) => void
 }
 
 export const CustomSelect: React.FC<CustomSelectProps> = ({

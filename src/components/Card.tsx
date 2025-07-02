@@ -1,13 +1,11 @@
-import Image from 'next/image'
 import { useState } from 'react'
 import { CardDialog } from './Dialog'
 
 interface CardProps {
-  img?: string
-  title?: string
-  description?: string
+  children: React.ReactNode
+  modalContent?: React.ReactNode
 }
-export const Card = ({ img, title, description }: CardProps) => {
+export const Card = ({ children, modalContent }: CardProps) => {
   const [isOpenDialog, setIsOpenDialog] = useState(false)
   const onCLick = () => {
     setIsOpenDialog(true)
@@ -20,18 +18,14 @@ export const Card = ({ img, title, description }: CardProps) => {
         className="w-[18rem]"
       >
         <div className="flex flex-col justify-center items-center gap-4  mt-5">
-          <Image src={img || ''} alt={title || ''} width={100} height={100} />
-          <h2>{title}</h2>
-          <p>{description}</p>
+          {modalContent}
         </div>
       </CardDialog>
       <div
-        className="w-[18rem] px-2 h-96 hover:bg-accent-2 bg-neutral-100 rounded-xl flex flex-col items-center justify-evenly gap-2 cursor-pointer"
+        className="w-[18rem] py-6 h-fit bg-neutral-50 rounded-xl flex flex-col items-center justify-evenly gap-2 cursor-pointer"
         onClick={onCLick}
       >
-        <Image src={img || ''} alt={title || ''} width={150} height={50} />
-        <h2>{title}</h2>
-        <p>{description}</p>
+        {children}
       </div>
     </>
   )
