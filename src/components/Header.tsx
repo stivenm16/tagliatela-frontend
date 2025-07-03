@@ -1,22 +1,26 @@
 'use client'
 
-import { usePathname, useRouter } from 'next/navigation'
+import { usePathname } from 'next/navigation'
 
+import colorMatcher from '@/utils/colorMatcher'
+import Link from 'next/link'
 import { ArrowLeft } from './Icons/ArrowLeft'
 
 export const Header = () => {
   const path = usePathname()
-  const router = useRouter()
-  const handleBack = () => {
-    router.back()
-  }
   return (
-    <div className="bg-surface relative uppercase h-20 flex justify-center items-center">
-      <div className="absolute top-[35%] left-10" onClick={handleBack}>
+    <div
+      style={{
+        backgroundColor: colorMatcher(path.split('/').filter(Boolean)[0]),
+        color: 'white',
+      }}
+      className={`relative uppercase h-20 flex justify-center items-center`}
+    >
+      <Link className="absolute top-[35%] left-10" href={'/'}>
         <ArrowLeft className={''} />
-      </div>
+      </Link>
       <span className=" w-full items-center text-xl justify-center text-center">
-        {path.split('/').pop()}
+        {path.split('/').pop()?.split('-').join(' ')?.toUpperCase() || 'Home'}
       </span>
     </div>
   )

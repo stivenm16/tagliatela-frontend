@@ -1,10 +1,8 @@
-import Layout from '@/components/Layout'
-
 const Page = () => {
   return (
-    <Layout>
+    <div>
       <h1>Salsa</h1>
-    </Layout>
+    </div>
   )
 }
 

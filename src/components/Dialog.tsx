@@ -1,6 +1,8 @@
+import CloseBtn from '@/assets/svgs/close-modal-btn.svg'
 import { Dialog, DialogContent } from '@/components/ui/dialog'
 import { DialogTitle } from '@radix-ui/react-dialog'
 import { VisuallyHidden } from '@radix-ui/react-visually-hidden'
+import Image from 'next/image'
 
 interface DialogProps {
   open?: boolean
@@ -16,11 +18,21 @@ export const CardDialog = ({
   className,
 }: DialogProps) => {
   return (
-    <Dialog open={open} onOpenChange={onChangeOpen}>
+    <Dialog open={open}>
       <VisuallyHidden>
         <DialogTitle></DialogTitle>
       </VisuallyHidden>
-      <DialogContent className={className}>{children}</DialogContent>
+      <DialogContent showCloseButton={false} className={className}>
+        {children}
+        <Image
+          src={CloseBtn}
+          alt="Next.js logo"
+          width={35}
+          height={20}
+          onClick={() => onChangeOpen && onChangeOpen(false)}
+          className="absolute -right-4 -top-4"
+        />
+      </DialogContent>
     </Dialog>
   )
 }
