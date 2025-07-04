@@ -92,20 +92,16 @@ export default function Home() {
           {fakeData.map((column, index) => (
             <Link
               href={column.items[0].href}
-              className={`flex  h-52 w-52 justify-center text-wrap flex-row items-center uppercase rounded-xl ${column.color} p-3`}
+              className={`flex  h-52 w-52 justify-center text-wrap flex-row  font-bold items-center uppercase rounded-xl ${column.color} p-3`}
               key={index}
             >
               <span className="text-center">{column.title}</span>
             </Link>
-          ))}
-
-          {/* {fakeData.map((column, index) => (
-            <Column key={index} title={column.title} items={column.items} />
-          ))} */}
+          ))}          
         </div>
         <Link
           href={'/novedades/platos'}
-          className={`flex  w-full mt-8 justify-center text-wrap flex-row items-center uppercase rounded-md bg-news-main p-3`}
+          className={`flex  w-full mt-8 justify-center text-wrap font-bold flex-row items-center uppercase rounded-md bg-news-main p-3`}
         >
           <span className="text-center">{'Novedades'}</span>
         </Link>

@@ -70,11 +70,7 @@ export const Card = ({
         </div>
       </CardDialog>
 
-      <div
-        className={`relative cursor-pointer`}
-        onClick={handleCardClick}
-        style={{ height, width }}
-      >
+      <div className={``} onClick={handleCardClick} style={{ height, width }}>
         <div
           className={`transition-transform duration-500 relative w-full h-full`}
           style={{
@@ -89,7 +85,7 @@ export const Card = ({
             }`}
           >
             <div className={`w-full h-full ${backgroundCard} rounded-lg `}>
-              <div className="pointer-events-auto">{children}</div>
+              <div className="">{children}</div>
               {isFlippable && (
                 <FlipButton onClick={toggleFlip} isFlipped={isFlipped} />
               )}
