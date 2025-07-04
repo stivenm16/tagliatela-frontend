@@ -6,3 +6,9 @@ export interface Sauce {
   highlightedContent: string
   isSuggested: boolean
 }
+
+export interface FilterSaucesOption {
+  selectedValue: number[]
+  options: { value: string; label: string }[]
+  placeHolder: string
+}

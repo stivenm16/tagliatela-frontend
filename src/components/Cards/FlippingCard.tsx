@@ -46,7 +46,6 @@ export const Card = ({
 
   const handleCardClick = (e: React.MouseEvent) => {
     e.stopPropagation()
-    console.log('nested')
     if (!isModalAvailable) return
 
     // If the card is flipped, we don't open the dialog

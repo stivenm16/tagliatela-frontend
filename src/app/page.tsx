@@ -106,6 +106,7 @@ export default function Home() {
           <span className="text-center">{'Novedades'}</span>
         </Link>
       </div>
+      
     </div>
   )
 }

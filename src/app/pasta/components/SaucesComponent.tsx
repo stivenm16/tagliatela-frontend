@@ -15,18 +15,23 @@ interface SaucesComponentProps {
   sauces: Sauce[]
   toggleSauceSelection: (id: number) => void
   selectedSauceId: number | null
+  showTitle?: boolean
 }
 const SaucesComponent = ({
   sauces,
   toggleSauceSelection,
   selectedSauceId,
+  showTitle = true,
 }: SaucesComponentProps) => {
   return (
     <div className="flex flex-col items-center justify-center mt-10">
-      <h2 className="font-bold text-2xl uppercase text-pasta-main mb-6">
-        Salsa disponibles
-      </h2>
-      <div className="flex flex-wrap justify-center w-full gap-2">
+      {showTitle && (
+        <h2 className="font-bold text-2xl uppercase text-pasta-main mb-6">
+          Salsa disponibles
+        </h2>
+      )}
+
+      <div className="flex flex-wrap px-12 w-full gap-2">
         {sauces.map((sauce) => (
           <label
             key={sauce.id}
@@ -69,9 +74,7 @@ const SaucesComponent = ({
                 {sauce.title}
                 {sauce.isNew && <NewDishFloatingButton styles={{}} />}
               </h3>
-              <p className="leading-[20px] font-extralight italic">
-                {sauce.description}
-              </p>
+              <p className="leading-[20px] font-light ">{sauce.description}</p>
             </div>
           </label>
         ))}

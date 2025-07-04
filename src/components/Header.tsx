@@ -1,13 +1,19 @@
 'use client'
 
-import { usePathname } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 
 import colorMatcher from '@/utils/colorMatcher'
+import { HomeIcon } from 'lucide-react'
 import Link from 'next/link'
 import { ArrowLeft } from './Icons/ArrowLeft'
 
 export const Header = () => {
   const path = usePathname()
+  const router = useRouter()
+  const handleGoBack = () => {
+    router.back()
+  }
+
   return (
     <div
       style={{
@@ -16,12 +22,16 @@ export const Header = () => {
       }}
       className={`relative uppercase h-20 flex justify-center items-center`}
     >
-      <Link className="absolute top-[35%] left-10" href={'/'}>
+      <div onClick={handleGoBack} className="absolute left-5 cursor-pointer">
         <ArrowLeft className={''} />
-      </Link>
+      </div>
+
       <span className=" w-full items-center text-xl justify-center text-center">
         {path.split('/').pop()?.split('-').join(' ')?.toUpperCase() || 'Home'}
       </span>
+      <Link className="absolute top-[35%] right-5" href={'/'}>
+        <HomeIcon />
+      </Link>
     </div>
   )
 }

@@ -2,6 +2,7 @@
 import PastaImg from '@/assets/images/pasta-image-reference.png'
 import { Card } from '@/components/Cards/FlippingCard'
 import Image from 'next/image'
+import Link from 'next/link'
 
 const NewDishFloatingButton = () => {
   return (
@@ -38,26 +39,28 @@ const Page = () => {
           </h3>
           <div className="flex gap-5 flex-wrap gap-x-5 gap-y-24">
             {fakeData.map((item) => (
-              <Card
-                key={item.id}
-                isFlippable={false}
-                backgroundCard=""
-                height="7rem"
-                width="9rem"
-                isModalAvailable={false}
-              >
-                <div className="flex flex-col w-full h-full gap-3 relative">
-                  {item.isNew && <NewDishFloatingButton />}
-                  <Image
-                    src={PastaImg}
-                    alt={item.title}
-                    className="w-full h-40"
-                    width={40}
-                    height={100}
-                  />
-                  <h2 className="text-center uppercase">{item.title}</h2>
-                </div>
-              </Card>
+              <Link href={`/pasta/pasta/${item.id}`} key={item.id}>
+                <Card
+                  key={item.id}
+                  isFlippable={false}
+                  backgroundCard=""
+                  height="7rem"
+                  width="9rem"
+                  isModalAvailable={false}
+                >
+                  <div className="flex flex-col w-full h-full gap-3 relative">
+                    {item.isNew && <NewDishFloatingButton />}
+                    <Image
+                      src={PastaImg}
+                      alt={item.title}
+                      className="w-full h-40"
+                      width={40}
+                      height={100}
+                    />
+                    <h2 className="text-center uppercase">{item.title}</h2>
+                  </div>
+                </Card>
+              </Link>
             ))}
           </div>
         </div>
@@ -65,26 +68,28 @@ const Page = () => {
           <h3 className="text-left font-bold my-6 uppercase">Pasta Ripiena</h3>
           <div className="flex gap-x-5 gap-y-24 flex-wrap ">
             {fakeData2.map((item) => (
-              <Card
-                key={item.id}
-                isFlippable={false}
-                backgroundCard="bg-transparent"
-                height="7rem"
-                width="9rem"
-                isModalAvailable={false}
-              >
-                <div className="flex flex-col w-full h-full  gap-3 relative">
-                  {item.isNew && <NewDishFloatingButton />}
-                  <Image
-                    src={PastaImg}
-                    alt={item.title}
-                    className="w-full h-40"
-                    width={40}
-                    height={100}
-                  />
-                  <h2 className="text-center uppercase">{item.title}</h2>
-                </div>
-              </Card>
+              <Link href={`/pasta/pasta/${item.id}`} key={item.id}>
+                <Card
+                  key={item.id}
+                  isFlippable={false}
+                  backgroundCard="bg-transparent"
+                  height="7rem"
+                  width="9rem"
+                  isModalAvailable={false}
+                >
+                  <div className="flex flex-col w-full h-full  gap-3 relative">
+                    {item.isNew && <NewDishFloatingButton />}
+                    <Image
+                      src={PastaImg}
+                      alt={item.title}
+                      className="w-full h-40"
+                      width={40}
+                      height={100}
+                    />
+                    <h2 className="text-center uppercase">{item.title}</h2>
+                  </div>
+                </Card>
+              </Link>
             ))}
           </div>
         </div>
