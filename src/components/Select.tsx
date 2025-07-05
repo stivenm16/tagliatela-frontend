@@ -3,11 +3,16 @@
 import { ChevronDown } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
 
+interface Option {
+  label: string
+  value: string
+}
 interface CustomSelectProps {
   label: string
-  options: string[]
+  options: Option[]
   selectedIndex?: number | null
   onChange: (index: number | null) => void
+  customStyles?: React.CSSProperties
 }
 
 export const CustomSelect: React.FC<CustomSelectProps> = ({
@@ -15,6 +20,7 @@ export const CustomSelect: React.FC<CustomSelectProps> = ({
   options,
   selectedIndex = 0,
   onChange,
+  customStyles = {},
 }) => {
   const [open, setOpen] = useState(false)
   const wrapperRef = useRef<HTMLDivElement>(null)
@@ -35,10 +41,14 @@ export const CustomSelect: React.FC<CustomSelectProps> = ({
   }, [])
 
   return (
-    <div ref={wrapperRef} className="relative w-64 text-sm font-medium">
+    <div
+      ref={wrapperRef}
+      className="relative text-sm font-medium "
+      style={customStyles}
+    >
       <button
         onClick={() => setOpen((prev) => !prev)}
-        className="flex items-center justify-between w-full rounded-md bg-[#5B0D31] px-4 py-2 text-white shadow-md transition-all duration-200"
+        className="flex items-center justify-between w-full rounded-md bg-[#5B0D31] px-4 py-2 uppercase text-white shadow-md transition-all duration-200"
       >
         <span>{label}</span>
         <ChevronDown
@@ -74,7 +84,7 @@ export const CustomSelect: React.FC<CustomSelectProps> = ({
                     : 'border-[#5B0D31]'
                 }`}
               />
-              <span className="text-[#5B0D31]">{option}</span>
+              <span className="text-[#5B0D31] uppercase">{option.label}</span>
             </li>
           ))}
         </ul>

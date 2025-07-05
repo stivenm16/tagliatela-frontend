@@ -8,6 +8,7 @@ interface CustomMultiSelectProps {
   options: string[]
   selectedIndices?: number[]
   onChange: (newSelected: number[]) => void
+  variant?: 'check-meeting' | 'no-disponibles'
 }
 
 export const CustomMultiSelect: React.FC<CustomMultiSelectProps> = ({
@@ -15,6 +16,7 @@ export const CustomMultiSelect: React.FC<CustomMultiSelectProps> = ({
   options,
   selectedIndices = [],
   onChange,
+  variant,
 }) => {
   const [open, setOpen] = useState(false)
   const wrapperRef = useRef<HTMLDivElement>(null)
@@ -42,13 +44,24 @@ export const CustomMultiSelect: React.FC<CustomMultiSelectProps> = ({
     }
   }
 
+  const variantCheked = () => {
+    if (variant == 'check-meeting') {
+      return selectedIndices.length > 0
+        ? 'bg-news-main'
+        : 'bg-checkmeeting-main'
+    } else {
+      return selectedIndices.length > 0
+        ? 'bg-news-main'
+        : 'bg-not-available-main'
+    }
+  }
   return (
     <div ref={wrapperRef} className="relative w-64 text-sm font-medium">
       <button
         onClick={() => setOpen((prev) => !prev)}
-        className="flex items-center justify-between w-full rounded-md bg-[#5B0D31] px-4 py-2 text-white shadow-md transition-all duration-200"
+        className={`flex items-center justify-between w-full rounded-md ${variantCheked()} px-4 py-2 text-white shadow-md transition-all duration-200`}
       >
-        <span>{label}</span>
+        <span className="uppercase font-bold">{label}</span>
         <ChevronDown
           size={16}
           className={`transition-transform duration-200 ${
@@ -79,7 +92,7 @@ export const CustomMultiSelect: React.FC<CustomMultiSelectProps> = ({
                     : 'border-[#5B0D31]'
                 }`}
               />
-              <span className="text-[#5B0D31]">{option}</span>
+              <span className="text-[#5B0D31] uppercase">{option}</span>
             </li>
           ))}
         </ul>

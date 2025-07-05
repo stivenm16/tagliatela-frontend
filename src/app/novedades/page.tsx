@@ -1,10 +1,8 @@
-import Layout from '@/components/Layout'
-
 const Page = () => {
   return (
-    <Layout>
+    <div>
       <h1>Novedades</h1>
-    </Layout>
+    </div>
   )
 }
 

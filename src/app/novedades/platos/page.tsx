@@ -1,99 +1,142 @@
 'use client'
-import { InfoButton } from '@/components/buttons/InfoButton'
-import { CustomMultiSelect } from '@/components/buttons/MultiSelect'
-import { Card } from '@/components/Card'
-import { ExpandableSection } from '@/components/ExpandableSection'
+import CardReferenceImage from '@/assets/images/card-reference-image.png'
+import InfoDark from '@/assets/svgs/help-circle-dark.svg'
+import InfoLight from '@/assets/svgs/help-circle-light.svg'
+import { Card } from '@/components/Cards/Card'
+import { CardDialog } from '@/components/Dialog/Dialog'
+import {
+  default as GeneralDialog,
+  default as GeneralDialogContent,
+} from '@/components/Dialog/GeneralDialog'
 import Layout from '@/components/Layout'
-import { CustomSelect } from '@/components/Select'
 import Image from 'next/image'
 import { useState } from 'react'
 
-const Page = () => {
-  const [selected, setSelected] = useState<number | null>(null)
-  const [multiSelected, setMultiSelected] = useState<number[]>([])
+interface ItemProps {
+  title: string
+  description: string
+  href?: string
+  origin?: string
+  isFlipped?: boolean
+}
+const ClickableItem = ({ title, description, isFlipped }: ItemProps) => {
+  const [isOpenDialog, setIsOpenDialog] = useState(false)
+  const handleClick = (e: React.MouseEvent) => {
+    e.stopPropagation()
+    e.preventDefault()
+    setIsOpenDialog(true)
+  }
 
-  const options = [
-    'Lasagna',
-    'Risotto',
-    'Pollo alla Cacciatora',
-    'Bistecca',
-    'Melanzane alla Parmigiana',
-  ]
-  const fakeData = Array.from({ length: 20 }, (_, i) => ({
+  return (
+    <li>
+      <CardDialog
+        open={isOpenDialog}
+        onChangeOpen={setIsOpenDialog}
+        className="w-[40rem] h-[38rem] flex flex-col items-center justify-center"
+      >
+        <GeneralDialogContent
+          title={title}
+          description={description}
+          img={CardReferenceImage}
+          origin="Italiano"
+        />
+      </CardDialog>
+      <div className="flex mr-auto gap-3" onClick={handleClick}>
+        {!isFlipped ? (
+          <Image src={InfoLight} alt={title} />
+        ) : (
+          <Image src={InfoDark} alt={title} />
+        )}
+        <span>{title}</span>
+      </div>
+    </li>
+  )
+}
+
+const Page = () => {
+  const fakeData = Array.from({ length: 10 }, (_, i) => ({
     id: i + 1,
-    title: `Plato ${i + 1}`,
-    description: `Descripción del plato ${i + 1}`,
-    img: `https://picsum.photos/200/300?random=${i + 1}`,
+    title: `Queso Taleggio DOP ${i + 1}`,
+    description: `Queso de vaca, semiblando, cremoso y untuoso al untar. ${
+      i + 1
+    }`,
+  }))
+
+  const fakeIngredients = Array.from({ length: 3 }, (_, i) => ({
+    id: i + 1,
+    name: `Ingrediente ${i + 1}`,
+    description: `Descripción del ${i + 1}`,
   }))
   return (
     <Layout>
-      <div className="flex flex-col items-center justify-center px-5 gap-10">
-        {multiSelected.length > 0 && (
-          <div className="text-sm text-gray-500">
-            Seleccionados: {multiSelected.map((i) => options[i]).join(', ')}
-          </div>
-        )}
-        <h1>Platos</h1>
-        <CustomSelect
-          label={selected === null ? 'Selecciona un plato' : options[selected]}
-          options={options}
-          selectedIndex={selected}
-          onChange={setSelected}
-        />
-        <CustomMultiSelect
-          label="Multi PIATTI PRINCIPALLI"
-          options={options}
-          selectedIndices={multiSelected}
-          onChange={setMultiSelected}
-        />
-        <InfoButton description="Descripción de la información" />
+      <div className="flex flex-col items-center justify-center px-5 py-10 gap-10">
         <div className="grid grid-cols-2 gap-10">
           {fakeData.map((item) => (
             <Card
               key={item.id}
               modalContent={
-                <>
-                  <Image
-                    src={item.img}
-                    alt={item.title}
-                    width={200}
-                    height={300}
-                    className="rounded-lg mb-4"
-                  />
-                  <h2>{item.title}</h2>
-                  <p>{item.description}</p>
-                </>
+                <GeneralDialog
+                  title={item.title}
+                  description={item.description}
+                  img={CardReferenceImage}
+                />
               }
-            >
-              <ExpandableSection maxHeight={500} initiallyExpanded={false}>
-                <div className="flex flex-col items-center justify-center gap-2 ">
-                  <h2 className="capitalize font-bold">{item.title}</h2>
+              height="33rem"
+              width="18rem"
+              backgroundCard="bg-neutral-50"
+              flipContent={
+                <div className="flex flex-col items-center gap-2 h-full w-full text-white">
+                  <h2 className="capitalize font-bold text-2xl mt-6">
+                    {item.title}
+                  </h2>
                   <Image
-                    src={item.img}
+                    src={CardReferenceImage}
                     alt={item.title}
-                    width={200}
+                    width={240}
                     height={50}
-                    className="my-3 rounded-lg "
+                    className="overflow-hidden"
                   />
                   <h2 className="capitalize font-medium">Ingredientes</h2>
 
-                  <ul className="list-disc  max-w-48 ">
-                    <li>
-                      Ingrediente 1 Lorem ipsum dolor sit amet consectetur
-                      adipisicing elit.
-                    </li>
-                    <li>
-                      Ingrediente 2 Deleniti eum sunt placeat! Quisquam iure
-                    </li>
-                    <li>
-                      Ingrediente 3 architecto libero vero obcaecati alias quia
-                      aut quas maxime omnis ducimus enim, vitae, praesentium
-                      deleniti quam
-                    </li>
-                    <li>Ingrediente 4</li>
+                  <ul className="list-none  flex flex-col gap-2 w-full px-6 mt-4">
+                    {fakeIngredients.map((ingrediente) => (
+                      <ClickableItem
+                        key={ingrediente.id}
+                        title={ingrediente.name}
+                        description={ingrediente.description}
+                        isFlipped={true}
+                      />
+                    ))}
                   </ul>
                 </div>
-              </ExpandableSection>
+              }
+            >
+              {/* <ExpandableSection maxHeight={400} initiallyExpanded={false}> */}
+              <div className="flex flex-col items-center gap-2 h-full w-full ">
+                <h2 className="capitalize font-bold text-2xl mt-6">
+                  {item.title}
+                </h2>
+                <Image
+                  src={CardReferenceImage}
+                  alt={item.title}
+                  width={240}
+                  height={50}
+                  className="overflow-hidden"
+                />
+                <h2 className="capitalize font-medium">Ingredientes</h2>
+
+                <ul className="list-none  flex flex-col gap-2 w-full px-6 mt-4">
+                  {fakeIngredients.map((ingrediente) => (
+                    <ClickableItem
+                      key={ingrediente.id}
+                      title={ingrediente.name}
+                      description={ingrediente.description}
+                      isFlipped={false}
+                    />
+                  ))}
+                </ul>
+              </div>
+              {/* </ExpandableSection> */}
             </Card>
           ))}
         </div>

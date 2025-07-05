@@ -1,6 +1,6 @@
 import { Info } from 'lucide-react'
 import { useState } from 'react'
-import { CardDialog } from '../Dialog'
+import { CardDialog } from '../Dialog/Dialog'
 
 interface CardProps {
   description?: string
