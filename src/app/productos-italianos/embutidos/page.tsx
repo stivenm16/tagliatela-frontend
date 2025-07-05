@@ -1,6 +1,7 @@
 'use client'
 import SausagesImg from '@/assets/images/sausages.png'
-import { Card } from '@/components/Cards/FlippingCard'
+import { Card } from '@/components/Cards/Card'
+import GeneralDialogContent from '@/components/Dialog/GeneralDialog'
 import Image from 'next/image'
 
 const fakeCheeseData = [
@@ -56,7 +57,6 @@ const fakeCheeseData = [
 const page = () => {
   return (
     <div className="w-full">
-      <h1>Quesos</h1>
       <div className="flex flex-wrap gap-x-10 justify-center ">
         {fakeCheeseData.map((cheese) => (
           <div key={cheese.id} className="my-18">
@@ -66,6 +66,14 @@ const page = () => {
               height="10rem"
               width="15rem"
               isModalAvailable={true}
+              modalContent={
+                <GeneralDialogContent
+                  title={cheese.title}
+                  description={cheese.description}
+                  img={SausagesImg}
+                  origin="Italiano"
+                />
+              }
             >
               <div className="flex flex-col w-full h-full gap-3 relative">
                 {/* {item.isNew && <NewDishFloatingButton />} */}

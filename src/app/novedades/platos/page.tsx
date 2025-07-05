@@ -2,8 +2,12 @@
 import CardReferenceImage from '@/assets/images/card-reference-image.png'
 import InfoDark from '@/assets/svgs/help-circle-dark.svg'
 import InfoLight from '@/assets/svgs/help-circle-light.svg'
-import { Card } from '@/components/Cards/FlippingCard'
-import { CardDialog } from '@/components/Dialog'
+import { Card } from '@/components/Cards/Card'
+import { CardDialog } from '@/components/Dialog/Dialog'
+import {
+  default as GeneralDialog,
+  default as GeneralDialogContent,
+} from '@/components/Dialog/GeneralDialog'
 import Layout from '@/components/Layout'
 import Image from 'next/image'
 import { useState } from 'react'
@@ -28,19 +32,14 @@ const ClickableItem = ({ title, description, isFlipped }: ItemProps) => {
       <CardDialog
         open={isOpenDialog}
         onChangeOpen={setIsOpenDialog}
-        className="w-[40rem] h-1/2"
+        className="w-[40rem] h-[38rem] flex flex-col items-center justify-center"
       >
-        <div className="flex flex-col justify-center items-center gap-4 mt-5">
-          <Image
-            src={CardReferenceImage}
-            alt={title}
-            width={350}
-            height={100}
-            className="rounded-lg mb-4 overflow-hidden"
-          />
-          <h2>{title}</h2>
-          <p>{description}</p>
-        </div>
+        <GeneralDialogContent
+          title={title}
+          description={description}
+          img={CardReferenceImage}
+          origin="Italiano"
+        />
       </CardDialog>
       <div className="flex mr-auto gap-3" onClick={handleClick}>
         {!isFlipped ? (
@@ -57,8 +56,10 @@ const ClickableItem = ({ title, description, isFlipped }: ItemProps) => {
 const Page = () => {
   const fakeData = Array.from({ length: 10 }, (_, i) => ({
     id: i + 1,
-    title: `Plato ${i + 1}`,
-    description: `Descripción del plato ${i + 1}`,
+    title: `Queso Taleggio DOP ${i + 1}`,
+    description: `Queso de vaca, semiblando, cremoso y untuoso al untar. ${
+      i + 1
+    }`,
   }))
 
   const fakeIngredients = Array.from({ length: 3 }, (_, i) => ({
@@ -74,17 +75,11 @@ const Page = () => {
             <Card
               key={item.id}
               modalContent={
-                <>
-                  <Image
-                    src={CardReferenceImage}
-                    alt={item.title}
-                    width={350}
-                    height={200}
-                    className="rounded-lg mb-4 overflow-hidden"
-                  />
-                  <h2>{item.title}</h2>
-                  <p>{item.description}</p>
-                </>
+                <GeneralDialog
+                  title={item.title}
+                  description={item.description}
+                  img={CardReferenceImage}
+                />
               }
               height="33rem"
               width="18rem"

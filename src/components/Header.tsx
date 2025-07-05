@@ -26,7 +26,7 @@ export const Header = () => {
         <ArrowLeft className={''} />
       </div>
 
-      <span className=" w-full items-center text-xl justify-center text-center">
+      <span className=" w-full items-center text-xl font-bold justify-center text-center">
         {path.split('/').pop()?.split('-').join(' ')?.toUpperCase() || 'Home'}
       </span>
       <Link className="absolute top-[35%] right-5" href={'/'}>

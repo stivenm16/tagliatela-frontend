@@ -1,6 +1,6 @@
 'use client'
 import PastaImg from '@/assets/images/pasta-image-reference.png'
-import { Card } from '@/components/Cards/FlippingCard'
+import { Card } from '@/components/Cards/Card'
 import Image from 'next/image'
 import Link from 'next/link'
 

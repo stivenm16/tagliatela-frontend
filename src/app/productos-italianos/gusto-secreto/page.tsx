@@ -1,53 +1,54 @@
 'use client'
 import SecretTaste from '@/assets/images/secret-taste.png'
-import { Card } from '@/components/Cards/FlippingCard'
+import { Card } from '@/components/Cards/Card'
+import GeneralDialogContent from '@/components/Dialog/GeneralDialog'
 import Image from 'next/image'
 
 const fakeCheeseData = [
   {
     id: 1,
-    title: 'Queso Parmesano',
-    description: 'Queso italiano',
+    title: 'Dolce Parmesano',
+    description: 'Dolce italiano',
     isNew: true,
     highlightedContent: 'Excelente para ensaladas y pastas.',
     isSuggested: true,
   },
   {
     id: 2,
-    title: 'Queso Cheddar',
-    description: 'Queso italiano',
+    title: 'Dolce Cheddar',
+    description: 'Dolce italiano',
     isNew: true,
     highlightedContent: 'Excelente para ensaladas y pastas.',
     isSuggested: true,
   },
   {
     id: 3,
-    title: 'Queso Azul',
-    description: 'Queso italiano',
+    title: 'Dolce Azul',
+    description: 'Dolce italiano',
     isNew: true,
     highlightedContent: 'Excelente para ensaladas y pastas.',
     isSuggested: true,
   },
   {
     id: 4,
-    title: 'Queso Azul',
-    description: 'Queso italiano',
+    title: 'Dolce Azul',
+    description: 'Dolce italiano',
     isNew: true,
     highlightedContent: 'Excelente para ensaladas y pastas.',
     isSuggested: true,
   },
   {
     id: 5,
-    title: 'Queso Azul',
-    description: 'Queso italiano',
+    title: 'Dolce Azul',
+    description: 'Dolce italiano',
     isNew: true,
     highlightedContent: 'Excelente para ensaladas y pastas.',
     isSuggested: true,
   },
   {
     id: 6,
-    title: 'Queso Azul',
-    description: 'Queso italiano',
+    title: 'Dolce Azul',
+    description: 'Dolce italiano',
     isNew: true,
     highlightedContent: 'Excelente para ensaladas y pastas.',
     isSuggested: true,
@@ -56,7 +57,6 @@ const fakeCheeseData = [
 const page = () => {
   return (
     <div className="w-full">
-      <h1>Quesos</h1>
       <div className="flex flex-wrap gap-x-10 justify-center ">
         {fakeCheeseData.map((cheese) => (
           <div key={cheese.id} className="my-18">
@@ -66,6 +66,14 @@ const page = () => {
               height="10rem"
               width="15rem"
               isModalAvailable={true}
+              modalContent={
+                <GeneralDialogContent
+                  title={cheese.title}
+                  description={cheese.description}
+                  img={SecretTaste}
+                  origin="Italiano"
+                />
+              }
             >
               <div className="flex flex-col w-full h-full gap-3 relative">
                 {/* {item.isNew && <NewDishFloatingButton />} */}

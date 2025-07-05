@@ -3,9 +3,9 @@ const colorMap: Record<string, string> = {
   'recomendados': 'var(--color-suggested-main)',
   'bebidas': 'var(--color-beverages-main)',
   'productos-italianos': 'var(--color-italian-main)',  
-  'checkmeeting': 'var(--color-checkmeeting-main)',
+  'check-meeting': 'var(--color-checkmeeting-main)',
   'novedades': 'var(--color-news-main)',
-  'no-disponibles': 'var(--color-not-available-main)'
+  'platos-no-disponibles': 'var(--color-not-available-main)'
 };
 const colorMatcher = (route: string): string => {
   const color = colorMap[route.toLowerCase()];  

@@ -53,7 +53,7 @@ const fakeData = [
     title: 'Bebidas',
     color: 'bg-beverages-main',
     items: [
-      { title: 'Vinos', href: '/bebidas/vinos' },
+      { title: 'Vinos', href: '/bebidas' },
       { title: 'Cocteles', href: '/bebidas/cocteles' },
       { title: 'Sangría', href: '/bebidas/sangria' },
     ],
@@ -70,12 +70,12 @@ const fakeData = [
   {
     title: 'Checkmeeting',
     color: 'bg-checkmeeting-main',
-    items: [{ title: 'Destacados', href: '/checkmeeting/destacados' }],
+    items: [{ title: 'Destacados', href: '/check-meeting' }],
   },
   {
     title: 'No disponibles',
     color: 'bg-not-available-main',
-    items: [{ title: 'Platos', href: '/no-disponibles/platos' }],
+    items: [{ title: 'Platos', href: '/platos-no-disponibles' }],
   },
   // {
   //   title: 'Novedades',
@@ -97,7 +97,7 @@ export default function Home() {
             >
               <span className="text-center">{column.title}</span>
             </Link>
-          ))}          
+          ))}
         </div>
         <Link
           href={'/novedades/platos'}
@@ -106,7 +106,6 @@ export default function Home() {
           <span className="text-center">{'Novedades'}</span>
         </Link>
       </div>
-      
     </div>
   )
 }

@@ -1,7 +1,6 @@
-import { CardDialog } from '@/components/Dialog'
+import { CardDialog } from '@/components/Dialog/Dialog'
 import { StaticImport } from 'next/dist/shared/lib/get-img-props'
 import Image from 'next/image'
-import React from 'react'
 
 interface SauceDialogProps {
   openModal: boolean

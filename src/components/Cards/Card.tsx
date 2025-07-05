@@ -1,7 +1,7 @@
 import FlipIcon from '@/assets/svgs/flip-icon.svg'
 import Image from 'next/image'
 import { useState } from 'react'
-import { CardDialog } from '../Dialog'
+import { CardDialog } from '../Dialog/Dialog'
 
 interface CardProps {
   children: React.ReactNode
@@ -9,6 +9,7 @@ interface CardProps {
   flipContent?: React.ReactNode
   height?: string
   width?: string
+  classNameModal?: string
   isFlippable?: boolean
   backgroundCard?: string
   isModalAvailable?: boolean
@@ -40,6 +41,7 @@ export const Card = ({
   isFlippable = true,
   backgroundCard = 'bg-white',
   isModalAvailable = true,
+  classNameModal,
 }: CardProps) => {
   const [isOpenDialog, setIsOpenDialog] = useState(false)
   const [isFlipped, setIsFlipped] = useState(false)
@@ -62,7 +64,7 @@ export const Card = ({
       <CardDialog
         open={isOpenDialog}
         onChangeOpen={setIsOpenDialog}
-        className="w-[40rem] h-1/2"
+        className={`w-[30rem] ${classNameModal}`}
       >
         <div className="flex flex-col justify-center items-center gap-4 mt-5">
           {modalContent}
