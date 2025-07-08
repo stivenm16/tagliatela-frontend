@@ -1,0 +1,46 @@
+// {
+//     "sauces": [
+//         {
+//             "title": "titles sauce",
+//             "description": "description sauce",
+//             "isNew": true,            
+//             "isSuggested": true,
+//             "isAvailable": true,
+//             "img_url": "img url",
+//             "ingredients_to_match": [
+//                 {
+//                     "title": "queso taleggio DOP",
+//                     "img_url": "img url",
+//                     "description": "description sauce",
+//                     "origin": "italiano"
+//                 }
+//             ],
+//             "pastas_to_match": [
+//                 {
+//                     "title": "queso taleggio DOP",
+//                     "thumbnail_url": "img url",
+//                     "type_of_pasta": "tradizionale"
+//                 },
+//                 {
+//                     "title": "queso taleggio DOP",
+//                     "thumbnail_url": "img url",
+//                     "type_of_pasta": "ripiena"
+//                 }
+//             ]
+//         }
+//     ]
+// }
+
+{
+    "tradizionale": [
+        {
+            "isNew": true,
+            "isSuggested": true,
+            "thumbnail_img": "img url",
+            "id":1
+        }
+    ],
+    "ripiena": [
+
+    ]
+}

@@ -17,8 +17,10 @@ export const FiltersSauces = ({
       {filters.map((filter) => (
         <CustomSelect
           key={filter.placeHolder}
+          placeHolder="Pasta"
           label={filter.options[filter.selectedValue[0]]?.label ?? 'None'}
           options={filter.options}
+          activedColor="bg-pasta-main"
           selectedIndex={filter.selectedValue[0] ?? null}
           onChange={(index) => handleSelectChange(index, filter.placeHolder)}
           customStyles={{ width: '200px', marginRight: '10px' }}

@@ -1,35 +1,6 @@
 import Logo from '@/components/Icons/LOGO.svg'
 import Image from 'next/image'
 import Link from 'next/link'
-// interface ColumItem {
-//   title: string
-//   href: string
-// }
-
-// interface Column {
-//   title: string
-//   items: ColumItem[]
-// }
-
-// const Column = ({ title, items }: Column) => (
-//   <div className="flex flex-col items-center uppercase">
-//     <h2 className="text-[0.65rem] w-[8.5rem] font-bold mb-2 bg-brand-dark py-3 text-center">
-//       {title}
-//     </h2>
-//     <ul className="flex flex-col gap-5">
-//       {items.map((item, index) => (
-//         <Link
-//           href={item.href}
-//           key={index}
-//           className="text-[0.65rem]  text-brand-dark w-[8.5rem] py-2 list-none text-center bg-accent"
-//         >
-//           {item.title}
-//         </Link>
-//       ))}
-//     </ul>
-//   </div>
-// )
-
 const fakeData = [
   {
     title: 'Recomendados',

@@ -1,4 +1,5 @@
 import ItalianImg from '@/assets/images/italian-flag.png'
+import SpanishFlag from '@/assets/images/spanish-flag.png'
 import BottleIcon from '@/assets/svgs/bottle.svg'
 import { StaticImport } from 'next/dist/shared/lib/get-img-props'
 import Image from 'next/image'
@@ -33,12 +34,17 @@ const CardBeverages = ({
       </CardDialog>
       <div className=" w-fit" onClick={() => setIsOpenModal(true)}>
         <Image src={img} alt={title} />
-        <div className="flex  items-center mt-6 ">
-          <Image src={BottleIcon} alt={title} />
+        <div className="flex mt-6 ">
+          <Image src={BottleIcon} alt={title} className="mt-auto" />
           <div className="flex flex-col gap-3 pl-4 w-40 ">
             <span className="uppercase font-bold w-44 text-wrap">{title}</span>
             <div className="flex w-full gap-3">
-              <Image src={ItalianImg} alt="Italian flag" className="" />
+              {origin.toLowerCase() === 'italiano' ? (
+                <Image src={ItalianImg} alt="Italian flag" className="" />
+              ) : (
+                <Image src={SpanishFlag} alt="Italian flag" className="" />
+              )}
+
               <span className="text-lg ">{origin}</span>
             </div>
           </div>

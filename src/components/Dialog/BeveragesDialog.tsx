@@ -1,4 +1,5 @@
 import ItalianImg from '@/assets/images/italian-flag.png'
+import SpanishFlag from '@/assets/images/spanish-flag.png'
 import { StaticImport } from 'next/dist/shared/lib/get-img-props'
 import Image from 'next/image'
 
@@ -20,12 +21,26 @@ const BeveragesDialogContent = ({
 }: BeveragesDialogProps) => {
   return (
     <div className="flex gap-10">
-      <Image src={img} alt={title} className="" />
+      <Image src={img} alt={title} className="" width={200} height={300} />
       <div className="flex flex-col justify-center gap-4">
         <span className="capitalize text-3xl font-bold max-w-72">{title}</span>
         {origin && (
           <div className="flex gap-3">
-            <Image src={ItalianImg} alt="Italian flag" />
+            {origin.toLowerCase() === 'italiano' ? (
+              <Image
+                src={ItalianImg}
+                alt="Italian flag"
+                width={50}
+                height={50}
+              />
+            ) : (
+              <Image
+                src={SpanishFlag}
+                alt="Spanish flag"
+                width={50}
+                height={50}
+              />
+            )}
             <span className="text-xl">{origin}</span>
           </div>
         )}

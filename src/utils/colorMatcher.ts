@@ -1,5 +1,5 @@
 const colorMap: Record<string, string> = {
-  'pasta': '#5C052E',
+  'pasta': 'var(--color-pasta-main)',
   'recomendados': 'var(--color-suggested-main)',
   'bebidas': 'var(--color-beverages-main)',
   'productos-italianos': 'var(--color-italian-main)',  
