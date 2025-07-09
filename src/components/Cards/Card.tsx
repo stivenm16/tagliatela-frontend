@@ -1,4 +1,5 @@
 import FlipIcon from '@/assets/svgs/flip-icon.svg'
+import StarIcon from '@/assets/svgs/star.svg'
 import Image from 'next/image'
 import { useState } from 'react'
 import { CardDialog } from '../Dialog/Dialog'
@@ -13,6 +14,7 @@ interface CardProps {
   isFlippable?: boolean
   backgroundCard?: string
   isModalAvailable?: boolean
+  isSuggested?: boolean
 }
 
 const FlipButton = ({
@@ -42,6 +44,7 @@ export const Card = ({
   backgroundCard = 'bg-white',
   isModalAvailable = true,
   classNameModal,
+  isSuggested = false,
 }: CardProps) => {
   const [isOpenDialog, setIsOpenDialog] = useState(false)
   const [isFlipped, setIsFlipped] = useState(false)
@@ -59,11 +62,16 @@ export const Card = ({
     setIsFlipped((prev) => !prev)
   }
 
+  const parsedSuggestedSizes = {
+    height: Number(height.split('rem')[0]) + 0.5,
+    width: Number(width.split('rem')[0]) + 0.5,
+  }
   return (
     <>
       <CardDialog
         open={isOpenDialog}
         onChangeOpen={setIsOpenDialog}
+        modal={false}
         className={`w-[30rem] ${classNameModal}`}
       >
         <div className="flex flex-col justify-center items-center gap-4 mt-5">
@@ -71,41 +79,68 @@ export const Card = ({
         </div>
       </CardDialog>
 
-      <div className={``} onClick={handleCardClick} style={{ height, width }}>
-        <div
-          className={`transition-transform duration-500 relative w-full h-full`}
-          style={{
-            transformStyle: 'preserve-3d',
-            transform: isFlipped ? 'rotateY(180deg)' : 'rotateY(0deg)',
-          }}
-        >
-          {/* Front */}
-          <div
-            className={`absolute inset-0 backface-hidden ${
-              isFlipped ? 'invisible' : 'visible'
-            }`}
-          >
-            <div className={`w-full h-full ${backgroundCard} rounded-lg `}>
-              <div className="">{children}</div>
-              {isFlippable && (
-                <FlipButton onClick={toggleFlip} isFlipped={isFlipped} />
-              )}
-            </div>
-          </div>
+      <div
+        style={{
+          height: `${parsedSuggestedSizes.height}rem`,
+          width: `${parsedSuggestedSizes.width}rem`,
+        }}
+        className={`relative ${
+          isSuggested && 'bg-suggested-main'
+        } flex items-center justify-center rounded-xl`}
+      >
+        {isSuggested && (
+          <>
+            <div className="absolute top-0 left-0 size-7 bg-neutral-50 z-10 rounded-br-[4px] overflow-hidden" />
+            <Image
+              src={StarIcon}
+              alt="star-icon"
+              // width={24}
+              // height={24}
+              className="absolute -top-4 -left-4 z-20"
+            />
+          </>
+        )}
 
-          {isFlippable && (
+        <div
+          className={`relative `}
+          onClick={handleCardClick}
+          style={{ height: height, width }}
+        >
+          <div
+            className={`transition-transform duration-500 relative w-full h-full`}
+            style={{
+              transformStyle: 'preserve-3d',
+              transform: isFlipped ? 'rotateY(180deg)' : 'rotateY(0deg)',
+            }}
+          >
+            {/* Front */}
             <div
               className={`absolute inset-0 backface-hidden ${
-                isFlipped ? 'visible' : 'invisible'
+                isFlipped ? 'invisible' : 'visible'
               }`}
-              style={{ transform: 'rotateY(180deg)' }}
             >
-              <div className="w-full h-full bg-pasta-main  rounded-lg ">
-                {flipContent ?? <p>No back content</p>}
-                <FlipButton onClick={toggleFlip} isFlipped={isFlipped} />
+              <div className={`w-full h-full ${backgroundCard} rounded-lg `}>
+                <div className="">{children}</div>
+                {isFlippable && (
+                  <FlipButton onClick={toggleFlip} isFlipped={isFlipped} />
+                )}
               </div>
             </div>
-          )}
+
+            {isFlippable && (
+              <div
+                className={`absolute inset-0 backface-hidden ${
+                  isFlipped ? 'visible' : 'invisible'
+                }`}
+                style={{ transform: 'rotateY(180deg)' }}
+              >
+                <div className="w-full h-full bg-pasta-main  rounded-lg ">
+                  {flipContent ?? <p>No back content</p>}
+                  <FlipButton onClick={toggleFlip} isFlipped={isFlipped} />
+                </div>
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </>

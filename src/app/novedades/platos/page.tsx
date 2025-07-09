@@ -71,7 +71,7 @@ const Page = () => {
     <Layout>
       <div className="flex flex-col items-center justify-center px-5 py-10 gap-10">
         <div className="grid grid-cols-2 gap-10">
-          {fakeData.map((item) => (
+          {fakeData.map((item, i) => (
             <Card
               key={item.id}
               modalContent={
@@ -110,6 +110,7 @@ const Page = () => {
                   </ul>
                 </div>
               }
+              isSuggested={i == 0}
             >
               {/* <ExpandableSection maxHeight={400} initiallyExpanded={false}> */}
               <div className="flex flex-col items-center gap-2 h-full w-full ">
