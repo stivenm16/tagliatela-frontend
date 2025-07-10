@@ -202,16 +202,13 @@ body {
 }
 
 .Dialog-overlay {
-  background: rgba(0, 0, 0, 0.8);
+  background: #F3E9D763;
   display: grid;
   place-items: center;
 }
 
 .Dialog {
-  margin: 15px;
   background-color: white;
-  padding: 15px;
-  border-radius: 4px;
 }
 
 

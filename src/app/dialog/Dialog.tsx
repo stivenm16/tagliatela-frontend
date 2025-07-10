@@ -1,4 +1,5 @@
 'use client'
+import CloseBtn from '@/assets/svgs/close-modal-btn.svg'
 import {
   FloatingFocusManager,
   FloatingOverlay,
@@ -11,6 +12,7 @@ import {
   useMergeRefs,
   useRole,
 } from '@floating-ui/react'
+import Image from 'next/image'
 import * as React from 'react'
 
 interface DialogOptions {
@@ -147,6 +149,7 @@ export const DialogContent = React.forwardRef<
               aria-labelledby={context.labelId}
               aria-describedby={context.descriptionId}
               {...context.getFloatingProps(props)}
+              className="relative"
             >
               {props.children}
             </div>
@@ -204,9 +207,26 @@ export const DialogClose = React.forwardRef<
   React.ButtonHTMLAttributes<HTMLButtonElement>
 >(function DialogClose({ children, ...props }, ref) {
   const { setOpen } = useDialogContext()
+  const handleClick = (e: React.MouseEvent) => {
+    e.stopPropagation()
+    e.preventDefault()
+    setOpen(false)
+  }
   return (
-    <button type="button" {...props} ref={ref} onClick={() => setOpen(false)}>
-      {children}
-    </button>
+    <div
+      {...props}
+      ref={ref}
+      onClick={handleClick}
+      className="text-gray-500 hover:text-black "
+      aria-label="Close"
+    >
+      <Image
+        src={CloseBtn}
+        alt="Next.js logo"
+        width={35}
+        height={20}
+        className=""
+      />
+    </div>
   )
 })

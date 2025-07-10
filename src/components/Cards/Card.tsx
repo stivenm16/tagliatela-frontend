@@ -17,7 +17,7 @@ interface CardProps {
   isSuggested?: boolean
 }
 
-const FlipButton = ({
+export const FlipButton = ({
   onClick,
   isFlipped,
 }: {
@@ -71,7 +71,7 @@ export const Card = ({
       <CardDialog
         open={isOpenDialog}
         onChangeOpen={setIsOpenDialog}
-        modal={false}
+        // modal={false}
         className={`w-[30rem] ${classNameModal}`}
       >
         <div className="flex flex-col justify-center items-center gap-4 mt-5">

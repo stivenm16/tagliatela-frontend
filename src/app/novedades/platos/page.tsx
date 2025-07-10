@@ -19,7 +19,7 @@ interface ItemProps {
   origin?: string
   isFlipped?: boolean
 }
-const ClickableItem = ({ title, description, isFlipped }: ItemProps) => {
+export const ClickableItem = ({ title, description, isFlipped }: ItemProps) => {
   const [isOpenDialog, setIsOpenDialog] = useState(false)
   const handleClick = (e: React.MouseEvent) => {
     e.stopPropagation()

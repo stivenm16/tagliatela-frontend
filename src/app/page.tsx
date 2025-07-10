@@ -1,17 +1,11 @@
 'use client'
 import Logo from '@/components/Icons/LOGO.svg'
-import { X } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeading,
-  DialogTrigger,
-  useDialogContext,
-} from './dialog/Dialog'
-const fakeData = [
+
+// import { ClickableItem } from './novedades/platos/page'
+
+const fakeData2 = [
   {
     title: 'Recomendados',
     color: 'bg-suggested-main',
@@ -64,30 +58,27 @@ const fakeData = [
   // },
 ]
 
-function DialogCloseIcon() {
-  const { setOpen } = useDialogContext()
-  const handleClick = (e: React.MouseEvent) => {
-    e.stopPropagation() // 🔥 prevent bubbling to parent trigger
-    setOpen(false)
-  }
-  return (
-    <button
-      onClick={handleClick}
-      className=" text-gray-500 hover:text-black"
-      aria-label="Close"
-    >
-      <X className="w-5 h-5" />
-    </button>
-  )
-}
 export default function Home() {
+  const fakeData = Array.from({ length: 1 }, (_, i) => ({
+    id: i + 1,
+    title: `Queso Taleggio DOP ${i + 1}`,
+    description: `Queso de vaca, semiblando, cremoso y untuoso al untar. ${
+      i + 1
+    }`,
+  }))
+
+  const fakeIngredients = Array.from({ length: 3 }, (_, i) => ({
+    id: i + 1,
+    name: `Queso Montasio DOP`,
+    description: `Descripción del ${i + 1}`,
+  }))
   return (
     <div className="flex flex-col bg-surface-2 items-center justify-center h-screen gap-10 text-white">
       <Image src={Logo} alt="Next.js logo" width={180} height={38} priority />
 
       <div>
-        <div className="grid grid-cols-2 gap-8 mt-4">
-          {/* {fakeData.map((column, index) => (
+        <div className="grid grid-cols-2 gap-8 mt-4 ">
+          {fakeData2.map((column, index) => (
             <Link
               href={column.items[0].href}
               className={`flex  h-52 w-52 justify-center text-wrap flex-row  font-bold items-center uppercase rounded-xl ${column.color} p-3`}
@@ -95,40 +86,7 @@ export default function Home() {
             >
               <span className="text-center">{column.title}</span>
             </Link>
-          ))} */}
-          <Dialog>
-            <DialogTrigger>
-              <div className="bg-red-100 h-56 w-72 font-black flex flex-col items-center text-black">
-                <span>Parent</span>
-                <Dialog>
-                  <DialogTrigger asChild>
-                    <div
-                      onClick={(e) => e.stopPropagation()}
-                      className="bg-red-500"
-                    >
-                      Open nested dialog
-                    </div>
-                  </DialogTrigger>
-                  <DialogContent className="Dialog">
-                    <DialogCloseIcon />
-                    <DialogHeading>
-                      My dialog heading nestedddddddd
-                    </DialogHeading>
-                    <DialogDescription>
-                      <span className="relative">
-                        <span>My dialog description nestedddddd</span>
-                      </span>
-                    </DialogDescription>
-                  </DialogContent>
-                </Dialog>
-              </div>
-            </DialogTrigger>
-            <DialogContent className="Dialog">
-              <DialogCloseIcon />
-              <DialogHeading>My dialog heading</DialogHeading>
-              <DialogDescription>My dialog description</DialogDescription>
-            </DialogContent>
-          </Dialog>
+          ))}
         </div>
         <Link
           href={'/novedades/platos'}
@@ -137,6 +95,77 @@ export default function Home() {
           <span className="text-center">{'Novedades'}</span>
         </Link>
       </div>
+
+      {/* <div className="grid grid-cols-2 gap-10">
+        {fakeData.map((item, i) => (
+          <CardRefactor
+            key={item.id}
+            modalContent={
+              <GeneralDialogContent
+                title={item.title}
+                description={item.description}
+                img={CardReferenceImage}
+              />
+            }
+            height="33rem"
+            width="18rem"
+            backgroundCard="bg-neutral-50"
+            flipContent={
+              <div className="flex flex-col items-center gap-2 h-full w-full text-white">
+                <h2 className="capitalize font-bold text-2xl mt-6">
+                  {item.title}
+                </h2>
+                <Image
+                  src={CardReferenceImage}
+                  alt={item.title}
+                  width={240}
+                  height={50}
+                  className="overflow-hidden"
+                />
+                <h2 className="capitalize font-medium">Ingredientes</h2>
+
+                <ul className="list-none  flex flex-col gap-2 w-full px-6 mt-4">
+                  {fakeIngredients.map((ingrediente) => (
+                    <ClickableItem
+                      key={ingrediente.id}
+                      title={ingrediente.name}
+                      description={ingrediente.description}
+                      isFlipped={true}
+                    />
+                  ))}
+                </ul>
+              </div>
+            }
+            isSuggested={i == 0}
+          >
+
+            <div className="flex flex-col items-center gap-2 h-full w-full ">
+              <h2 className="capitalize font-bold text-2xl mt-6">
+                {item.title}
+              </h2>
+              <Image
+                src={CardReferenceImage}
+                alt={item.title}
+                width={240}
+                height={50}
+                className="overflow-hidden"
+              />
+              <h2 className="capitalize font-medium">Ingredientes</h2>
+
+              <ul className="list-none  flex flex-col gap-2 w-full px-6 mt-4">
+                {fakeIngredients.map((ingrediente) => (
+                  <ClickableItem
+                    key={ingrediente.id}
+                    title={ingrediente.name}
+                    description={ingrediente.description}
+                    isFlipped={false}
+                  />
+                ))}
+              </ul>
+            </div>
+          </CardRefactor>
+        ))}
+      </div> */}
     </div>
   )
 }
