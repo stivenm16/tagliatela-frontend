@@ -1,12 +1,9 @@
 'use client'
-import PastaImg from '@/assets/images/pasta-image-reference.png'
-import SauceImg from '@/assets/images/salsa.png'
 import { FilterSaucesOption, Sauce } from '@/types/global'
 import { fakeFilters } from '@/utils/data/fakeFilters'
 import { fakeSauces } from '@/utils/data/fakeSauces'
 import { useState } from 'react'
 import { FiltersSauces } from '../components/FiltersSauces'
-import SauceDialog from '../components/SauceDialog'
 import SaucesComponent from '../components/SaucesComponent'
 
 const Page = () => {
@@ -14,7 +11,6 @@ const Page = () => {
 
   const [sauces, setSauces] = useState<Sauce[]>(fakeSauces)
 
-  const [openModal, setOpenModal] = useState(false)
   const [selectedSauceId, setSelectedSauceId] = useState<number | null>(null)
   const handleSelectChange = (
     selectedIndex: number | null,
@@ -33,20 +29,12 @@ const Page = () => {
   }
 
   const toggleSauceSelection = (id: number) => {
-    setOpenModal(true)
+    console.log(id)
     setSelectedSauceId(id)
   }
 
   return (
     <div>
-      <SauceDialog
-        openModal={openModal}
-        setOpenModal={setOpenModal}
-        selectedSauceId={selectedSauceId}
-        sauces={sauces}
-        SauceImg={SauceImg}
-        PastaImg={PastaImg}
-      />
       <div className="flex justify-center items-center gap-5 mt-20">
         <FiltersSauces
           filters={filters}

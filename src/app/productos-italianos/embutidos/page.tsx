@@ -1,6 +1,6 @@
 'use client'
 import SausagesImg from '@/assets/images/sausages.png'
-import { Card } from '@/components/Cards/Card'
+import Card from '@/components/Cards/Card'
 import GeneralDialogContent from '@/components/Dialog/GeneralDialog'
 import Image from 'next/image'
 

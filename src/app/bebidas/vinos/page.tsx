@@ -95,7 +95,7 @@ const WinesWrapper = ({ wines }: { wines: WineProps[] }) => {
               pairing={wine.pairing}
               title={wine.title}
               origin={wine.origin}
-              img={wine.full_img}
+              img={WineThumbnail}
             />
           }
           img={WineThumbnail}

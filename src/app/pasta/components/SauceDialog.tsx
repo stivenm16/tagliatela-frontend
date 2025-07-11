@@ -1,29 +1,20 @@
-import { CardDialog } from '@/components/Dialog/Dialog'
 import { StaticImport } from 'next/dist/shared/lib/get-img-props'
 import Image from 'next/image'
 
 interface SauceDialogProps {
-  openModal: boolean
-  setOpenModal: (open: boolean) => void
   selectedSauceId: number | null
   sauces: { id: number; title: string }[]
   SauceImg: string | StaticImport
   PastaImg: string | StaticImport
 }
 const SauceDialog = ({
-  openModal,
-  setOpenModal,
   selectedSauceId,
   sauces,
   SauceImg,
   PastaImg,
 }: SauceDialogProps) => {
   return (
-    <CardDialog
-      open={openModal}
-      onChangeOpen={setOpenModal}
-      className="w-[28rem] h-2/3"
-    >
+    <div className="w-[28rem] h-2/3">
       <div className="flex flex-col  items-center gap-4 ">
         <h2 className="text-2xl font-bold text-pasta-main">
           {sauces.find((sauce) => sauce.id === selectedSauceId)?.title}
@@ -90,7 +81,7 @@ const SauceDialog = ({
           </div>
         </div>
       </div>
-    </CardDialog>
+    </div>
   )
 }
 

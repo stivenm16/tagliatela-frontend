@@ -1,24 +1,19 @@
 'use client'
 import PastaImgMedium from '@/assets/images/pasta-image-reference-medium.png'
-import PastaImg from '@/assets/images/pasta-image-reference.png'
-import SauceImg from '@/assets/images/salsa.png'
 import { FilterSaucesOption, Sauce } from '@/types/global'
 import { fakeFilters } from '@/utils/data/fakeFilters'
 import { fakeSauces } from '@/utils/data/fakeSauces'
 import Image from 'next/image'
 import { useState } from 'react'
 import { FiltersSauces } from '../../components/FiltersSauces'
-import SauceDialog from '../../components/SauceDialog'
 import SaucesComponent from '../../components/SaucesComponent'
 const Page = () => {
   const [filters, setFilters] = useState<FilterSaucesOption[]>(fakeFilters)
 
   const [sauces, setSauces] = useState<Sauce[]>(fakeSauces)
-  const [openModal, setOpenModal] = useState(false)
   const [selectedSauceId, setSelectedSauceId] = useState<number | null>(null)
 
   const toggleSauceSelection = (id: number) => {
-    setOpenModal(true)
     setSelectedSauceId(id)
   }
 
@@ -39,14 +34,6 @@ const Page = () => {
   }
   return (
     <div className="">
-      <SauceDialog
-        openModal={openModal}
-        setOpenModal={setOpenModal}
-        selectedSauceId={selectedSauceId}
-        sauces={sauces}
-        SauceImg={SauceImg}
-        PastaImg={PastaImg}
-      />
       <div className="flex flex-col mt-20 gap-6 px-20">
         <span className="uppercase text-not-available-main font-bold text-xl">
           Pasta tradizionale
