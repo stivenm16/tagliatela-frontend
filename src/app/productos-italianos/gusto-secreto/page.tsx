@@ -1,6 +1,6 @@
 'use client'
 import SecretTaste from '@/assets/images/secret-taste.png'
-import { Card } from '@/components/Cards/Card'
+import Card from '@/components/Cards/Card'
 import GeneralDialogContent from '@/components/Dialog/GeneralDialog'
 import Image from 'next/image'
 

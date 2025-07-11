@@ -10,17 +10,27 @@ interface Option {
 interface CustomSelectProps {
   label: string
   options: Option[]
+  placeHolder: string
   selectedIndex?: number | null
   onChange: (index: number | null) => void
   customStyles?: React.CSSProperties
+  mainColor?: string
+  activedColor?: string
+  allowClear?: boolean
+  handleClear?: () => void
 }
 
 export const CustomSelect: React.FC<CustomSelectProps> = ({
   label,
   options,
-  selectedIndex = 0,
+  selectedIndex,
   onChange,
+  placeHolder,
   customStyles = {},
+  mainColor = 'bg-pasta-main',
+  activedColor = 'bg-news-main',
+  allowClear = false,
+  handleClear,
 }) => {
   const [open, setOpen] = useState(false)
   const wrapperRef = useRef<HTMLDivElement>(null)
@@ -46,11 +56,23 @@ export const CustomSelect: React.FC<CustomSelectProps> = ({
       className="relative text-sm font-medium "
       style={customStyles}
     >
+      {allowClear && (
+        <div
+          onClick={handleClear}
+          className={`absolute rounded-full flex items-center justify-center size-8 ${activedColor} -right-10`}
+        >
+          <div className="text-white border-t-2 border-white w-4 h-0.5"></div>
+        </div>
+      )}
       <button
         onClick={() => setOpen((prev) => !prev)}
-        className="flex items-center justify-between w-full rounded-md bg-[#5B0D31] px-4 py-2 uppercase text-white shadow-md transition-all duration-200"
+        className={`flex items-center justify-between w-full rounded-md ${
+          selectedIndex == null && mainColor
+        } ${
+          label && activedColor
+        } px-4 py-2 uppercase text-white shadow-md transition-all duration-200`}
       >
-        <span>{label}</span>
+        <span className="font-bold">{label || placeHolder}</span>
         <ChevronDown
           size={16}
           className={`transition-transform duration-200 ${

@@ -10,14 +10,14 @@ import { usePathname } from 'next/navigation'
 const DummySangria = () => {
   return (
     <CardBeverages
-      title="Sangría spumante italiano di maría"
+      title="Sangría di lambrusco"
       origin="Italiano"
       modalContent={
         <BeveragesDialogContent
           ingredients={['Aperol', 'Royal Bliss Aromantic Berry']}
           qualities={['Refrescante', 'Afrutado', 'Ligero toque amargo']}
           pairing={['Entrantes frescos', ' Ensaladas', 'Quesos suaves']}
-          title="Sangría spumante italiano di maría"
+          title="Sangría di lambrusco"
           origin="Italiano"
           img={SangriaImg}
         />

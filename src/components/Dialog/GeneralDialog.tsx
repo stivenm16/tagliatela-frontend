@@ -15,7 +15,7 @@ const GeneralDialogContent = ({
   origin,
 }: GeneralDialogProps) => {
   return (
-    <>
+    <div className="p-8 rounded-xl w-full bg-white">
       <Image
         src={img}
         alt={title}
@@ -23,16 +23,18 @@ const GeneralDialogContent = ({
         height={200}
         className="rounded-lg mb-4 overflow-hidden"
       />
-      <span className="capitalize text-3xl font-bold">{title}</span>
+      <p className="capitalize text-3xl mx-auto text-center font-bold">
+        {title}
+      </p>
       {origin && (
-        <div className="flex gap-3">
+        <div className="flex gap-3 w-full my-3 justify-center items-center">
           <Image src={ItalianImg} alt="Italian flag" width={50} />
           <span className="text-xl">{origin}</span>
         </div>
       )}
 
-      <p className="font-light text-xl w-72 text-center">{description}</p>
-    </>
+      <p className="font-light text-xl mt-2  text-center">{description}</p>
+    </div>
   )
 }
 

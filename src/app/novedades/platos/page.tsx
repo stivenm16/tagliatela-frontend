@@ -1,57 +1,10 @@
 'use client'
 import CardReferenceImage from '@/assets/images/card-reference-image.png'
-import InfoDark from '@/assets/svgs/help-circle-dark.svg'
-import InfoLight from '@/assets/svgs/help-circle-light.svg'
-import { Card } from '@/components/Cards/Card'
-import { CardDialog } from '@/components/Dialog/Dialog'
-import {
-  default as GeneralDialog,
-  default as GeneralDialogContent,
-} from '@/components/Dialog/GeneralDialog'
+import Card from '@/components/Cards/Card'
+import { ClickableItem } from '@/components/Dialog/ClickableItem'
+import { default as GeneralDialogContent } from '@/components/Dialog/GeneralDialog'
 import Layout from '@/components/Layout'
 import Image from 'next/image'
-import { useState } from 'react'
-
-interface ItemProps {
-  title: string
-  description: string
-  href?: string
-  origin?: string
-  isFlipped?: boolean
-}
-const ClickableItem = ({ title, description, isFlipped }: ItemProps) => {
-  const [isOpenDialog, setIsOpenDialog] = useState(false)
-  const handleClick = (e: React.MouseEvent) => {
-    e.stopPropagation()
-    e.preventDefault()
-    setIsOpenDialog(true)
-  }
-
-  return (
-    <li>
-      <CardDialog
-        open={isOpenDialog}
-        onChangeOpen={setIsOpenDialog}
-        className="w-[40rem] h-[38rem] flex flex-col items-center justify-center"
-      >
-        <GeneralDialogContent
-          title={title}
-          description={description}
-          img={CardReferenceImage}
-          origin="Italiano"
-        />
-      </CardDialog>
-      <div className="flex mr-auto gap-3" onClick={handleClick}>
-        {!isFlipped ? (
-          <Image src={InfoLight} alt={title} />
-        ) : (
-          <Image src={InfoDark} alt={title} />
-        )}
-        <span>{title}</span>
-      </div>
-    </li>
-  )
-}
 
 const Page = () => {
   const fakeData = Array.from({ length: 10 }, (_, i) => ({
@@ -71,11 +24,11 @@ const Page = () => {
     <Layout>
       <div className="flex flex-col items-center justify-center px-5 py-10 gap-10">
         <div className="grid grid-cols-2 gap-10">
-          {fakeData.map((item) => (
+          {fakeData.map((item, i) => (
             <Card
               key={item.id}
               modalContent={
-                <GeneralDialog
+                <GeneralDialogContent
                   title={item.title}
                   description={item.description}
                   img={CardReferenceImage}
@@ -110,8 +63,8 @@ const Page = () => {
                   </ul>
                 </div>
               }
+              isSuggested={i == 0}
             >
-              {/* <ExpandableSection maxHeight={400} initiallyExpanded={false}> */}
               <div className="flex flex-col items-center gap-2 h-full w-full ">
                 <h2 className="capitalize font-bold text-2xl mt-6">
                   {item.title}
@@ -136,7 +89,6 @@ const Page = () => {
                   ))}
                 </ul>
               </div>
-              {/* </ExpandableSection> */}
             </Card>
           ))}
         </div>
