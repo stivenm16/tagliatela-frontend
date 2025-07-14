@@ -3,8 +3,6 @@ import Logo from '@/components/Icons/LOGO.svg'
 import Image from 'next/image'
 import Link from 'next/link'
 
-// import { ClickableItem } from './novedades/platos/page'
-
 const fakeData2 = [
   {
     title: 'Recomendados',
