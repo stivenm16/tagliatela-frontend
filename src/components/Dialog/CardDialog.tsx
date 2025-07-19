@@ -17,7 +17,7 @@ export const CardDialog = ({
     <Dialog>
       {children}
       <DialogContent className={className}>
-        <div className="absolute top-2 -right-4">
+        <div className="absolute -top-2 -right-4">
           <DialogClose />
         </div>
         {contentModal}

@@ -1,0 +1,38 @@
+{
+  "id": "1",
+  "name": "Tagliatele",
+  "family": "Tradizionale",
+  "description": "",
+  "available": true,
+  "new": false,
+  "recommended": false,
+  "imageUrl": "a",
+  "sauces": [
+    {
+      "id": "1",
+      "name": "Al tartufo e taleggio",
+      "available": true,
+      "new": false,
+      "recommended": false,
+      "ingredient_to_match": "name of the ingredient to match",
+      "filters": {
+        "base": "Tomate",
+        "ingredients": ["Pomodoro", "Pomodoro", "Pomodoro"],
+        "flavours": "spicy"
+      }
+    },
+    {
+      "id": "2",
+      "name": "Pesto rosso panna",
+      "available": true,
+      "new": false,
+      "recommended": false,
+      "ingredient_to_match": "name of the ingredient to match",
+      "filters": {
+        "base": "Tomate",
+        "ingredients": ["Pomodoro", "Pomodoro", "Pomodoro"],
+        "flavours": "spicy"
+      }
+    }
+  ]
+}

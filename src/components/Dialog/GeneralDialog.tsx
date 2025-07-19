@@ -15,7 +15,7 @@ const GeneralDialogContent = ({
   origin,
 }: GeneralDialogProps) => {
   return (
-    <div className="p-8 rounded-xl w-full bg-white">
+    <div className="p-6 rounded-xl w-full bg-white">
       <Image
         src={img}
         alt={title}

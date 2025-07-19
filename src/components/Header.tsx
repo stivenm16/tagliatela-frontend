@@ -3,8 +3,6 @@
 import { usePathname, useRouter } from 'next/navigation'
 
 import colorMatcher from '@/utils/colorMatcher'
-import { HomeIcon } from 'lucide-react'
-import Link from 'next/link'
 import { ArrowLeft } from './Icons/ArrowLeft'
 
 export const Header = () => {
@@ -20,18 +18,16 @@ export const Header = () => {
         backgroundColor: colorMatcher(path.split('/').filter(Boolean)[0]),
         color: 'white',
       }}
-      className={`relative uppercase h-20 flex justify-center items-center`}
+      className={`relative uppercase h-20 flex gap-5  items-center bg-neutral-50`}
     >
-      <div onClick={handleGoBack} className="absolute left-5 cursor-pointer">
+      <div onClick={handleGoBack} className="cursor-pointer ml-5">
         <ArrowLeft className={''} />
       </div>
 
-      <span className=" w-full items-center text-xl font-bold justify-center text-center">
+      <span className=" w-fit items-center text-xl font-bold">
         {path.split('/').pop()?.split('-').join(' ')?.toUpperCase() || 'Home'}
       </span>
-      <Link className="absolute top-[35%] right-5" href={'/'}>
-        <HomeIcon />
-      </Link>
+      <div className="w-full" id="filters-container"></div>
     </div>
   )
 }

@@ -14,7 +14,7 @@ export const FlipButton = ({
 }) => (
   <button
     onClick={onClick}
-    className={`-top-5 -right-5 px-2 py-1 size-9 absolute text-xs ${
+    className={`-top-[7px] -right-[7px] flex items-center justify-center size-[32px] absolute text-xs ${
       isFlipped ? 'bg-not-available-main' : 'bg-pasta-main'
     } rounded-full hover:bg-gray-300`}
   >
@@ -53,15 +53,15 @@ const Card = ({
   }
 
   const parsedSuggestedSizes = {
-    height: Number(height.split('rem')[0]) + 0.5,
-    width: Number(width.split('rem')[0]) + 0.5,
+    height: Number(height.split('rem')[0]) + 0.4,
+    width: Number(width.split('rem')[0]) + 0.4,
   }
   return (
-    <div>
+    <div className="">
       <CardDialog
         className={`w-[30rem] ${classNameModal}`}
         contentModal={
-          <div className="flex flex-col justify-center bg-white rounded-lg items-center gap-4 mt-5">
+          <div className="flex flex-col justify-center bg-white rounded-3xl items-center gap-4">
             {modalContent}
           </div>
         }
@@ -73,32 +73,32 @@ const Card = ({
             transformStyle: 'preserve-3d',
             transform: isFlipped ? 'rotateY(360deg)' : 'rotateY(0deg)',
           }}
-          className={`relative transition-transform duration-500 w-full h-full ${
+          className={`relative transition-transform duration-500  w-full h-full ${
             isSuggested && 'bg-suggested-main'
-          } flex items-center justify-center rounded-xl`}
+          } flex items-center justify-center rounded-3xl `}
         >
           {isSuggested && (
             <>
               <div
-                className={`absolute top-0 left-0 size-7  ${
+                className={`absolute top-1 left-1 size-7  ${
                   isFlipped ? 'bg-pasta-main' : 'bg-white'
                 } z-10 rounded-br-[4px] overflow-hidden`}
               />
               <Image
                 src={StarIcon}
                 alt="star-icon"
-                className="absolute -top-4 -left-4 z-20"
+                className="absolute -top-4 -left-3 z-20"
               />
             </>
           )}
 
           <DialogTrigger>
             <div
-              className={`relative text-pasta-main`}
+              className={`relative text-pasta-main shadow-xl shadow-black/20 rounded-3xl `}
               style={{ height: height, width }}
             >
               <div
-                className={`transition-transform duration-500 relative w-full h-full`}
+                className={`transition-transform duration-500 relative w-full h-full `}
                 style={{
                   transformStyle: 'preserve-3d',
                   transform: isFlipped ? 'rotateY(180deg)' : 'rotateY(0deg)',
@@ -108,10 +108,10 @@ const Card = ({
                 <div
                   className={`absolute inset-0 backface-hidden ${
                     isFlipped ? 'invisible' : 'visible'
-                  }`}
+                  } rounded-3xl`}
                 >
                   <div
-                    className={`w-full h-full ${backgroundCard} rounded-lg `}
+                    className={`w-full h-full ${backgroundCard} rounded-3xl `}
                   >
                     <div className="">{children}</div>
                     {isFlippable && (
@@ -127,7 +127,7 @@ const Card = ({
                     }`}
                     style={{ transform: 'rotateY(180deg)' }}
                   >
-                    <div className="w-full h-full bg-pasta-main  rounded-lg ">
+                    <div className="w-full h-full bg-pasta-main  rounded-3xl ">
                       {flipContent ?? <p>No back content</p>}
                       <FlipButton onClick={toggleFlip} isFlipped={isFlipped} />
                     </div>
