@@ -1,15 +1,10 @@
 'use client'
 import PastaImg from '@/assets/images/pasta-image-reference.png'
+import Alert from '@/components/Alert'
 import Image from 'next/image'
 import Link from 'next/link'
+import NewDishFloatingButton from '../components/NewDishFloatingButton'
 
-const NewDishFloatingButton = () => {
-  return (
-    <span className="text-xs bg-red-500 text-white font-semibold px-2 py-1 absolute -right-2 rotate-10 uppercase">
-      Nuevo
-    </span>
-  )
-}
 const Page = () => {
   const fakeData = Array.from({ length: 6 }, (_, i) => ({
     id: i + 1,
@@ -27,6 +22,7 @@ const Page = () => {
   }))
   return (
     <div className="px-[30px]  ">
+      <Alert />
       <h1 className="text-center font-bold text-xl mt-4 uppercase">
         Tipo de pastas
       </h1>
@@ -44,7 +40,7 @@ const Page = () => {
                   <Image
                     src={PastaImg}
                     alt={item.title}
-                    className="w-full h-40"
+                    className="w-full h-40 rounded-xl shadow-lg"
                   />
                   <h2 className="text-center uppercase">{item.title}</h2>
                 </div>
@@ -62,7 +58,7 @@ const Page = () => {
                   <Image
                     src={PastaImg}
                     alt={item.title}
-                    className="w-full h-40"
+                    className="w-full h-40 rounded-xl shadow-lg"
                   />
                   <h2 className="text-center uppercase">{item.title}</h2>
                 </div>
