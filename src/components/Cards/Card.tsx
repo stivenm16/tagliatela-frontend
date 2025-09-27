@@ -94,7 +94,7 @@ const Card = ({
 
           <DialogTrigger>
             <div
-              className={`relative text-pasta-main shadow-xl shadow-black/20 rounded-3xl `}
+              className={`relative text-pasta-main  shadow-xl shadow-black/20 rounded-3xl `}
               style={{ height: height, width }}
             >
               <div

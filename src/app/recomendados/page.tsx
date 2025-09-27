@@ -5,9 +5,33 @@ import Card from '@/components/Cards/Card'
 import { ClickableItem } from '@/components/Dialog/ClickableItem'
 import GeneralDialogContent from '@/components/Dialog/GeneralDialog'
 import { useFilters } from '@/components/Layout/context/FilterContext'
+import axiosInstance from '@/lib/axios'
 import Image from 'next/image'
-import { useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 
+interface Ingredient {
+  id: string
+  name: string
+  description?: string
+  imageUrl?: string
+  isAvaible?: boolean
+  isRecommended?: boolean
+  origin?: string
+  thubnailUrl?: string
+}
+interface Dish {
+  description: string
+  familyName: string
+  id: string
+  imgUrl: string
+  ingredients: Ingredient[]
+  isAvaible: boolean
+  isNew: boolean
+  isRecommended: boolean
+  name: string
+  pairing_wine: Ingredient[]
+  thumbnailUrl: string
+}
 const Page = () => {
   const [dietOptions, setDietOptions] = useState([
     {
@@ -101,9 +125,34 @@ const Page = () => {
     family: null,
   })
 
+  const [dishes, setDishes] = useState<Dish[]>([])
+
   const { filters } = useFilters()
   const [flagNoContent, setFlagNoContent] = useState(true)
 
+  const getContent = useCallback(async () => {
+    const response = await axiosInstance.get(
+      `dish/search?familyName=${filters.family?.toUpperCase()}`,
+      {
+        withCredentials: true,
+      },
+    )
+    return response.data
+  }, [filters.family])
+
+  useEffect(() => {
+    if (filters.family) {
+      getContent().then((data) => {
+        if (data.length === 0) {
+          setFlagNoContent(true)
+        } else {
+          setFlagNoContent(false)
+          setDishes(data)
+          console.log(data)
+        }
+      })
+    }
+  }, [filters.family, getContent])
   const fakeData = Array.from({ length: 10 }, (_, i) => ({
     id: i + 1,
     title: `Rissotto alla carbonara`,
@@ -136,73 +185,74 @@ const Page = () => {
         <>
           <div className="flex flex-col gap-3 px-3 ">
             <div className="grid grid-cols-3 gap-x-2 px-2 gap-y-5 mt-10">
-              {fakeData.map((item, i) => (
-                <Card
-                  key={item.id}
-                  modalContent={
-                    <GeneralDialogContent
-                      title={item.title}
-                      description={item.description}
-                      img={CardReferenceImage}
-                    />
-                  }
-                  height="28rem"
-                  width="14.5rem"
-                  backgroundCard="bg-neutral-50"
-                  flipContent={
-                    <div className="flex flex-col items-center gap-2 h-full w-full text-white">
-                      <h2 className="capitalize font-bold text-2xl mt-6">
-                        {item.title}
+              {dishes.length > 0 &&
+                dishes.map((item, i) => (
+                  <Card
+                    key={item.id}
+                    modalContent={
+                      <GeneralDialogContent
+                        title={item.name}
+                        description={item.description}
+                        img={CardReferenceImage}
+                      />
+                    }
+                    height="28rem"
+                    width="14.5rem"
+                    backgroundCard="bg-neutral-50"
+                    flipContent={
+                      <div className="flex flex-col items-center gap-2 h-full w-full text-white">
+                        <h2 className="capitalize font-bold text-2xl mt-6">
+                          {item.title}
+                        </h2>
+                        <Image
+                          src={CardReferenceImage}
+                          alt={item.title}
+                          width={240}
+                          height={50}
+                          className="overflow-hidden"
+                        />
+                        <h2 className="capitalize font-medium">Ingredientes</h2>
+
+                        <ul className="list-none  flex flex-col gap-2 w-full px-6 mt-4">
+                          {fakeIngredients.map((ingrediente) => (
+                            <ClickableItem
+                              key={ingrediente.id}
+                              title={ingrediente.name}
+                              description={ingrediente.description}
+                              isFlipped={true}
+                            />
+                          ))}
+                        </ul>
+                      </div>
+                    }
+                    isSuggested={i == 0}
+                  >
+                    <div className="flex flex-col items-center gap-2 p-4 h-full w-full ">
+                      <h2 className="capitalize text-center font-bold text-xl mt-3">
+                        {item.name}
                       </h2>
                       <Image
                         src={CardReferenceImage}
-                        alt={item.title}
-                        width={240}
+                        alt={item.name}
+                        width={210}
                         height={50}
-                        className="overflow-hidden"
+                        className="rounded-2xl overflow-hidden"
                       />
                       <h2 className="capitalize font-medium">Ingredientes</h2>
 
-                      <ul className="list-none  flex flex-col gap-2 w-full px-6 mt-4">
+                      <ul className="list-none  flex flex-col gap-2 w-full mt-4">
                         {fakeIngredients.map((ingrediente) => (
                           <ClickableItem
                             key={ingrediente.id}
                             title={ingrediente.name}
                             description={ingrediente.description}
-                            isFlipped={true}
+                            isFlipped={false}
                           />
                         ))}
                       </ul>
                     </div>
-                  }
-                  isSuggested={i == 0}
-                >
-                  <div className="flex flex-col items-center gap-2 p-4 h-full w-full ">
-                    <h2 className="capitalize font-bold text-xl mt-3">
-                      {item.title}
-                    </h2>
-                    <Image
-                      src={CardReferenceImage}
-                      alt={item.title}
-                      width={210}
-                      height={50}
-                      className="rounded-2xl overflow-hidden"
-                    />
-                    <h2 className="capitalize font-medium">Ingredientes</h2>
-
-                    <ul className="list-none  flex flex-col gap-2 w-full mt-4">
-                      {fakeIngredients.map((ingrediente) => (
-                        <ClickableItem
-                          key={ingrediente.id}
-                          title={ingrediente.name}
-                          description={ingrediente.description}
-                          isFlipped={false}
-                        />
-                      ))}
-                    </ul>
-                  </div>
-                </Card>
-              ))}
+                  </Card>
+                ))}
             </div>
           </div>
         </>
