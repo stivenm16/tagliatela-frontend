@@ -4,8 +4,7 @@ import Alert from '@/components/Alert'
 import Card from '@/components/Cards/Card'
 import { ClickableItem } from '@/components/Dialog/ClickableItem'
 import GeneralDialogContent from '@/components/Dialog/GeneralDialog'
-import Layout from '@/components/Layout/Layout'
-import { CustomSelect } from '@/components/Select'
+import { useFilters } from '@/components/Layout/context/FilterContext'
 import Image from 'next/image'
 import { useState } from 'react'
 
@@ -102,6 +101,7 @@ const Page = () => {
     family: null,
   })
 
+  const { filters } = useFilters()
   const [flagNoContent, setFlagNoContent] = useState(true)
 
   const fakeData = Array.from({ length: 10 }, (_, i) => ({
@@ -127,101 +127,86 @@ const Page = () => {
 
   return (
     <>
-      <Layout>
-        {flagNoContent ? (
-          <Alert
-            text="POR FAVOR SELECCIONA LA FAMILIA DE PLATOS DESEADA"
-            closeButton={false}
-          />
-        ) : (
-          <>
-            <div className="flex flex-col gap-5 px-1 ">
-              <CustomSelect
-                label={
-                  filtersSelected.family !== null
-                    ? familyOptions[filtersSelected.family].label
-                    : ''
-                }
-                placeHolder="Familia"
-                options={familyOptions}
-                selectedIndex={filtersSelected.family ?? null}
-                mainColor="bg-suggested-main"
-                activedColor="bg-pasta-main"
-                onChange={(value) => handleSelectChange('family', value)}
-              />
-              <div className="grid grid-cols-3 gap-x-2 px-2 gap-y-5 mt-10">
-                {fakeData.map((item, i) => (
-                  <Card
-                    key={item.id}
-                    modalContent={
-                      <GeneralDialogContent
-                        title={item.title}
-                        description={item.description}
-                        img={CardReferenceImage}
-                      />
-                    }
-                    height="28rem"
-                    width="15rem"
-                    backgroundCard="bg-neutral-50"
-                    flipContent={
-                      <div className="flex flex-col items-center gap-2 h-full w-full text-white">
-                        <h2 className="capitalize font-bold text-2xl mt-6">
-                          {item.title}
-                        </h2>
-                        <Image
-                          src={CardReferenceImage}
-                          alt={item.title}
-                          width={240}
-                          height={50}
-                          className="overflow-hidden"
-                        />
-                        <h2 className="capitalize font-medium">Ingredientes</h2>
-
-                        <ul className="list-none  flex flex-col gap-2 w-full px-6 mt-4">
-                          {fakeIngredients.map((ingrediente) => (
-                            <ClickableItem
-                              key={ingrediente.id}
-                              title={ingrediente.name}
-                              description={ingrediente.description}
-                              isFlipped={true}
-                            />
-                          ))}
-                        </ul>
-                      </div>
-                    }
-                    isSuggested={i == 0}
-                  >
-                    <div className="flex flex-col items-center gap-2 p-4 h-full w-full ">
-                      <h2 className="capitalize font-bold text-xl mt-3">
+      {!filters.family ? (
+        <Alert
+          text="POR FAVOR SELECCIONA LA FAMILIA DE PLATOS DESEADA"
+          closeButton={false}
+        />
+      ) : (
+        <>
+          <div className="flex flex-col gap-3 px-3 ">
+            <div className="grid grid-cols-3 gap-x-2 px-2 gap-y-5 mt-10">
+              {fakeData.map((item, i) => (
+                <Card
+                  key={item.id}
+                  modalContent={
+                    <GeneralDialogContent
+                      title={item.title}
+                      description={item.description}
+                      img={CardReferenceImage}
+                    />
+                  }
+                  height="28rem"
+                  width="14.5rem"
+                  backgroundCard="bg-neutral-50"
+                  flipContent={
+                    <div className="flex flex-col items-center gap-2 h-full w-full text-white">
+                      <h2 className="capitalize font-bold text-2xl mt-6">
                         {item.title}
                       </h2>
                       <Image
                         src={CardReferenceImage}
                         alt={item.title}
-                        width={210}
+                        width={240}
                         height={50}
-                        className="rounded-2xl overflow-hidden"
+                        className="overflow-hidden"
                       />
                       <h2 className="capitalize font-medium">Ingredientes</h2>
 
-                      <ul className="list-none  flex flex-col gap-2 w-full mt-4">
+                      <ul className="list-none  flex flex-col gap-2 w-full px-6 mt-4">
                         {fakeIngredients.map((ingrediente) => (
                           <ClickableItem
                             key={ingrediente.id}
                             title={ingrediente.name}
                             description={ingrediente.description}
-                            isFlipped={false}
+                            isFlipped={true}
                           />
                         ))}
                       </ul>
                     </div>
-                  </Card>
-                ))}
-              </div>
+                  }
+                  isSuggested={i == 0}
+                >
+                  <div className="flex flex-col items-center gap-2 p-4 h-full w-full ">
+                    <h2 className="capitalize font-bold text-xl mt-3">
+                      {item.title}
+                    </h2>
+                    <Image
+                      src={CardReferenceImage}
+                      alt={item.title}
+                      width={210}
+                      height={50}
+                      className="rounded-2xl overflow-hidden"
+                    />
+                    <h2 className="capitalize font-medium">Ingredientes</h2>
+
+                    <ul className="list-none  flex flex-col gap-2 w-full mt-4">
+                      {fakeIngredients.map((ingrediente) => (
+                        <ClickableItem
+                          key={ingrediente.id}
+                          title={ingrediente.name}
+                          description={ingrediente.description}
+                          isFlipped={false}
+                        />
+                      ))}
+                    </ul>
+                  </div>
+                </Card>
+              ))}
             </div>
-          </>
-        )}
-      </Layout>
+          </div>
+        </>
+      )}
     </>
   )
 }

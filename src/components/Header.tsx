@@ -56,6 +56,7 @@ import colorMatcher from '@/utils/colorMatcher'
 import Image from 'next/image'
 import { usePathname, useRouter } from 'next/navigation'
 import { useEffect, useRef, useState } from 'react'
+import { createPortal } from 'react-dom'
 import { ArrowLeft } from './Icons/ArrowLeft'
 import { Filters, useFilters } from './Layout/context/FilterContext'
 
@@ -147,25 +148,33 @@ const CategoryFilter = ({
   items: FilterItem[]
 }) => {
   const { focusedFilter, setFocusedFilter, filters, setFilters } = useFilters()
+  const [mounted, setMounted] = useState(false)
+  const container = mounted && document.getElementById('filters-container')
+  const menuRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => setMounted(true), [])
 
   const ref = useRef<HTMLDivElement>(null)
 
   const disabled = filterBy !== 'family' && filters.family === null
   useEffect(() => {
-    const handleClickOutside = (event: MouseEvent | TouchEvent) => {
-      if (ref.current && !ref.current.contains(event.target as Node)) {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        ref.current &&
+        !ref.current.contains(event.target as Node) &&
+        menuRef.current &&
+        !menuRef.current.contains(event.target as Node)
+      ) {
         setFocusedFilter(null)
       }
     }
 
     if (focusedFilter === filterBy) {
-      document.addEventListener('mousedown', handleClickOutside)
-      document.addEventListener('touchstart', handleClickOutside)
+      document.addEventListener('click', handleClickOutside)
     }
 
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside)
-      document.removeEventListener('touchstart', handleClickOutside)
+      document.removeEventListener('click', handleClickOutside)
     }
   }, [focusedFilter, filterBy, setFocusedFilter])
 
@@ -200,15 +209,26 @@ const CategoryFilter = ({
             />
           )}
         </button>
-        {filterBy === focusedFilter ? (
-          <div className="absolute mt-2">
-            <VerticalFilterMenu
-              items={items}
-              activeColor={'white'}
-              category={filterBy}
-            />
-          </div>
-        ) : null}
+        {focusedFilter === filterBy &&
+          mounted &&
+          container &&
+          createPortal(
+            <div
+              className="absolute top-18 left-0 z-[9999]"
+              style={{
+                position: 'absolute',
+                transform: `translateX(${ref.current?.offsetLeft ?? 0}px)`,
+              }}
+              ref={menuRef}
+            >
+              <VerticalFilterMenu
+                items={items}
+                activeColor="white"
+                category={filterBy}
+              />
+            </div>,
+            container,
+          )}
       </div>
     </div>
   )
@@ -222,7 +242,7 @@ export const VerticalFilterMenu = ({
   const [hovered, setHovered] = useState<string | null>(null)
   const { updateFilter, setFocusedFilter } = useFilters()
   return (
-    <div className="flex flex-col items-center z-[-1] gap-4">
+    <div className="flex flex-col items-center gap-4 bg-white rounded-full shadow-lg">
       {items.map(({ id, label, icon }) => (
         <div
           key={id}
@@ -234,7 +254,7 @@ export const VerticalFilterMenu = ({
           onTouchEnd={() => setHovered(null)}
         >
           <button
-            className={`p-2 size-10 flex justify-center rounded-full bg-white shadow-md text-xl ${activeColor}`}
+            className={`p-2 size-10 flex justify-center text-xl ${activeColor}`}
             onClick={() => {
               updateFilter(category, id === hovered ? null : id)
               setFocusedFilter(null)
@@ -260,6 +280,7 @@ export const VerticalFilterMenu = ({
 export const Header = () => {
   const path = usePathname()
   const router = useRouter()
+  const { filters } = useFilters()
   const handleGoBack = () => {
     router.back()
   }

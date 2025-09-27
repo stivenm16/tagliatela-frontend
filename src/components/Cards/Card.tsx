@@ -15,7 +15,7 @@ export const FlipButton = ({
   <button
     onClick={onClick}
     className={`-top-[7px] -right-[7px] flex items-center justify-center size-[32px] absolute text-xs ${
-      isFlipped ? 'bg-not-available-main' : 'bg-pasta-main'
+      isFlipped ? 'bg-not-available-main' : 'bg-checkmeeting-main'
     } rounded-full hover:bg-gray-300`}
   >
     {/* <ArrowRightLeft color="white" size={20} /> */}
@@ -57,7 +57,7 @@ const Card = ({
     width: Number(width.split('rem')[0]) + 0.4,
   }
   return (
-    <div className="">
+    <div className="z-[0]">
       <CardDialog
         className={`w-[30rem] ${classNameModal}`}
         contentModal={
@@ -74,20 +74,20 @@ const Card = ({
             transform: isFlipped ? 'rotateY(360deg)' : 'rotateY(0deg)',
           }}
           className={`relative transition-transform duration-500  w-full h-full ${
-            isSuggested && 'bg-suggested-main'
+            isSuggested && 'bg-checkmeeting-main'
           } flex items-center justify-center rounded-3xl `}
         >
           {isSuggested && (
             <>
               <div
                 className={`absolute top-1 left-1 size-7  ${
-                  isFlipped ? 'bg-pasta-main' : 'bg-white'
+                  isFlipped ? 'bg-checkmeeting-main' : 'bg-white'
                 } z-10 rounded-br-[4px] overflow-hidden`}
               />
               <Image
                 src={StarIcon}
                 alt="star-icon"
-                className="absolute -top-4 -left-3 z-20"
+                className="absolute -top-3 -left-3 z-20"
               />
             </>
           )}
@@ -127,7 +127,7 @@ const Card = ({
                     }`}
                     style={{ transform: 'rotateY(180deg)' }}
                   >
-                    <div className="w-full h-full bg-pasta-main  rounded-3xl ">
+                    <div className="w-full h-full bg-checkmeeting-main  rounded-3xl ">
                       {flipContent ?? <p>No back content</p>}
                       <FlipButton onClick={toggleFlip} isFlipped={isFlipped} />
                     </div>
