@@ -50,20 +50,6 @@ const fakeData2 = [
       { title: 'Gusto Secreto', href: '/productos-italianos/gusto-secreto' },
     ],
   },
-  // {
-  //   title: 'Checkmeeting',
-  //   color: 'bg-checkmeeting-main',
-  //   items: [{ title: 'Destacados', href: '/check-meeting' }],
-  // },
-  // {
-  //   title: 'No disponibles',
-  //   color: 'bg-not-available-main',
-  //   items: [{ title: 'Platos', href: '/platos-no-disponibles' }],
-  // },
-  // {
-  //   title: 'Novedades',
-  //   items: [{ title: 'Platos', href: '/novedades/platos' }],
-  // },
 ]
 
 export default function Home() {

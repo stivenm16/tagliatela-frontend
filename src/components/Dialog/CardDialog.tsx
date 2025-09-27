@@ -16,7 +16,11 @@ export const CardDialog = ({
   return (
     <Dialog>
       {children}
-      <DialogContent className={className}>
+      <DialogContent
+        style={{
+          width: '30rem',
+        }}
+      >
         <div className="absolute -top-2 -right-4">
           <DialogClose />
         </div>

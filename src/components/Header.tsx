@@ -256,7 +256,7 @@ export const VerticalFilterMenu = ({
           <button
             className={`p-2 size-10 flex justify-center text-xl ${activeColor}`}
             onClick={() => {
-              updateFilter(category, id === hovered ? null : id)
+              updateFilter(category, id === hovered ? null : label)
               setFocusedFilter(null)
             }}
           >
@@ -291,7 +291,7 @@ export const Header = () => {
         backgroundColor: colorMatcher(path.split('/').filter(Boolean)[0]),
         color: 'white',
       }}
-      className={`relative uppercase h-20 justify-between flex gap-5  items-center bg-neutral-50`}
+      className={`relative uppercase h-20  z-1 justify-between flex gap-5  items-center bg-neutral-50`}
     >
       <div className="flex  gap-5">
         <div onClick={handleGoBack} className="cursor-pointer ml-5">

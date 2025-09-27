@@ -12,7 +12,7 @@ import Link from 'next/link'
 
 export const FloatingMenu = () => {
   return (
-    <div className="fixed bottom-5 z-[0.5] w-full px-14 flex justify-center">
+    <div className="fixed bottom-5 z-1 w-full px-14 flex justify-center">
       <div className="flex gap-5 w-full items-center justify-center p-4 bg-white/10 text-black backdrop-blur-md rounded-2xl shadow-xl border border-white/20">
         <IconButton
           href="/recomendados"

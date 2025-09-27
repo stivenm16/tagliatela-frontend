@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { ReactNode, useEffect, useState } from 'react'
 import { createPortal } from 'react-dom'
 
 const AlertPortal = ({ children }: { children: React.ReactNode }) => {
@@ -16,11 +16,11 @@ const AlertPortal = ({ children }: { children: React.ReactNode }) => {
 }
 
 const Alert = ({
-  text,
+  children,
   applyBorder,
   closeButton = true,
 }: {
-  text: string
+  children: ReactNode
   applyBorder?: boolean
   closeButton?: boolean
 }) => {
@@ -32,11 +32,11 @@ const Alert = ({
     <AlertPortal>
       <div className="fixed top-[45%] left-1/4 -50">
         <div
-          className={`p-5 bg-white/80 backdrop-blur-sm uppercase w-[25rem] px-10 ${
+          className={`p-5 bg-white/80 backdrop-blur-sm uppercase w-[26rem] px-10 ${
             applyBorder ? 'border-2 border-red-600' : ''
           } rounded-2xl w-2/3 text-center shadow-lg relative`}
         >
-          <span>{text}</span>
+          <span>{children}</span>
           {closeButton ? (
             <button
               onClick={() => setOpen(false)}
