@@ -3,7 +3,7 @@ import CardReferenceImage from '@/assets/images/card-reference-image.png'
 import Card from '@/components/Cards/Card'
 import { ClickableItem } from '@/components/Dialog/ClickableItem'
 import { default as GeneralDialogContent } from '@/components/Dialog/GeneralDialog'
-import Layout from '@/components/Layout'
+import Layout from '@/components/Layout/Layout'
 import Image from 'next/image'
 
 const Page = () => {

@@ -15,25 +15,36 @@ const AlertPortal = ({ children }: { children: React.ReactNode }) => {
   return createPortal(children, document.body)
 }
 
-const Alert = () => {
+const Alert = ({
+  text,
+  applyBorder,
+  closeButton = true,
+}: {
+  text: string
+  applyBorder?: boolean
+  closeButton?: boolean
+}) => {
   const [open, setOpen] = useState(true)
 
   if (!open) return null
 
   return (
     <AlertPortal>
-      <div className="fixed top-1/2 left-1/4 -50">
-        <div className="p-5 bg-white/80 backdrop-blur-sm uppercase border-2 border-red-600 rounded-2xl w-2/3 text-center shadow-lg relative">
-          <span>
-            POR FAVOR NO OLVIDES PREGUNTAR SI TIENE ALGUNA RESTRICCIÓN
-            ALIMENTARIA
-          </span>
-          <button
-            onClick={() => setOpen(false)}
-            className="absolute -top-2 -right-2 bg-red-600 text-white rounded-full w-6 h-6 flex items-center justify-center"
-          >
-            ✕
-          </button>
+      <div className="fixed top-[45%] left-1/4 -50">
+        <div
+          className={`p-5 bg-white/80 backdrop-blur-sm uppercase w-[25rem] px-10 ${
+            applyBorder ? 'border-2 border-red-600' : ''
+          } rounded-2xl w-2/3 text-center shadow-lg relative`}
+        >
+          <span>{text}</span>
+          {closeButton ? (
+            <button
+              onClick={() => setOpen(false)}
+              className="absolute -top-2 -right-2 bg-red-600 text-white rounded-full w-6 h-6 flex items-center justify-center"
+            >
+              ✕
+            </button>
+          ) : null}
         </div>
       </div>
     </AlertPortal>

@@ -1,10 +1,11 @@
 'use client'
 import CardReferenceImage from '@/assets/images/card-reference-image.png'
+import Alert from '@/components/Alert'
 import Card from '@/components/Cards/Card'
 import { ClickableItem } from '@/components/Dialog/ClickableItem'
 import GeneralDialogContent from '@/components/Dialog/GeneralDialog'
-import { FiltersPortal } from '@/components/FilterPortal'
-import Layout from '@/components/Layout'
+import Layout from '@/components/Layout/Layout'
+import { CustomSelect } from '@/components/Select'
 import Image from 'next/image'
 import { useState } from 'react'
 
@@ -127,87 +128,27 @@ const Page = () => {
   return (
     <>
       <Layout>
-        {/* <div className="flex flex-col gap-5 px-20 mt-20"> */}
         {flagNoContent ? (
-          <div className="flex items-center justify-center w-full ">
-            <div className="h-24 bg-white flex w-[70%] shadow-xl justify-center items-center  px-8 rounded-2xl mt-[50%]">
-              <h1 className="text-xl text-center ">
-                POR FAVOR SELECCIONA LA FAMILIA EN LA SECCIÓN DE FILTROS PARA
-                VER LAS RECOMENDACIONES
-              </h1>
-            </div>
-          </div>
+          <Alert
+            text="POR FAVOR SELECCIONA LA FAMILIA DE PLATOS DESEADA"
+            closeButton={false}
+          />
         ) : (
           <>
             <div className="flex flex-col gap-5 px-1 ">
-              {/* <CustomSelect
-            label={
-              filtersSelected.family !== null
-                ? familyOptions[filtersSelected.family].label
-                : ''
-            }
-            placeHolder="Familia"
-            options={familyOptions}
-            selectedIndex={filtersSelected.family ?? null}
-            mainColor="bg-suggested-main"
-            activedColor="bg-pasta-main"
-            onChange={(value) => handleSelectChange('family', value)}
-          /> */}
-
-              {/* <div className="grid grid-cols-2 gap-5">
-            <CustomSelect
-              label={
-                filtersSelected.diet !== null
-                  ? dietOptions[filtersSelected.diet].label
-                  : ''
-              }
-              placeHolder="Dieta"
-              options={dietOptions}
-              selectedIndex={filtersSelected.diet ?? null}
-              mainColor="bg-suggested-main"
-              activedColor="bg-pasta-main"
-              onChange={(value) => handleSelectChange('diet', value)}
-            />
-            <CustomSelect
-              label={
-                filtersSelected.allergen !== null
-                  ? allergenOptions[filtersSelected.allergen].label
-                  : ''
-              }
-              placeHolder="Alergenos"
-              options={allergenOptions}
-              selectedIndex={filtersSelected.allergen ?? null}
-              mainColor="bg-suggested-main"
-              activedColor="bg-pasta-main"
-              onChange={(value) => handleSelectChange('allergen', value)}
-            />
-            <CustomSelect
-              label={
-                filtersSelected.ingredient !== null
-                  ? ingredientOptions[filtersSelected.ingredient].label
-                  : ''
-              }
-              placeHolder="Ingredientes"
-              options={ingredientOptions}
-              selectedIndex={filtersSelected.ingredient ?? null}
-              mainColor="bg-suggested-main"
-              activedColor="bg-pasta-main"
-              onChange={(value) => handleSelectChange('ingredient', value)}
-            />
-            <CustomSelect
-              label={
-                filtersSelected.flavor !== null
-                  ? flavorOptions[filtersSelected.flavor].label
-                  : ''
-              }
-              placeHolder={'Sabores'}
-              options={flavorOptions}
-              selectedIndex={filtersSelected.flavor ?? null}
-              mainColor="bg-suggested-main"
-              activedColor="bg-pasta-main"
-              onChange={(value) => handleSelectChange('flavor', value)}
-            />
-          </div> */}
+              <CustomSelect
+                label={
+                  filtersSelected.family !== null
+                    ? familyOptions[filtersSelected.family].label
+                    : ''
+                }
+                placeHolder="Familia"
+                options={familyOptions}
+                selectedIndex={filtersSelected.family ?? null}
+                mainColor="bg-suggested-main"
+                activedColor="bg-pasta-main"
+                onChange={(value) => handleSelectChange('family', value)}
+              />
               <div className="grid grid-cols-3 gap-x-2 px-2 gap-y-5 mt-10">
                 {fakeData.map((item, i) => (
                   <Card
@@ -281,13 +222,6 @@ const Page = () => {
           </>
         )}
       </Layout>
-      <FiltersPortal>
-        <div className="flex gap-5 ml-auto w-fit mr-5">
-          <div className="bg-neutral-300 size-10 rounded-full" />
-          <div className="bg-neutral-300 size-10 rounded-full" />
-          <div className="bg-neutral-300 size-10 rounded-full" />
-        </div>
-      </FiltersPortal>
     </>
   )
 }

@@ -1,7 +1,6 @@
 import PastaImg from '@/assets/images/pasta-image-reference.png'
 import SauceImg from '@/assets/images/salsa.png'
 import SauceThumbnail from '@/assets/images/sauce-thumbnail.png'
-import Alert from '@/components/Alert'
 import {
   Dialog,
   DialogContent,
@@ -31,8 +30,7 @@ const SaucesComponent = ({
           Salsa disponibles
         </h2>
       )}
-
-      <Alert />
+      {/* <Alert /> */}
       <div className="flex gap-5 gap-y-4 flex-wrap">
         {sauces.map((sauce) => (
           <Dialog key={sauce.id}>

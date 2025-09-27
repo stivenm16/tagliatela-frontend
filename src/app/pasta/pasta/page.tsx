@@ -22,7 +22,10 @@ const Page = () => {
   }))
   return (
     <div className="px-[30px]  ">
-      <Alert />
+      <Alert
+        text="POR FAVOR NO OLVIDES PREGUNTAR SI TIENE ALGUNA RESTRICCIÓN
+            ALIMENTARIA"
+      />
       <h1 className="text-center font-bold text-xl mt-4 uppercase">
         Tipo de pastas
       </h1>
