@@ -4,6 +4,7 @@ import BeveragesIcon from '@/assets/svgs/beverages-card-icon.svg'
 import IngredientsIcon from '@/assets/svgs/filters/ingredients/ingredients-icon.svg'
 import Alert from '@/components/Alert'
 import Card from '@/components/Cards/Card'
+import { ClickableItem } from '@/components/Dialog/ClickableItem'
 import GeneralDialogContent from '@/components/Dialog/GeneralDialog'
 import OverlayPopup from '@/components/Dialog/OverlayPopup'
 import { useFilters } from '@/components/Layout/context/FilterContext'
@@ -57,14 +58,6 @@ const supervisorMessage = (
   </>
 )
 const Page = () => {
-  const [filtersSelected, setFiltersSelected] = useState({
-    diet: null,
-    allergen: null,
-    ingredient: null,
-    flavor: null,
-    family: null,
-  })
-
   const [dishes, setDishes] = useState<Dish[]>([])
   const [isLoading, setIsLoading] = useState(false)
   const [open, setOpen] = useState(true)
@@ -111,12 +104,6 @@ const Page = () => {
         })
     }
   }, [filters.family, getContent])
-
-  const fakeIngredients = Array.from({ length: 3 }, (_, i) => ({
-    id: i + 1,
-    name: `Ingrediente ${i + 1}`,
-    description: `Descripción del ${i + 1}`,
-  }))
 
   const matchesFilter = (
     dishValues: { name: string }[] | undefined,
@@ -194,7 +181,38 @@ const Page = () => {
                         backgroundCard="bg-neutral-50"
                         flipContentOptions={[
                           {
-                            content: <div>Contenido 2</div>,
+                            content: (
+                              <div className="p-4 text-white">
+                                <h2 className="text-2xl font-semibold mb-2 text-center">
+                                  {item.name}
+                                </h2>
+                                <ul className="flex flex-col gap-1 w-44 overflow-y-auto pr-2 mx-auto justify-center">
+                                  {item.ingredients.length > 0
+                                    ? item.ingredients.map((ingredient) => (
+                                        <li key={ingredient.id}>
+                                          {ingredient.imageUrl ? (
+                                            <ClickableItem
+                                              title={ingredient.name}
+                                              description={
+                                                ingredient.description!
+                                              }
+                                              origin="Italiano"
+                                              lightIcon={false}
+                                            />
+                                          ) : (
+                                            <div className="flex gap-2 items-center">
+                                              <div className="size-2 rounded-full bg-white ml-[6px]" />
+                                              <span className="ml-3">
+                                                {ingredient.name}
+                                              </span>
+                                            </div>
+                                          )}
+                                        </li>
+                                      ))
+                                    : null}
+                                </ul>
+                              </div>
+                            ),
                             icon: BeveragesIcon,
                             label: 'Bebidas',
                             color: 'bg-pasta-main',
@@ -202,23 +220,35 @@ const Page = () => {
                           },
                           {
                             content: (
-                              <div className="p-4">
-                                <h2 className="text-lg font-semibold mb-2">
-                                  Ingredientes
+                              <div className="p-4 text-white">
+                                <h2 className="text-2xl font-semibold mb-2 text-center">
+                                  {item.name}
                                 </h2>
-                                <div className="flex flex-col gap-2 max-h-48 overflow-y-auto pr-2">
-                                  {(item.ingredients.length > 0
-                                    ? item.ingredients
-                                    : fakeIngredients
-                                  ).map((ingredient) => (
-                                    <div key={ingredient.id}> test</div>
-                                    // <ClickableItem
-                                    //   key={ingredient.id}
-                                    //   // icon={IngredientsIcon}
-                                    //   text={ingredient.name}
-                                    // />
-                                  ))}
-                                </div>
+                                <ul className="flex flex-col gap-1 w-44 overflow-y-auto pr-2 mx-auto justify-center">
+                                  {item.ingredients.length > 0
+                                    ? item.ingredients.map((ingredient) => (
+                                        <li key={ingredient.id}>
+                                          {ingredient.imageUrl ? (
+                                            <ClickableItem
+                                              title={ingredient.name}
+                                              description={
+                                                ingredient.description!
+                                              }
+                                              origin="Italiano"
+                                              lightIcon={false}
+                                            />
+                                          ) : (
+                                            <div className="flex gap-2 items-center">
+                                              <div className="size-2 rounded-full bg-white ml-[6px]" />
+                                              <span className="ml-3">
+                                                {ingredient.name}
+                                              </span>
+                                            </div>
+                                          )}
+                                        </li>
+                                      ))
+                                    : null}
+                                </ul>
                               </div>
                             ),
                             icon: IngredientsIcon,
@@ -230,7 +260,7 @@ const Page = () => {
                         isSuggested={i == 0}
                       >
                         <div className="flex flex-col items-center gap-2 p-4 h-full w-full ">
-                          <h2 className="capitalize text-center font-bold text-xl mt-3">
+                          <h2 className="capitalize text-center font-bold text-2xl mt-3">
                             {item.name}
                           </h2>
                           <Image
