@@ -62,7 +62,7 @@ export default function Home() {
           {fakeData2.map((column, index) => (
             <Link
               href={column.items[0].href}
-              className={`flex flex-col  size-[14rem]  justify-center text-wrap gap-4 font-bold items-center uppercase rounded-full  ${column.color} p-3`}
+              className={`flex flex-col  size-[13rem]  justify-center text-wrap gap-4 font-bold items-center uppercase rounded-full  ${column.color} p-3`}
               key={index}
             >
               <>
@@ -72,26 +72,20 @@ export default function Home() {
             </Link>
           ))}
         </div>
-        <div className="flex gap-5 justify-center">
+        <div className="flex gap-28 justify-center mx-auto">
           <Link
             href={'/check-meeting'}
-            className={`flex  size-40 mt-8 justify-center text-wrap font-bold flex-row items-center uppercase rounded-full bg-checkmeeting-main`}
+            className={`flex  size-32 mt-8 justify-center text-wrap font-bold flex-row items-center uppercase rounded-full bg-checkmeeting-main`}
           >
             <Image src={Checckmeeting} alt={'Checkmeeting'} />
           </Link>
           <Link
             href={'/platos-no-disponibles'}
-            className={`flex  size-40 mt-8 justify-center text-wrap font-bold flex-row items-center uppercase rounded-full bg-not-available-main`}
+            className={`flex  size-32 mt-8 justify-center text-wrap font-bold flex-row items-center uppercase rounded-full bg-not-available-main`}
           >
             <Image src={NotAvailable} alt={'Not Available'} />
           </Link>
         </div>
-        {/* <Link
-          href={'/novedades/platos'}
-          className={`flex  w-full mt-8 justify-center text-wrap font-bold flex-row items-center uppercase rounded-md bg-news-main p-3`}
-        >
-          <span className="text-center">{'Novedades'}</span>
-        </Link> */}
       </div>
     </div>
   )

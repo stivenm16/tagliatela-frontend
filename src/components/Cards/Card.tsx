@@ -71,7 +71,7 @@ const Card = ({
         <CardDialog
           className={classNameModal}
           contentModal={
-            <div className="flex flex-col justify-center bg-white rounded-3xl items-center gap-4">
+            <div className="flex flex-col justify-center bg-white shadow-2xl rounded-3xl items-center gap-4">
               {modalContent}
             </div>
           }

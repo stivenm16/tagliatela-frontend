@@ -68,7 +68,7 @@ const Page = () => {
 
   const getContent = useCallback(async () => {
     const response = await axiosInstance.get(
-      `dish/search?familyName=${filters.family?.toUpperCase()}`,
+      `dish/search?typeName=${filters.family?.toUpperCase()}`,
       {
         withCredentials: true,
       },
@@ -92,7 +92,6 @@ const Page = () => {
             setDishes([])
           } else {
             setDishes(data)
-            console.log(data, '<====== data')
           }
         })
         .catch((error) => {
@@ -182,14 +181,14 @@ const Page = () => {
                         flipContentOptions={[
                           {
                             content: (
-                              <div className="p-4 text-white">
-                                <h2 className="text-2xl font-semibold mb-2 text-center">
+                              <div className="p-4 text-white  w-[12rem] flex flex-col mx-auto ">
+                                <h2 className="text-xl font-semibold my-4 text-center">
                                   {item.name}
                                 </h2>
                                 <ul className="flex flex-col gap-1 w-44 overflow-y-auto pr-2 mx-auto justify-center">
                                   {item.ingredients.length > 0
                                     ? item.ingredients.map((ingredient) => (
-                                        <li key={ingredient.id}>
+                                        <div key={ingredient.id}>
                                           {ingredient.imageUrl ? (
                                             <ClickableItem
                                               title={ingredient.name}
@@ -201,13 +200,13 @@ const Page = () => {
                                             />
                                           ) : (
                                             <div className="flex gap-2 items-center">
-                                              <div className="size-2 rounded-full bg-white ml-[6px]" />
+                                              <div className="size-2 rounded-full bg-white ml-[5px] text-sm" />
                                               <span className="ml-3">
                                                 {ingredient.name}
                                               </span>
                                             </div>
                                           )}
-                                        </li>
+                                        </div>
                                       ))
                                     : null}
                                 </ul>
@@ -220,14 +219,14 @@ const Page = () => {
                           },
                           {
                             content: (
-                              <div className="p-4 text-white">
-                                <h2 className="text-2xl font-semibold mb-2 text-center">
+                              <div className="p-4 text-white  w-[12rem] flex flex-col mx-auto ">
+                                <h2 className="text-xl font-semibold my-4 text-center">
                                   {item.name}
                                 </h2>
                                 <ul className="flex flex-col gap-1 w-44 overflow-y-auto pr-2 mx-auto justify-center">
                                   {item.ingredients.length > 0
                                     ? item.ingredients.map((ingredient) => (
-                                        <li key={ingredient.id}>
+                                        <div key={ingredient.id}>
                                           {ingredient.imageUrl ? (
                                             <ClickableItem
                                               title={ingredient.name}
@@ -239,13 +238,13 @@ const Page = () => {
                                             />
                                           ) : (
                                             <div className="flex gap-2 items-center">
-                                              <div className="size-2 rounded-full bg-white ml-[6px]" />
-                                              <span className="ml-3">
+                                              <div className="size-2 rounded-full bg-white ml-[5px]" />
+                                              <span className="ml-3 text-sm">
                                                 {ingredient.name}
                                               </span>
                                             </div>
                                           )}
-                                        </li>
+                                        </div>
                                       ))
                                     : null}
                                 </ul>
@@ -260,7 +259,7 @@ const Page = () => {
                         isSuggested={i == 0}
                       >
                         <div className="flex flex-col items-center gap-2 p-4 h-full w-full ">
-                          <h2 className="capitalize text-center font-bold text-2xl mt-3">
+                          <h2 className="capitalize text-center font-bold text-xl h-16 self-center flex items-center">
                             {item.name}
                           </h2>
                           <Image
@@ -270,8 +269,8 @@ const Page = () => {
                             height={50}
                             className="rounded-2xl overflow-hidden"
                           />
-                          <h2 className="font-medium text-center">
-                            {item.description.slice(0, 70)}...
+                          <h2 className="font-medium text-sm text-center">
+                            {item.description.slice(0, 80)}...
                           </h2>
                         </div>
                       </Card>

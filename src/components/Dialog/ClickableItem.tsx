@@ -24,7 +24,7 @@ export const ClickableItem = ({
       <Dialog>
         <DialogTrigger asChild>
           <div
-            className="flex mr-auto gap-3"
+            className="flex mr-auto gap-4"
             onClick={(e) => e.stopPropagation()}
           >
             {lightIcon ? (
@@ -32,7 +32,7 @@ export const ClickableItem = ({
             ) : (
               <Image src={InfoDark} alt={title} />
             )}
-            <span>{title}</span>
+            <span className='text-sm"'>{title}</span>
           </div>
         </DialogTrigger>
         <DialogContent className="Dialog rounded-lg relative bg-white">
