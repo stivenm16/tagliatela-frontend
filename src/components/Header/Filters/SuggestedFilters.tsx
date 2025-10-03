@@ -1,4 +1,5 @@
 'use client'
+import { FilterItem, VerticalFilterMenu } from './VerticalFilterMenu'
 // Family Icons
 import AntipastiIcon from '@/assets/svgs/filters/family/antipasti-icon.svg'
 import AperitiviIcon from '@/assets/svgs/filters/family/aperitivi-icon.svg'
@@ -52,24 +53,10 @@ import basePastaIcon from '@/assets/svgs/filters/base-pasta/base-pasta-icon.svg'
 import CreamyIcon from '@/assets/svgs/filters/base-pasta/creamy-icon.svg'
 import OilIcon from '@/assets/svgs/filters/base-pasta/oil-icon.svg'
 
-import colorMatcher from '@/utils/colorMatcher'
+import { Filters, useFilters } from '@/components/Layout/context/FilterContext'
 import Image from 'next/image'
-import { usePathname, useRouter } from 'next/navigation'
 import { useEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
-import { ArrowLeft } from './Icons/ArrowLeft'
-import { Filters, useFilters } from './Layout/context/FilterContext'
-
-export type FilterItem = {
-  id: string
-  label: string
-  icon: string
-}
-type VerticalFilterMenuProps = {
-  items: FilterItem[]
-  activeColor: string
-  category: keyof Filters
-}
 
 const ingredientsFilters: FilterItem[] = [
   { id: 'cheese', label: 'Queso', icon: CheeseIcon },
@@ -234,197 +221,39 @@ const CategoryFilter = ({
   )
 }
 
-const VerticalFilterItem = ({
-  id,
-  label,
-  icon,
-  activeColor,
-  hovered,
-  setHovered,
-  updateFilter,
-  setFocusedFilter,
-  category,
-}: {
-  id: string
-  label: string
-  icon: string
-  activeColor: string
-  hovered: string | null
-  setHovered: (id: string | null) => void
-  updateFilter: (category: keyof Filters, value: string | null) => void
-  setFocusedFilter: (filter: keyof Filters | null) => void
-  category: keyof Filters
-}) => {
-  const [position, setPosition] = useState<'left' | 'right'>('right')
-  const [coords, setCoords] = useState<{ top: number; left: number } | null>(
-    null,
-  )
-  const [isPositioned, setIsPositioned] = useState(false)
-  const buttonRef = useRef<HTMLButtonElement>(null)
-  const tooltipRef = useRef<HTMLSpanElement>(null)
-
-  useEffect(() => {
-    if (hovered === id && buttonRef.current) {
-      setIsPositioned(false)
-      const rect = buttonRef.current.getBoundingClientRect()
-      const top = rect.top + rect.height / 2
-
-      // Set initial position temporarily
-      setPosition('right')
-      setCoords({ top, left: rect.right + 12 })
-
-      // Use setTimeout to ensure DOM has updated
-      setTimeout(() => {
-        if (tooltipRef.current && buttonRef.current) {
-          const tooltipWidth = tooltipRef.current.offsetWidth
-          const buttonRect = buttonRef.current.getBoundingClientRect()
-
-          // Check if tooltip fits on the right
-          if (buttonRect.right + tooltipWidth + 12 > window.innerWidth) {
-            setPosition('left')
-            setCoords({
-              top: buttonRect.top + buttonRect.height / 2,
-              left: buttonRect.left - tooltipWidth - 12,
-            })
-          } else {
-            setPosition('right')
-            setCoords({
-              top: buttonRect.top + buttonRect.height / 2,
-              left: buttonRect.right + 12,
-            })
-          }
-          setIsPositioned(true)
-        }
-      }, 0)
-    } else {
-      setIsPositioned(false)
-    }
-  }, [hovered, id])
-
+export const SuggestedFilters = () => {
   return (
-    <div
-      className="relative flex items-center"
-      onMouseDown={() => setHovered(id)}
-      onMouseUp={() => setHovered(null)}
-      onMouseLeave={() => setHovered(null)}
-      onTouchStart={() => setHovered(id)}
-      onTouchEnd={() => setHovered(null)}
-    >
-      <button
-        ref={buttonRef}
-        className={`p-2 size-10 flex justify-center text-xl ${activeColor}`}
-        onClick={() => {
-          updateFilter(category, id === hovered ? null : label)
-          setFocusedFilter(null)
-        }}
-      >
-        <Image src={icon} alt={label} />
-      </button>
-
-      {hovered === id &&
-        coords &&
-        createPortal(
-          <span
-            ref={tooltipRef}
-            style={{
-              position: 'fixed',
-              top: coords.top,
-              left: coords.left,
-              transform: 'translateY(-50%)',
-              opacity: isPositioned ? 1 : 0,
-            }}
-            className="px-3 py-1 bg-white rounded-xl shadow text-sm font-medium whitespace-nowrap transition-opacity duration-200 text-black z-[9999]"
-          >
-            {label}
-          </span>,
-          document.body,
-        )}
-    </div>
-  )
-}
-export const VerticalFilterMenu = ({
-  items,
-  activeColor,
-  category,
-}: VerticalFilterMenuProps) => {
-  const [hovered, setHovered] = useState<string | null>(null)
-  const { updateFilter, setFocusedFilter } = useFilters()
-  return (
-    <div className="flex flex-col items-center gap-4 bg-white rounded-full shadow-lg">
-      {items.map(({ id, label, icon }) => (
-        <VerticalFilterItem
-          key={id}
-          id={id}
-          label={label}
-          icon={icon}
-          activeColor={activeColor}
-          hovered={hovered}
-          setHovered={setHovered}
-          updateFilter={updateFilter}
-          setFocusedFilter={setFocusedFilter}
-          category={category}
-        />
-      ))}
-    </div>
-  )
-}
-export const Header = () => {
-  const path = usePathname()
-  const router = useRouter()
-  const { filters } = useFilters()
-  const handleGoBack = () => {
-    router.back()
-  }
-
-  return (
-    <div
-      style={{
-        backgroundColor: colorMatcher(path.split('/').filter(Boolean)[0]),
-        color: 'white',
-      }}
-      className={`relative uppercase h-20  z-1 justify-between flex gap-5  items-center bg-neutral-50`}
-    >
-      <div className="flex  gap-5">
-        <div onClick={handleGoBack} className="cursor-pointer ml-5">
-          <ArrowLeft className={''} />
-        </div>
-
-        <span className=" w-fit items-center text-xl font-bold">
-          {path.split('/').pop()?.split('-').join(' ')?.toUpperCase() || 'Home'}
-        </span>
-      </div>
-      <div className="w-fit ml-auto mr-5 flex gap-5" id="filters-container">
-        <CategoryFilter
-          filterBy="family"
-          triggerIcon={FamilyIcon}
-          items={familyFilters}
-        />
-        <CategoryFilter
-          filterBy="allergen"
-          triggerIcon={AlergensIcon}
-          items={allergensFilters}
-        />
-        <CategoryFilter
-          filterBy="diet"
-          triggerIcon={DietIcon}
-          items={dietFilters}
-        />
-        <CategoryFilter
-          filterBy="ingredients"
-          triggerIcon={IngredientsIcon}
-          items={ingredientsFilters}
-        />
-        <CategoryFilter
-          filterBy="flavour"
-          triggerIcon={FlavoursIcon}
-          items={flavoursFilters}
-        />
-        <CategoryFilter
-          filterBy="basePasta"
-          triggerIcon={basePastaIcon}
-          items={basePastaFilters}
-        />
-      </div>
+    <div className="w-fit ml-auto mr-5 flex gap-5" id="filters-container">
+      <CategoryFilter
+        filterBy="family"
+        triggerIcon={FamilyIcon}
+        items={familyFilters}
+      />
+      <CategoryFilter
+        filterBy="allergen"
+        triggerIcon={AlergensIcon}
+        items={allergensFilters}
+      />
+      <CategoryFilter
+        filterBy="diet"
+        triggerIcon={DietIcon}
+        items={dietFilters}
+      />
+      <CategoryFilter
+        filterBy="ingredients"
+        triggerIcon={IngredientsIcon}
+        items={ingredientsFilters}
+      />
+      <CategoryFilter
+        filterBy="flavour"
+        triggerIcon={FlavoursIcon}
+        items={flavoursFilters}
+      />
+      <CategoryFilter
+        filterBy="basePasta"
+        triggerIcon={basePastaIcon}
+        items={basePastaFilters}
+      />
     </div>
   )
 }

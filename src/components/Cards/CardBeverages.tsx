@@ -36,7 +36,7 @@ const CardBeverages = ({
       >
         <DialogTrigger>
           <div className=" w-fit" onClick={() => setIsOpenModal(true)}>
-            <Image src={img} alt={title} />
+            <Image src={img} alt={title} className="rounded-xl shadow-lg" />
             <div className="flex mt-3 ">
               <Image src={BottleIcon} alt={title} className="mt-auto" />
               <div className="flex flex-col gap-1 pl-4 w-40 mt-auto">

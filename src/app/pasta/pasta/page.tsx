@@ -1,8 +1,8 @@
 'use client'
 import PastaImg from '@/assets/images/pasta-image-reference.png'
-import Alert from '@/components/Alert'
 import Image from 'next/image'
 import Link from 'next/link'
+import AlertSauces from '../components/AlertSauces'
 import NewDishFloatingButton from '../components/NewDishFloatingButton'
 
 const Page = () => {
@@ -22,17 +22,14 @@ const Page = () => {
   }))
   return (
     <div className="px-[30px]  ">
-      <Alert
-        text="POR FAVOR NO OLVIDES PREGUNTAR SI TIENE ALGUNA RESTRICCIÓN
-            ALIMENTARIA"
-      />
+      <AlertSauces />
       <h1 className="text-center font-bold text-xl mt-4 uppercase">
         Tipo de pastas
       </h1>
 
       <div className="flex flex-col gap-5">
         <div className="h-full">
-          <h3 className="text-left font-bold my-4 uppercase">
+          <h3 className="text-left text-xl text-suggested-main font-bold my-4 uppercase">
             Pasta tradizionale
           </h3>
           <div className="flex gap-5 flex-wrap gap-y-4">
@@ -52,7 +49,9 @@ const Page = () => {
           </div>
         </div>
         <div>
-          <h3 className="text-left font-bold my-6 uppercase">Pasta Ripiena</h3>
+          <h3 className="text-left text-xl text-beverages-main font-bold my-6 uppercase">
+            Pasta Ripiena
+          </h3>
           <div className="flex gap-5 gap-y-4 flex-wrap ">
             {fakeData2.map((item) => (
               <Link href={`/pasta/pasta/${item.id}`} key={item.id}>

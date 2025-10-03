@@ -6,13 +6,13 @@ import { LinkImgContainer } from '@/components/LinkImgContainer'
 const page = () => {
   return (
     <div className="flex flex-col items-center justify-center">
-      <span className="uppercase my-8 mt-18">
-        POR FAVOR SELECCIONA LA CATEGORÍA:
+      <span className="uppercase text-pasta-main text-xl drop-shadow-2xl font-bold my-10 ">
+        Por favor selecciona una categoria:
       </span>
       <div className="flex flex-wrap px-28  font-bold uppercase text-xl gap-8">
         <LinkImgContainer
           title="VINI D´ ITALIA"
-          href="/bebidas/vinos"          
+          href="/bebidas/vinos"
           img={ViniImg}
           style={{ width: '16rem', height: '20rem', borderRadius: '14px' }}
         />

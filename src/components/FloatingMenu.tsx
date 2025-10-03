@@ -12,7 +12,6 @@ import { usePathname } from 'next/navigation'
 
 export const FloatingMenu = () => {
   const path = usePathname()
-  console.log(path)
   const route = path.split('/')[1]
 
   const routes = [

@@ -3,14 +3,13 @@ import { FilterSaucesOption, Sauce } from '@/types/global'
 import { fakeFilters } from '@/utils/data/fakeFilters'
 import { fakeSauces } from '@/utils/data/fakeSauces'
 import { useState } from 'react'
+import AlertSauces from '../components/AlertSauces'
 import { FiltersSauces } from '../components/FiltersSauces'
 import SaucesComponent from '../components/SaucesComponent'
 
 const Page = () => {
   const [filters, setFilters] = useState<FilterSaucesOption[]>(fakeFilters)
-
   const [sauces, setSauces] = useState<Sauce[]>(fakeSauces)
-
   const [selectedSauceId, setSelectedSauceId] = useState<number | null>(null)
   const handleSelectChange = (
     selectedIndex: number | null,
@@ -29,12 +28,12 @@ const Page = () => {
   }
 
   const toggleSauceSelection = (id: number) => {
-    console.log(id)
     setSelectedSauceId(id)
   }
 
   return (
     <div>
+      <AlertSauces />
       <div className="flex justify-center items-center gap-5 mt-20">
         <FiltersSauces
           filters={filters}
