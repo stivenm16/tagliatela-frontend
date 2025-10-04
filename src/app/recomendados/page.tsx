@@ -43,8 +43,9 @@ interface Dish {
   isNew: boolean
   isRecommended: boolean
   name: string
-  pairing_wine: Ingredient[]
+  pairing: Ingredient[]
   thumbnailUrl: string
+  type: string
 }
 
 const suggestionsMessage = (
@@ -129,6 +130,7 @@ const Page = () => {
       matchesFilter(filter.families, filters.family)
     )
   })
+
   const onCloseDialog = () => {
     setOpen(false)
     setAlertMessage(suggestionsMessage)
@@ -187,7 +189,7 @@ const Page = () => {
                                 </h2>
                                 <ul className="flex flex-col gap-1 w-44 overflow-y-auto pr-2 mx-auto justify-center">
                                   {item.ingredients.length > 0
-                                    ? item.ingredients.map((ingredient) => (
+                                    ? item.pairing.map((ingredient) => (
                                         <div key={ingredient.id}>
                                           {ingredient.imageUrl ? (
                                             <ClickableItem
@@ -257,18 +259,26 @@ const Page = () => {
                           },
                         ]}
                         isSuggested={i == 0}
+                        hasPairing={item.pairing.length > 0}
                       >
                         <div className="flex flex-col items-center gap-2 p-4 h-full w-full ">
                           <h2 className="capitalize text-center font-bold text-xl h-16 self-center flex items-center">
                             {item.name}
                           </h2>
-                          <Image
-                            src={CardReferenceImage}
-                            alt={item.name}
-                            width={210}
-                            height={50}
-                            className="rounded-2xl overflow-hidden"
-                          />
+                          <div className="relative">
+                            <Image
+                              src={CardReferenceImage}
+                              alt={item.name}
+                              width={210}
+                              height={50}
+                              className="rounded-2xl overflow-hidden"
+                            />
+                            {item.type.toLowerCase() === 'insalate' ? (
+                              <div className="bg-suggested-main rounded-tl-full text-center h-8 flex items-center justify-center text-white uppercase absolute w-full bottom-0">
+                                Insalati
+                              </div>
+                            ) : null}
+                          </div>
                           <h2 className="font-medium text-sm text-center">
                             {item.description.slice(0, 80)}...
                           </h2>
