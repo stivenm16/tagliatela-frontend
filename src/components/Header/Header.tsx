@@ -14,6 +14,7 @@ export const Header = () => {
   }
 
   const route = path.split('/').filter(Boolean)[0] as ROUTES
+  console.log(route)
   return (
     <div
       style={{

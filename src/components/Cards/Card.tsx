@@ -126,21 +126,23 @@ const Card = ({
                         {children}
 
                         {flipContentOptions && (
-                          <div className="absolute bottom-4 left-14 flex gap-10">
-                            {flipContentOptions.map((item) => (
-                              <button
-                                key={item.label}
-                                className={`${item.color} size-10 flex justify-center items-center p-2 rounded-full`}
-                                onClick={(e) => toggleFlip(e, item.label)}
-                              >
-                                <Image
-                                  src={item.icon}
-                                  alt={item.label}
-                                  width={item.iconWidth ?? 15}
-                                  height={24}
-                                />
-                              </button>
-                            ))}
+                          <div className="absolute bottom-6 left-0 flex  gap-10 w-full ">
+                            <div className="flex mx-auto gap-20">
+                              {flipContentOptions.map((item) => (
+                                <button
+                                  key={item.label}
+                                  className={`${item.color} size-10 flex justify-center items-center p-2 rounded-full`}
+                                  onClick={(e) => toggleFlip(e, item.label)}
+                                >
+                                  <Image
+                                    src={item.icon}
+                                    alt={item.label}
+                                    width={item.iconWidth ?? 15}
+                                    height={24}
+                                  />
+                                </button>
+                              ))}
+                            </div>
                           </div>
                         )}
                       </div>
@@ -172,7 +174,7 @@ const Card = ({
 
                       {/* Flip back button */}
                       {flipState.isFlipped && (
-                        <div className="absolute bottom-4 left-24 flex gap-10">
+                        <div className="absolute bottom-6 flex gap-10 justify-center items-center  w-full">
                           <button
                             className="size-10 flex justify-center items-center p-2 rounded-full"
                             onClick={(e) => {

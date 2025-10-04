@@ -49,25 +49,25 @@ const GenericBeveragesPage = () => {
   const path = usePathname()
 
   return (
-    <div className=" gap-8 py-10 px-12 h-screen pb-40 overflow-y-scroll">
-      <div className="">
+    <>
+      <div className="pt-10  px-8 h-[55rem] overflow-y-scroll pb-20">
         {path === '/bebidas/cocktails' ? (
-          <div className="grid grid-cols-3 gap-8 mb-20">
+          <div className="grid grid-cols-3 gap-8">
             <DummyCocktail />
             <DummyCocktail />
             <DummyCocktail />
             <DummyCocktail />
           </div>
         ) : (
-          <>
+          <div className="grid grid-cols-3 gap-8">
             <DummySangria />
             <DummySangria />
             <DummySangria />
             <DummySangria />
-          </>
+          </div>
         )}
       </div>
-    </div>
+    </>
   )
 }
 

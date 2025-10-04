@@ -29,14 +29,14 @@ const CardBeverages = ({
         onChangeOpen={setIsOpenModal}
         className={`w-[33rem] ${classNameModal}`}
         contentModal={
-          <div className="flex bg-white p-8 rounded-md flex-col justify-center items-center gap-4 mt-5">
+          <div className="flex bg-white p-8 rounded-2xl shadow-2xl flex-col justify-center items-center gap-4 mt-5">
             {modalContent}
           </div>
         }
       >
         <DialogTrigger>
           <div className=" w-fit" onClick={() => setIsOpenModal(true)}>
-            <Image src={img} alt={title} className="rounded-xl shadow-lg" />
+            <Image src={img} alt={title} className="rounded-3xl shadow-lg" />
             <div className="flex mt-3 ">
               <Image src={BottleIcon} alt={title} className="mt-auto" />
               <div className="flex flex-col gap-1 pl-4 w-40 mt-auto">
