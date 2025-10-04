@@ -1,8 +1,8 @@
-import Layout from '@/components/Layout'
+import Layout from '@/components/Layout/Layout'
 import React from 'react'
 
-const layout = ({ children }: { children: React.ReactNode }) => {
+const BeveragesLayout = ({ children }: { children: React.ReactNode }) => {
   return <Layout>{children}</Layout>
 }
 
-export default layout
+export default BeveragesLayout

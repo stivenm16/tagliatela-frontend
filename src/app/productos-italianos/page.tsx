@@ -6,10 +6,10 @@ import { LinkImgContainer } from '@/components/LinkImgContainer'
 const Page = () => {
   return (
     <div className="flex flex-col items-center">
-      <span className="uppercase my-4 mt-8">
-        POR FAVOR SELECCIONA LA CATEGORÍA:
+      <span className="uppercase text-pasta-main text-xl drop-shadow-2xl font-bold my-10 ">
+        Por favor selecciona una categoria:
       </span>
-      <div className="flex flex-col items-center font-bold uppercase text-xl justify-center px-5 gap-5">
+      <div className=" grid grid-cols-2 items-center font-bold uppercase text-xl justify-center px-5 gap-12">
         <LinkImgContainer
           title="Quesos"
           href="/productos-italianos/quesos"

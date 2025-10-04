@@ -49,28 +49,25 @@ const GenericBeveragesPage = () => {
   const path = usePathname()
 
   return (
-    <div className="flex flex-col items-center gap-8 px-12">
-      <span className="uppercase font-bold text-pasta-main text-2xl mt-16 ">
-        Disponibles
-      </span>
-      <div className="flex flex-wrap gap-8">
+    <>
+      <div className="pt-10  px-8 h-[55rem] overflow-y-scroll pb-20">
         {path === '/bebidas/cocktails' ? (
-          <>
+          <div className="grid grid-cols-3 gap-8">
             <DummyCocktail />
             <DummyCocktail />
             <DummyCocktail />
             <DummyCocktail />
-          </>
+          </div>
         ) : (
-          <>
+          <div className="grid grid-cols-3 gap-8">
             <DummySangria />
             <DummySangria />
             <DummySangria />
             <DummySangria />
-          </>
+          </div>
         )}
       </div>
-    </div>
+    </>
   )
 }
 

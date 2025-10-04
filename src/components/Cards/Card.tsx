@@ -5,27 +5,17 @@ import React, { useState } from 'react'
 import { CardDialog } from '../Dialog/CardDialog'
 import { DialogTrigger } from '../Dialog/Dialog'
 
-export const FlipButton = ({
-  onClick,
-  isFlipped,
-}: {
-  onClick: (e: React.MouseEvent) => void
-  isFlipped: boolean
-}) => (
-  <button
-    onClick={onClick}
-    className={`-top-5 -right-5 px-2 py-1 size-9 absolute text-xs ${
-      isFlipped ? 'bg-not-available-main' : 'bg-pasta-main'
-    } rounded-full hover:bg-gray-300`}
-  >
-    {/* <ArrowRightLeft color="white" size={20} /> */}
-    <Image src={FlipIcon} alt="Next.js logo" width={20} height={20} />
-  </button>
-)
+interface FlipContentOptions {
+  content: React.ReactNode
+  icon: string
+  label: string
+  color: string
+  iconWidth?: number
+}
 interface CardProps {
   children: React.ReactNode
   modalContent?: React.ReactNode
-  flipContent?: React.ReactNode
+  flipContentOptions?: FlipContentOptions[]
   height?: string
   width?: string
   classNameModal?: string
@@ -34,10 +24,15 @@ interface CardProps {
   isModalAvailable?: boolean
   isSuggested?: boolean
 }
+
+interface FlippedState {
+  isFlipped: boolean
+  activeId: string | null
+}
 const Card = ({
   children,
   modalContent,
-  flipContent,
+  flipContentOptions,
   height = 'fit-content',
   width = '18rem',
   isFlippable = true,
@@ -45,100 +40,166 @@ const Card = ({
   classNameModal,
   isSuggested = false,
 }: CardProps) => {
-  const [isFlipped, setIsFlipped] = useState(false)
+  const [flipState, setFlipState] = useState<FlippedState>({
+    isFlipped: false,
+    activeId: null,
+  })
 
-  const toggleFlip = (e: React.MouseEvent) => {
+  const toggleFlip = (e: React.MouseEvent, id?: string) => {
     e.stopPropagation()
-    setIsFlipped((prev) => !prev)
+    setFlipState((prev) => {
+      // Case: going back to front
+      if (prev.isFlipped && prev.activeId === id) {
+        return { isFlipped: false, activeId: null }
+      }
+      // Case: new back face selected
+      return { isFlipped: true, activeId: id ?? null }
+    })
   }
+
+  const activeBack = flipContentOptions?.find(
+    (opt) => opt.label === flipState.activeId,
+  )
 
   const parsedSuggestedSizes = {
-    height: Number(height.split('rem')[0]) + 0.5,
-    width: Number(width.split('rem')[0]) + 0.5,
+    height: Number(height.split('rem')[0]) + 0.4,
+    width: Number(width.split('rem')[0]) + 0.4,
   }
   return (
-    <div>
-      <CardDialog
-        className={`w-[30rem] ${classNameModal}`}
-        contentModal={
-          <div className="flex flex-col justify-center bg-white rounded-lg items-center gap-4 mt-5">
-            {modalContent}
-          </div>
-        }
-      >
-        <div
-          style={{
-            height: `${parsedSuggestedSizes.height}rem`,
-            width: `${parsedSuggestedSizes.width}rem`,
-            transformStyle: 'preserve-3d',
-            transform: isFlipped ? 'rotateY(360deg)' : 'rotateY(0deg)',
-          }}
-          className={`relative transition-transform duration-500 w-full h-full ${
-            isSuggested && 'bg-suggested-main'
-          } flex items-center justify-center rounded-xl`}
+    <>
+      <div className="z-[0]">
+        <CardDialog
+          className={classNameModal}
+          contentModal={
+            <div className="flex flex-col justify-center bg-white shadow-2xl rounded-3xl items-center gap-4">
+              {modalContent}
+            </div>
+          }
         >
-          {isSuggested && (
-            <>
+          <div
+            style={{
+              height: `${parsedSuggestedSizes.height}rem`,
+              width: `${parsedSuggestedSizes.width}rem`,
+              perspective: '1000px',
+            }}
+            className="relative flex items-center justify-center rounded-3xl"
+          >
+            <DialogTrigger>
               <div
-                className={`absolute top-0 left-0 size-7  ${
-                  isFlipped ? 'bg-pasta-main' : 'bg-white'
-                } z-10 rounded-br-[4px] overflow-hidden`}
-              />
-              <Image
-                src={StarIcon}
-                alt="star-icon"
-                className="absolute -top-4 -left-4 z-20"
-              />
-            </>
-          )}
-
-          <DialogTrigger>
-            <div
-              className={`relative text-pasta-main`}
-              style={{ height: height, width }}
-            >
-              <div
-                className={`transition-transform duration-500 relative w-full h-full`}
-                style={{
-                  transformStyle: 'preserve-3d',
-                  transform: isFlipped ? 'rotateY(180deg)' : 'rotateY(0deg)',
-                }}
+                className="relative text-pasta-main shadow-xl shadow-black/20 rounded-3xl w-full h-full"
+                style={{ height, width }}
               >
-                {/* Front */}
+                {/* Rotating wrapper */}
                 <div
-                  className={`absolute inset-0 backface-hidden ${
-                    isFlipped ? 'invisible' : 'visible'
-                  }`}
+                  className="transition-transform duration-500 relative w-full h-full"
+                  style={{
+                    transformStyle: 'preserve-3d',
+                    transform: flipState.isFlipped
+                      ? 'rotateY(180deg)'
+                      : 'rotateY(0deg)',
+                  }}
                 >
+                  {/* Front */}
                   <div
-                    className={`w-full h-full ${backgroundCard} rounded-lg `}
-                  >
-                    <div className="">{children}</div>
-                    {isFlippable && (
-                      <FlipButton onClick={toggleFlip} isFlipped={isFlipped} />
-                    )}
-                  </div>
-                </div>
-
-                {isFlippable && (
-                  <div
-                    className={`absolute inset-0 backface-hidden ${
-                      isFlipped ? 'visible' : 'invisible'
+                    className={`absolute inset-0 backface-hidden rounded-3xl ${
+                      flipState.isFlipped
+                        ? 'pointer-events-none'
+                        : 'pointer-events-auto'
                     }`}
-                    style={{ transform: 'rotateY(180deg)' }}
                   >
-                    <div className="w-full h-full bg-pasta-main  rounded-lg ">
-                      {flipContent ?? <p>No back content</p>}
-                      <FlipButton onClick={toggleFlip} isFlipped={isFlipped} />
+                    <div
+                      className={`w-full h-full ${backgroundCard} rounded-3xl relative`}
+                    >
+                      {/* 🔴 Suggested border layer goes here */}
+                      {isSuggested && (
+                        <div className="absolute inset-0 rounded-3xl ring-4 ring-checkmeeting-main">
+                          {/* Optional star */}
+                          <Image
+                            src={StarIcon}
+                            alt="star-icon"
+                            className="absolute -top-3 -left-3 z-20"
+                          />
+                        </div>
+                      )}
+
+                      <div className="h-full relative z-10">
+                        {children}
+
+                        {flipContentOptions && (
+                          <div className="absolute bottom-6 left-0 flex  gap-10 w-full ">
+                            <div className="flex mx-auto gap-20">
+                              {flipContentOptions.map((item) => (
+                                <button
+                                  key={item.label}
+                                  className={`${item.color} size-10 flex justify-center items-center p-2 rounded-full`}
+                                  onClick={(e) => toggleFlip(e, item.label)}
+                                >
+                                  <Image
+                                    src={item.icon}
+                                    alt={item.label}
+                                    width={item.iconWidth ?? 15}
+                                    height={24}
+                                  />
+                                </button>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+                      </div>
                     </div>
                   </div>
-                )}
+
+                  {/* Back */}
+                  {isFlippable && (
+                    <div
+                      className={`absolute inset-0 backface-hidden rounded-3xl ${
+                        flipState.isFlipped
+                          ? 'pointer-events-auto'
+                          : 'pointer-events-none'
+                      }`}
+                      style={{ transform: 'rotateY(180deg)' }}
+                    >
+                      <div
+                        className={`w-full h-full ${
+                          activeBack?.color ?? 'bg-gray-200'
+                        } rounded-3xl flex   relative`}
+                      >
+                        {/* 🔴 Match suggested border on back too */}
+                        {isSuggested && (
+                          <div className="absolute inset-0 rounded-3xl ring-4 ring-checkmeeting-main" />
+                        )}
+
+                        {activeBack?.content}
+                      </div>
+
+                      {/* Flip back button */}
+                      {flipState.isFlipped && (
+                        <div className="absolute bottom-6 flex gap-10 justify-center items-center  w-full">
+                          <button
+                            className="size-10 flex justify-center items-center p-2 rounded-full"
+                            onClick={(e) => {
+                              e.stopPropagation()
+                              setFlipState({ isFlipped: false, activeId: null })
+                            }}
+                          >
+                            <Image
+                              src={activeBack?.icon ?? FlipIcon}
+                              alt={activeBack?.label ?? 'back'}
+                              width={activeBack?.iconWidth ?? 15}
+                              height={24}
+                            />
+                          </button>
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </div>
               </div>
-            </div>
-          </DialogTrigger>
-        </div>
-      </CardDialog>
-    </div>
+            </DialogTrigger>
+          </div>
+        </CardDialog>
+      </div>
+    </>
   )
 }
 

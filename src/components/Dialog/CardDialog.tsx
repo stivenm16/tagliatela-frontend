@@ -8,19 +8,24 @@ interface DialogProps {
   className?: string
 }
 
-export const CardDialog = ({
-  children,
-  contentModal,
-  className,
-}: DialogProps) => {
+export const CardDialog = ({ children, contentModal }: DialogProps) => {
   return (
     <Dialog>
       {children}
-      <DialogContent className={className}>
-        <div className="absolute top-2 -right-4">
-          <DialogClose />
-        </div>
-        {contentModal}
+      <DialogContent
+        style={{
+          width: '30rem',
+        }}
+      >
+        {contentModal ?? (
+          <>
+            <div className="absolute -top-2 -right-4">
+              <DialogClose />
+            </div>
+
+            {contentModal}
+          </>
+        )}
       </DialogContent>
     </Dialog>
   )

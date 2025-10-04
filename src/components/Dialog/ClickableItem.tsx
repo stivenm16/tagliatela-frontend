@@ -11,23 +11,28 @@ interface ItemProps {
   description: string
   href?: string
   origin?: string
-  isFlipped?: boolean
+  lightIcon?: boolean
 }
-export const ClickableItem = ({ title, description, isFlipped }: ItemProps) => {
+export const ClickableItem = ({
+  title,
+  description,
+  lightIcon,
+  origin,
+}: ItemProps) => {
   return (
     <li>
       <Dialog>
         <DialogTrigger asChild>
           <div
-            className="flex mr-auto gap-3"
+            className="flex mr-auto gap-4"
             onClick={(e) => e.stopPropagation()}
           >
-            {!isFlipped ? (
+            {lightIcon ? (
               <Image src={InfoLight} alt={title} />
             ) : (
               <Image src={InfoDark} alt={title} />
             )}
-            <span>{title}</span>
+            <span className='text-sm"'>{title}</span>
           </div>
         </DialogTrigger>
         <DialogContent className="Dialog rounded-lg relative bg-white">
@@ -38,7 +43,7 @@ export const ClickableItem = ({ title, description, isFlipped }: ItemProps) => {
             title={title}
             description={description}
             img={CardReferenceImage}
-            origin="Italiano"
+            origin={origin}
           />
         </DialogContent>
       </Dialog>

@@ -18,7 +18,7 @@ export const LinkImgContainer = ({
     <Link
       className={`${
         title === 'Pasta' ? 'bg-brand' : 'bg-brand-dark'
-      } w-[30rem] h-[16rem] flex items-center justify-center rounded-xl text-white relative overflow-hidden`}
+      } w-[18rem] h-[20rem] flex items-center shadow-lg justify-center rounded-xl text-white relative overflow-hidden`}
       href={href}
       style={style}
     >
@@ -27,7 +27,10 @@ export const LinkImgContainer = ({
 
       {/* Flex container to center the title */}
       <div className="z-10 flex items-center justify-center w-full h-full">
-        <span className="font-bold text-2xl text-white text-center px-4">
+        <span
+          className="font-bold text-3xl text-white drop-shadow-sm text-center px-4"
+          style={{ textShadow: '2px 2px 6px rgba(0,0,0,0.8)' }}
+        >
           {title}
         </span>
       </div>

@@ -122,14 +122,14 @@ export const DialogTrigger = React.forwardRef<
   }
 
   return (
-    <button
+    <div
       ref={ref}
       // The user can style the trigger based on the state
       data-state={context.open ? 'open' : 'closed'}
       {...context.getReferenceProps(props)}
     >
       {children}
-    </button>
+    </div>
   )
 })
 
@@ -142,8 +142,12 @@ export const DialogContent = React.forwardRef<
 
   return (
     <FloatingPortal>
-      {context.open && (
-        <FloatingOverlay className="Dialog-overlay" lockScroll>
+      <FloatingOverlay
+        className="Dialog-overlay"
+        data-state={context.open ? 'open' : 'closed'}
+        lockScroll
+      >
+        {context.open && (
           <FloatingFocusManager context={floatingContext}>
             <div
               ref={ref}
@@ -155,8 +159,8 @@ export const DialogContent = React.forwardRef<
               {props.children}
             </div>
           </FloatingFocusManager>
-        </FloatingOverlay>
-      )}
+        )}
+      </FloatingOverlay>
     </FloatingPortal>
   )
 })
