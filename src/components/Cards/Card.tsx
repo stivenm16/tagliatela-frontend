@@ -13,6 +13,7 @@ interface FlipContentOptions {
   iconWidth?: number
 }
 interface CardProps {
+  flipContent?: React.ReactNode
   children: React.ReactNode
   modalContent?: React.ReactNode
   flipContentOptions?: FlipContentOptions[]

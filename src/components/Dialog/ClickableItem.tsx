@@ -7,6 +7,7 @@ import Image from 'next/image'
 import { Dialog, DialogClose, DialogContent, DialogTrigger } from './Dialog'
 
 interface ItemProps {
+  isFlipped?: boolean;
   title: string
   description: string
   href?: string
