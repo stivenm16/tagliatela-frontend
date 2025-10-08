@@ -94,7 +94,7 @@ const VerticalFilterItem = ({
         ref={buttonRef}
         className={`p-2 size-10 flex justify-center text-xl ${activeColor}`}
         onClick={() => {
-          updateFilter(category, id === hovered ? null : label)
+          updateFilter(category, id === hovered ? null : id)
           setFocusedFilter(null)
         }}
       >

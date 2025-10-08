@@ -40,9 +40,19 @@ function OverlayPopup({
     <FloatingPortal>
       <FloatingOverlay
         data-state={open ? 'open' : 'closed'}
-        className="Overlay-popup Dialog-overlay"
+        className="Overlay-popup Dialog-overlay "
         lockScroll={lockScroll}
       >
+        <div
+          aria-hidden
+          className="fixed inset-0"
+          style={{
+            backgroundColor: 'rgba(0,0,0,0.0)', // dim the page a bit
+            backdropFilter: 'blur(6px)', // fallback if you can't set tailwind class
+            WebkitBackdropFilter: 'blur(6px)',
+            zIndex: 50,
+          }}
+        />
         <FloatingFocusManager context={context}>
           <div
             ref={refs.setFloating}

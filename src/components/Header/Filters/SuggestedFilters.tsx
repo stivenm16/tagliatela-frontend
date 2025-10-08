@@ -112,8 +112,8 @@ export const familyFilters: FilterItem[] = [
     icon: MainDishesIcon,
   },
   { id: 'desserts', label: 'Postres', icon: DessertsIcon },
-  { id: 'pizza', label: 'Pizza', icon: PizzaIcon },
-  { id: 'cuore-felici', label: 'Cuore Felici', icon: HeartIcon },
+  { id: 'le-pizze', label: 'Pizza', icon: PizzaIcon },
+  { id: 'cuore-felice', label: 'Cuore Felici', icon: HeartIcon },
 ]
 
 const filterMap: Record<keyof Filters, FilterItem[]> = {

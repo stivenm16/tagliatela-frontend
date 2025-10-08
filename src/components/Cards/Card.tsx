@@ -1,3 +1,4 @@
+import { Ingredient } from '@/app/recomendados/page'
 import FlipIcon from '@/assets/svgs/flip-icon.svg'
 import StarIcon from '@/assets/svgs/star.svg'
 import Image from 'next/image'
@@ -24,6 +25,7 @@ interface CardProps {
   backgroundCard?: string
   isModalAvailable?: boolean
   isSuggested?: boolean
+  hasPairing?: boolean
 }
 
 interface FlippedState {
@@ -40,6 +42,7 @@ const Card = ({
   backgroundCard = 'bg-white',
   classNameModal,
   isSuggested = false,
+  hasPairing = false,
 }: CardProps) => {
   const [flipState, setFlipState] = useState<FlippedState>({
     isFlipped: false,
@@ -72,7 +75,7 @@ const Card = ({
         <CardDialog
           className={classNameModal}
           contentModal={
-            <div className="flex flex-col justify-center bg-white shadow-2xl rounded-3xl items-center gap-4">
+            <div className="flex flex-col justify-center  shadow-2xl rounded-3xl items-center gap-4">
               {modalContent}
             </div>
           }
@@ -129,20 +132,23 @@ const Card = ({
                         {flipContentOptions && (
                           <div className="absolute bottom-6 left-0 flex  gap-10 w-full ">
                             <div className="flex mx-auto gap-20">
-                              {flipContentOptions.map((item) => (
-                                <button
-                                  key={item.label}
-                                  className={`${item.color} size-10 flex justify-center items-center p-2 rounded-full`}
-                                  onClick={(e) => toggleFlip(e, item.label)}
-                                >
-                                  <Image
-                                    src={item.icon}
-                                    alt={item.label}
-                                    width={item.iconWidth ?? 15}
-                                    height={24}
-                                  />
-                                </button>
-                              ))}
+                              {flipContentOptions.map((item, i) => {
+                                if (!hasPairing && i === 0) return null
+                                return (
+                                  <button
+                                    key={item.label}
+                                    className={`${item.color} size-10 flex justify-center items-center p-2 rounded-full`}
+                                    onClick={(e) => toggleFlip(e, item.label)}
+                                  >
+                                    <Image
+                                      src={item.icon}
+                                      alt={item.label}
+                                      width={item.iconWidth ?? 15}
+                                      height={24}
+                                    />
+                                  </button>
+                                )
+                              })}
                             </div>
                           </div>
                         )}

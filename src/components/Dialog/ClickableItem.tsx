@@ -7,7 +7,7 @@ import Image from 'next/image'
 import { Dialog, DialogClose, DialogContent, DialogTrigger } from './Dialog'
 
 interface ItemProps {
-  isFlipped?: boolean;
+  isFlipped?: boolean
   title: string
   description: string
   href?: string
@@ -36,7 +36,7 @@ export const ClickableItem = ({
             <span className='text-sm"'>{title}</span>
           </div>
         </DialogTrigger>
-        <DialogContent className="Dialog rounded-lg relative bg-white">
+        <DialogContent className="Dialog rounded-lg relative ">
           <div className="absolute -top-4 -right-4">
             <DialogClose />
           </div>

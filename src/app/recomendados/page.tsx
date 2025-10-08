@@ -2,6 +2,7 @@
 import CardReferenceImage from '@/assets/images/card-reference-image.png'
 import BeveragesIcon from '@/assets/svgs/beverages-card-icon.svg'
 import IngredientsIcon from '@/assets/svgs/filters/ingredients/ingredients-icon.svg'
+import InfoIcon from '@/assets/svgs/info-icon.svg'
 import Alert from '@/components/Alert'
 import Card from '@/components/Cards/Card'
 import { ClickableItem } from '@/components/Dialog/ClickableItem'
@@ -11,9 +12,17 @@ import { useFilters } from '@/components/Layout/context/FilterContext'
 import { Skeleton } from '@/components/ui/skeleton'
 import axiosInstance from '@/lib/axios'
 import Image from 'next/image'
-import { JSX, useCallback, useEffect, useState } from 'react'
+import {
+  JSX,
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from 'react'
+import { createPortal } from 'react-dom'
 
-interface Ingredient {
+export interface Ingredient {
   id: string
   name: string
   description?: string
@@ -45,8 +54,84 @@ interface Dish {
   name: string
   pairing_wine: Ingredient[]
   thumbnailUrl: string
+  type: string
 }
 
+interface Props {
+  text: string
+  id: string
+  openId: string | null
+  setOpenId: (id: string | null) => void
+}
+
+function InfoWithPortal({ text, id, openId, setOpenId }: Props) {
+  const ref = useRef<HTMLDivElement | null>(null)
+  const tooltipRef = useRef<HTMLDivElement | null>(null)
+  const isOpen = openId === id
+  const [pos, setPos] = useState({ left: 0, top: 0 })
+  const [flip, setFlip] = useState(false)
+
+  useLayoutEffect(() => {
+    if (!isOpen || !ref.current) return
+
+    const rect = ref.current.getBoundingClientRect()
+
+    // Calculate if we have enough space to the right
+    const tooltipWidth = 150
+    const spaceRight = window.innerWidth - rect.right
+    const needsFlip = spaceRight < tooltipWidth + 12 // padding
+
+    setFlip(needsFlip)
+    setPos({ left: rect.left + rect.width / 2, top: rect.top })
+  }, [isOpen])
+
+  const handleToggle = (e: React.MouseEvent) => {
+    e.stopPropagation()
+    setOpenId(isOpen ? null : id)
+  }
+
+  return (
+    <>
+      <div
+        ref={ref}
+        onClick={handleToggle}
+        className="flex items-center gap-2 cursor-pointer z-20 w-full"
+      >
+        <Image src={InfoIcon} alt="info" width={15} />
+        <span className="pt-[1px]">vinagretas</span>
+      </div>
+
+      {isOpen &&
+        typeof document !== 'undefined' &&
+        createPortal(
+          <div
+            onClick={(e) => e.stopPropagation()}
+            className="fixed z-[9999] pointer-events-auto"
+            style={{
+              left: pos.left,
+              top: pos.top - 8,
+              transform: flip
+                ? 'translate(-100%, -120%)'
+                : 'translate(10%, -120%)',
+            }}
+          >
+            <div
+              ref={tooltipRef}
+              className={`bg-suggested-main p-3 text-xs shadow-lg w-[15rem] max-w-xs rounded-xl ${
+                flip ? 'rounded-br-none' : 'rounded-bl-none'
+              }`}
+            >
+              <div className="text-pasta-main capitalize">
+                Vinagretas:{' '}
+                <span className="text-white normal-case">{text}</span>
+              </div>
+            </div>
+          </div>,
+          document.body,
+        )}
+    </>
+  )
+}
 const suggestionsMessage = (
   <>Por favor selecciona otro de los filtros para ver más recomendaciones</>
 )
@@ -59,6 +144,7 @@ const supervisorMessage = (
 )
 const Page = () => {
   const [dishes, setDishes] = useState<Dish[]>([])
+  const [openTooltipId, setOpenTooltipId] = useState<string | null>(null)
   const [isLoading, setIsLoading] = useState(false)
   const [open, setOpen] = useState(true)
   const [alertMessage, setAlertMessage] =
@@ -129,6 +215,7 @@ const Page = () => {
       matchesFilter(filter.families, filters.family)
     )
   })
+
   const onCloseDialog = () => {
     setOpen(false)
     setAlertMessage(suggestionsMessage)
@@ -186,8 +273,9 @@ const Page = () => {
                                   {item.name}
                                 </h2>
                                 <ul className="flex flex-col gap-1 w-44 overflow-y-auto pr-2 mx-auto justify-center">
-                                  {item.ingredients.length > 0
-                                    ? item.ingredients.map((ingredient) => (
+                                  {item.pairing_wine &&
+                                  item.pairing_wine.length > 0
+                                    ? item.pairing_wine.map((ingredient) => (
                                         <div key={ingredient.id}>
                                           {ingredient.imageUrl ? (
                                             <ClickableItem
@@ -257,18 +345,36 @@ const Page = () => {
                           },
                         ]}
                         isSuggested={i == 0}
+                        hasPairing={item.pairing_wine.length > 0}
                       >
                         <div className="flex flex-col items-center gap-2 p-4 h-full w-full ">
                           <h2 className="capitalize text-center font-bold text-xl h-16 self-center flex items-center">
                             {item.name}
                           </h2>
-                          <Image
-                            src={CardReferenceImage}
-                            alt={item.name}
-                            width={210}
-                            height={50}
-                            className="rounded-2xl overflow-hidden"
-                          />
+                          <div className="relative overflow-visible">
+                            <Image
+                              src={CardReferenceImage}
+                              alt={item.name}
+                              width={210}
+                              height={50}
+                              className="rounded-2xl overflow-hidden"
+                            />
+                            {item.type.toLowerCase() === 'insalate' ? (
+                              <div
+                                className="bg-suggested-main  rounded-tl-full text-center h-8 flex items-center text-[13px] justify-start pl-6 text-white uppercase absolute w-full bottom-0"
+                                onClick={(e) => {
+                                  e.stopPropagation()
+                                }}
+                              >
+                                <InfoWithPortal
+                                  text="miel y pistachos, mango y albahaca y aliño tradicional"
+                                  id={item.id}
+                                  openId={openTooltipId}
+                                  setOpenId={setOpenTooltipId}
+                                />
+                              </div>
+                            ) : null}
+                          </div>
                           <h2 className="font-medium text-sm text-center">
                             {item.description.slice(0, 80)}...
                           </h2>

@@ -15,14 +15,15 @@ const GeneralDialogContent = ({
   origin,
 }: GeneralDialogProps) => {
   return (
-    <div className="p-6 rounded-xl w-[98%] mx-auto bg-white">
+    <div className="p-6 w-full rounded-3xl mx-auto flex flex-col justify-center bg-white">
       <Image
         src={img}
         alt={title}
         width={420}
         height={200}
-        className="rounded-lg mb-4 overflow-hidden shadow-md"
+        className="rounded-lg mb-4 overflow-hidden self-center shadow-md"
       />
+
       <p className="capitalize text-3xl mx-auto text-center font-bold">
         {title}
       </p>
