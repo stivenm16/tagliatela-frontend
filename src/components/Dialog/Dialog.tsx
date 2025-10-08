@@ -143,10 +143,20 @@ export const DialogContent = React.forwardRef<
   return (
     <FloatingPortal>
       <FloatingOverlay
-        className="Dialog-overlay"
+        className="Dialog-overlay Overlay-popup"
         data-state={context.open ? 'open' : 'closed'}
         lockScroll
       >
+        <div
+          aria-hidden
+          className="fixed inset-0"
+          style={{
+            backgroundColor: 'rgba(0,0,0,0.0)', // dim the page a bit
+            backdropFilter: 'blur(6px)', // fallback if you can't set tailwind class
+            WebkitBackdropFilter: 'blur(6px)',
+            // zIndex: 50,
+          }}
+        />
         {context.open && (
           <FloatingFocusManager context={floatingContext}>
             <div
