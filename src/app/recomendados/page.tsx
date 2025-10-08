@@ -64,7 +64,7 @@ interface Props {
   setOpenId: (id: string | null) => void
 }
 
-export function InfoWithPortal({ text, id, openId, setOpenId }: Props) {
+function InfoWithPortal({ text, id, openId, setOpenId }: Props) {
   const ref = useRef<HTMLDivElement | null>(null)
   const tooltipRef = useRef<HTMLDivElement | null>(null)
   const isOpen = openId === id
