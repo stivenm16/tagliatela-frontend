@@ -1,4 +1,3 @@
-import { Ingredient } from '@/app/recomendados/page'
 import FlipIcon from '@/assets/svgs/flip-icon.svg'
 import StarIcon from '@/assets/svgs/star.svg'
 import Image from 'next/image'

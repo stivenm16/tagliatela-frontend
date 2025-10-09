@@ -18,13 +18,13 @@ export const CardDialog = ({ children, contentModal }: DialogProps) => {
         }}
       >
         {contentModal ?? (
-          <>
+          <div className="z-[6000]">
             <div className="absolute -top-2 -right-4">
               <DialogClose />
             </div>
 
             {contentModal}
-          </>
+          </div>
         )}
       </DialogContent>
     </Dialog>
