@@ -11,6 +11,7 @@ import OverlayPopup from '@/components/Dialog/OverlayPopup'
 import { useFilters } from '@/components/Layout/context/FilterContext'
 import { Skeleton } from '@/components/ui/skeleton'
 import axiosInstance from '@/lib/axios'
+import { EntityT } from '@/types/global'
 import Image from 'next/image'
 import {
   JSX,
@@ -22,15 +23,27 @@ import {
 } from 'react'
 import { createPortal } from 'react-dom'
 
-export interface Ingredient {
-  id: string
+export interface Ingredient extends EntityT {
   name: string
-  description?: string
-  imageUrl?: string
-  isAvaible?: boolean
-  isRecommended?: boolean
-  origin?: string
-  thubnailUrl?: string
+  typeIngredientId: number | null
+  typeIngredient: string | null
+  flavorsIceCream: string[]
+}
+
+interface PairingWine extends EntityT {
+  name: string
+  isServedByBottle: boolean
+  isSevervedByBottle: boolean
+  origin: string
+  type: string
+  dishes: {
+    id: number
+    name: string
+  }[]
+}
+
+interface SideDish extends Omit<EntityT, 'isNew' | ' isRecommended'> {
+  name: string
 }
 
 interface Filter {
@@ -41,19 +54,16 @@ interface Filter {
   families?: { id: string; name: string }[]
   basePastas?: { id: string; name: string }[]
 }
-interface Dish {
-  description: string
+
+interface Dish extends EntityT {
   familyName: string
   filter: Filter
-  id: string
-  imgUrl: string
   ingredients: Ingredient[]
-  isAvaible: boolean
-  isNew: boolean
-  isRecommended: boolean
   name: string
-  pairing_wine: Ingredient[]
-  thumbnailUrl: string
+  pairing_wine: PairingWine[]
+  side_dishes: SideDish[]
+  vinaigrettes: SideDish[]
+
   type: string
 }
 
@@ -71,6 +81,24 @@ function InfoWithPortal({ text, id, openId, setOpenId }: Props) {
   const [pos, setPos] = useState({ left: 0, top: 0 })
   const [flip, setFlip] = useState(false)
 
+  useEffect(() => {
+    if (!isOpen) return
+
+    const handleClickOutside = (e: MouseEvent) => {
+      const target = e.target as Node
+      if (
+        ref.current &&
+        !ref.current.contains(target) &&
+        tooltipRef.current &&
+        !tooltipRef.current.contains(target)
+      ) {
+        setOpenId(null)
+      }
+    }
+
+    document.addEventListener('click', handleClickOutside)
+    return () => document.removeEventListener('click', handleClickOutside)
+  }, [isOpen, setOpenId])
   useLayoutEffect(() => {
     if (!isOpen || !ref.current) return
 
@@ -117,13 +145,12 @@ function InfoWithPortal({ text, id, openId, setOpenId }: Props) {
           >
             <div
               ref={tooltipRef}
-              className={`bg-suggested-main p-3 text-xs shadow-lg w-[15rem] max-w-xs rounded-xl ${
+              className={`bg-suggested-main p-3 text-sm shadow-lg w-[15rem] max-w-xs rounded-xl ${
                 flip ? 'rounded-br-none' : 'rounded-bl-none'
               }`}
             >
               <div className="text-pasta-main capitalize">
-                Vinagretas:{' '}
-                <span className="text-white normal-case">{text}</span>
+                Vinagretas: <span className="text-white lowercase">{text}</span>
               </div>
             </div>
           </div>,
@@ -177,6 +204,7 @@ const Page = () => {
           if (data.length === 0) {
             setDishes([])
           } else {
+            console.log(data, '<======= data')
             setDishes(data)
           }
         })
@@ -258,7 +286,7 @@ const Page = () => {
                         modalContent={
                           <GeneralDialogContent
                             title={item.name}
-                            description={item.description}
+                            description={item.description!}
                             img={CardReferenceImage}
                           />
                         }
@@ -315,7 +343,7 @@ const Page = () => {
                                   {item.ingredients.length > 0
                                     ? item.ingredients.map((ingredient) => (
                                         <div key={ingredient.id}>
-                                          {ingredient.imageUrl ? (
+                                          {ingredient?.imageUrl ? (
                                             <ClickableItem
                                               title={ingredient.name}
                                               description={
@@ -367,8 +395,10 @@ const Page = () => {
                                 }}
                               >
                                 <InfoWithPortal
-                                  text="miel y pistachos, mango y albahaca y aliño tradicional"
-                                  id={item.id}
+                                  text={item.vinaigrettes
+                                    .map((v) => v.name)
+                                    .join(', ')}
+                                  id={item.id.toString()}
                                   openId={openTooltipId}
                                   setOpenId={setOpenTooltipId}
                                 />
@@ -376,7 +406,7 @@ const Page = () => {
                             ) : null}
                           </div>
                           <h2 className="font-medium text-sm text-center">
-                            {item.description.slice(0, 80)}...
+                            {item.description!.slice(0, 80)}...
                           </h2>
                         </div>
                       </Card>

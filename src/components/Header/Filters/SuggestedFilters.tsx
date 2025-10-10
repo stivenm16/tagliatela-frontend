@@ -111,7 +111,7 @@ export const familyFilters: FilterItem[] = [
     label: 'Platos Principales',
     icon: MainDishesIcon,
   },
-  { id: 'desserts', label: 'Postres', icon: DessertsIcon },
+  { id: 'postres', label: 'Postres', icon: DessertsIcon },
   { id: 'le-pizze', label: 'Pizza', icon: PizzaIcon },
   { id: 'cuore-felice', label: 'Cuore Felici', icon: HeartIcon },
 ]
