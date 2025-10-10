@@ -1,10 +1,12 @@
 'use client'
 import CardReferenceImage from '@/assets/images/card-reference-image.png'
+import WineImageRerence from '@/assets/images/vini-reference-image.png'
 import BeveragesIcon from '@/assets/svgs/beverages-card-icon.svg'
 import IngredientsIcon from '@/assets/svgs/filters/ingredients/ingredients-icon.svg'
 import InfoIcon from '@/assets/svgs/info-icon.svg'
 import Alert from '@/components/Alert'
 import Card from '@/components/Cards/Card'
+import BeveragesDialogContent from '@/components/Dialog/BeveragesDialog'
 import { ClickableItem } from '@/components/Dialog/ClickableItem'
 import GeneralDialogContent from '@/components/Dialog/GeneralDialog'
 import OverlayPopup from '@/components/Dialog/OverlayPopup'
@@ -30,16 +32,18 @@ export interface Ingredient extends EntityT {
   flavorsIceCream: string[]
 }
 
+interface PairingWineDishes {
+  id: number
+  name: string
+}
+
 interface PairingWine extends EntityT {
   name: string
   isServedByBottle: boolean
   isSevervedByBottle: boolean
   origin: string
   type: string
-  dishes: {
-    id: number
-    name: string
-  }[]
+  dishes: PairingWineDishes[]
 }
 
 interface SideDish extends Omit<EntityT, 'isNew' | ' isRecommended'> {
@@ -63,7 +67,6 @@ interface Dish extends EntityT {
   pairing_wine: PairingWine[]
   side_dishes: SideDish[]
   vinaigrettes: SideDish[]
-
   type: string
 }
 
@@ -159,6 +162,7 @@ function InfoWithPortal({ text, id, openId, setOpenId }: Props) {
     </>
   )
 }
+
 const suggestionsMessage = (
   <>Por favor selecciona otro de los filtros para ver más recomendaciones</>
 )
@@ -305,7 +309,7 @@ const Page = () => {
                                   item.pairing_wine.length > 0
                                     ? item.pairing_wine.map((ingredient) => (
                                         <div key={ingredient.id}>
-                                          {ingredient.imageUrl ? (
+                                          {ingredient.origin ? (
                                             <ClickableItem
                                               title={ingredient.name}
                                               description={
@@ -313,6 +317,53 @@ const Page = () => {
                                               }
                                               origin="Italiano"
                                               lightIcon={false}
+                                              customDialog={
+                                                // <div className="p-6 w-2/3 rounded-3xl mx-auto flex justify-center bg-white">
+                                                //   <Image
+                                                //     src={WineImageRerence}
+                                                //     alt={ingredient.name}
+                                                //     width={450}
+                                                //     // height={200}
+                                                //     className="rounded-lg mb-4 overflow-hidden self-center shadow-md"
+                                                //   />
+                                                //   <div>
+                                                //     <p className="capitalize text-3xl mx-auto text-center font-bold">
+                                                //       {ingredient.name}
+                                                //     </p>
+                                                //     {origin && (
+                                                //       <div className="flex gap-3 w-full my-3 justify-center items-center">
+                                                //         <Image
+                                                //           src={
+                                                //             ingredient.imageUrl
+                                                //           }
+                                                //           alt="Italian flag"
+                                                //           width={50}
+                                                //         />
+                                                //         <span className="text-xl">
+                                                //           {ingredient.origin}
+                                                //         </span>
+                                                //       </div>
+                                                //     )}
+
+                                                //     <p className="font-light text-xl mt-2  text-center">
+                                                //       {ingredient.description}
+                                                //     </p>
+                                                //   </div>
+                                                // </div>
+                                                <div className="bg-white w-[33rem] h-[25rem] flex justify-center items-center rounded-xl">
+                                                  <BeveragesDialogContent
+                                                    title={ingredient.name}
+                                                    img={WineImageRerence}
+                                                    origin={ingredient.origin}
+                                                    description={
+                                                      ingredient.description
+                                                    }
+                                                    pairing={ingredient.dishes.map(
+                                                      (d) => d.name,
+                                                    )}
+                                                  />
+                                                </div>
+                                              }
                                             />
                                           ) : (
                                             <div className="flex gap-2 items-center">

@@ -8,6 +8,7 @@ interface BeveragesDialogProps {
   img: string | StaticImport
   origin?: string
   ingredients?: string[]
+  description?: string
   pairing?: string[]
   qualities?: string[]
 }
@@ -17,10 +18,11 @@ const BeveragesDialogContent = ({
   origin,
   ingredients,
   pairing,
+  description,
   qualities,
 }: BeveragesDialogProps) => {
   return (
-    <div className="flex gap-10">
+    <div className="flex gap-8">
       <Image
         src={img}
         alt={title}
@@ -28,7 +30,7 @@ const BeveragesDialogContent = ({
         width={200}
         height={300}
       />
-      <div className="flex flex-col justify-center gap-4">
+      <div className="flex flex-col gap-4">
         <span className="capitalize text-3xl font-bold max-w-72">{title}</span>
         {origin && (
           <div className="flex gap-3">
@@ -74,6 +76,13 @@ const BeveragesDialogContent = ({
                   </span>
                 ))}
               </div>
+            </div>
+          )}
+
+          {description && (
+            <div className="flex flex-col">
+              <span className="text-beverages-main">Descripción:</span>
+              <div className="flex flex-col w-[15rem]">{description}</div>
             </div>
           )}
 
