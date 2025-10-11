@@ -27,13 +27,13 @@ const BeveragesDialogContent = ({
         src={img}
         alt={title}
         className="rounded-2xl shadow-xl"
-        width={200}
-        height={300}
+        width={280}
+        height={400}
       />
-      <div className="flex flex-col gap-4">
-        <span className="capitalize text-3xl font-bold max-w-72">{title}</span>
+      <div className="flex w-[18rem] flex-col gap-4">
+        <span className="capitalize text-3xl font-bold ml-3">{title}</span>
         {origin && (
-          <div className="flex gap-3">
+          <div className="flex gap-3 px-3">
             {origin.toLowerCase() === 'italiano' ? (
               <Image
                 src={ItalianImg}
@@ -52,7 +52,7 @@ const BeveragesDialogContent = ({
             <span className="text-xl">{origin}</span>
           </div>
         )}
-        <div className="flex flex-col gap-3">
+        <div className="flex flex-col gap-3 justify-between mt-auto text-xl">
           {ingredients && ingredients?.length > 0 && (
             <div className="flex flex-col">
               <span className="text-beverages-main">Ingredientes:</span>
@@ -80,16 +80,18 @@ const BeveragesDialogContent = ({
           )}
 
           {description && (
-            <div className="flex flex-col">
-              <span className="text-beverages-main">Descripción:</span>
-              <div className="flex flex-col w-[15rem]">{description}</div>
+            <div className="flex flex-col px-3">
+              <span className="text-beverages-main ">Descripción:</span>
+              <div className="flex flex-col w-[15rem] font-light">
+                {description}
+              </div>
             </div>
           )}
 
           {pairing && pairing?.length > 0 && (
             <div className="flex flex-col">
-              <span className="text-beverages-main">Maridaje:</span>
-              <div className="flex flex-col">
+              <span className="text-beverages-main ml-3 mb-2">Maridaje:</span>
+              <div className="flex flex-col h-56 bg-gray-100 px-3 py-2 rounded-lg overflow-y-scroll ">
                 {pairing.map((ingredient, index) => (
                   <span className="font-light" key={index}>
                     {ingredient}

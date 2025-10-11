@@ -54,7 +54,6 @@ import CreamyIcon from '@/assets/svgs/filters/base-pasta/creamy-icon.svg'
 import OilIcon from '@/assets/svgs/filters/base-pasta/oil-icon.svg'
 
 import { Filters, useFilters } from '@/components/Layout/context/FilterContext'
-import Image from 'next/image'
 import { useEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 
@@ -126,11 +125,11 @@ const filterMap: Record<keyof Filters, FilterItem[]> = {
 }
 
 const CategoryFilter = ({
-  triggerIcon,
+  triggerIcon: TriggerIcon,
   items,
   filterBy,
 }: {
-  triggerIcon: string
+  triggerIcon: React.FC<React.SVGProps<SVGSVGElement>>
   filterBy: keyof Filters
   items: FilterItem[]
 }) => {
@@ -165,35 +164,28 @@ const CategoryFilter = ({
     }
   }, [focusedFilter, filterBy, setFocusedFilter])
 
-  const selectedIcon =
+  const SelectedIcon =
     filters[filterBy] && filterMap[filterBy]
       ? filterMap[filterBy].find((item) => item.id === filters[filterBy])
-          ?.icon ?? triggerIcon
-      : triggerIcon
+          ?.icon ?? TriggerIcon
+      : TriggerIcon
+
   return (
     <div>
       <div ref={ref} className="relative">
         <button
           className={` ${
             disabled ? 'cursor-not-allowed opacity-50' : ''
-          } rounded-full bg-neutral-600 size-10 justify-center flex shadow-md text-xl`}
+          } rounded-full bg-neutral-600 size-10 justify-center items-center flex shadow-md text-xl`}
           disabled={disabled}
           onClick={() =>
             setFocusedFilter((prev) => (prev === filterBy ? null : filterBy))
           }
         >
           {!!filters[filterBy] ? (
-            <Image
-              src={selectedIcon}
-              alt={`${filterBy} icon`}
-              className="text-checkmeeting-main"
-            />
+            <TriggerIcon className="size-6 mx-auto self-center px-auto flex" />
           ) : (
-            <Image
-              src={selectedIcon}
-              alt={`${filterBy} icon`}
-              className="text-checkmeeting-main"
-            />
+            <TriggerIcon className="size-6 mx-auto self-center px-auto flex" />
           )}
         </button>
         {focusedFilter === filterBy &&
@@ -224,6 +216,7 @@ const CategoryFilter = ({
 export const SuggestedFilters = () => {
   return (
     <div className="w-fit ml-auto mr-5 flex gap-5" id="filters-container">
+      {/* <CheeseIcon className="text-white [&_path]:fill-white" /> */}
       <CategoryFilter
         filterBy="family"
         triggerIcon={FamilyIcon}

@@ -71,13 +71,14 @@ interface Dish extends EntityT {
 }
 
 interface Props {
-  text: string
+  content: JSX.Element
+  label: string
   id: string
   openId: string | null
   setOpenId: (id: string | null) => void
 }
 
-function InfoWithPortal({ text, id, openId, setOpenId }: Props) {
+function InfoWithPortal({ content, id, openId, setOpenId, label }: Props) {
   const ref = useRef<HTMLDivElement | null>(null)
   const tooltipRef = useRef<HTMLDivElement | null>(null)
   const isOpen = openId === id
@@ -99,9 +100,21 @@ function InfoWithPortal({ text, id, openId, setOpenId }: Props) {
       }
     }
 
+    const handleScrollOrDrag = () => {
+      setOpenId(null)
+    }
+
     document.addEventListener('click', handleClickOutside)
-    return () => document.removeEventListener('click', handleClickOutside)
+    window.addEventListener('scroll', handleScrollOrDrag, true) // use capture to catch inner scrollables
+    window.addEventListener('touchmove', handleScrollOrDrag, { passive: true })
+
+    return () => {
+      document.removeEventListener('click', handleClickOutside)
+      window.removeEventListener('scroll', handleScrollOrDrag, true)
+      window.removeEventListener('touchmove', handleScrollOrDrag)
+    }
   }, [isOpen, setOpenId])
+
   useLayoutEffect(() => {
     if (!isOpen || !ref.current) return
 
@@ -128,8 +141,8 @@ function InfoWithPortal({ text, id, openId, setOpenId }: Props) {
         onClick={handleToggle}
         className="flex items-center gap-2 cursor-pointer z-20 w-full"
       >
-        <Image src={InfoIcon} alt="info" width={15} />
-        <span className="pt-[1px]">vinagretas</span>
+        <InfoIcon />
+        <span className="pt-[1px]">{label}</span>
       </div>
 
       {isOpen &&
@@ -140,7 +153,7 @@ function InfoWithPortal({ text, id, openId, setOpenId }: Props) {
             className="fixed z-[9999] pointer-events-auto"
             style={{
               left: pos.left,
-              top: pos.top - 8,
+              top: pos.top,
               transform: flip
                 ? 'translate(-100%, -120%)'
                 : 'translate(10%, -120%)',
@@ -152,9 +165,7 @@ function InfoWithPortal({ text, id, openId, setOpenId }: Props) {
                 flip ? 'rounded-br-none' : 'rounded-bl-none'
               }`}
             >
-              <div className="text-pasta-main capitalize">
-                Vinagretas: <span className="text-white lowercase">{text}</span>
-              </div>
+              {content}
             </div>
           </div>,
           document.body,
@@ -208,7 +219,6 @@ const Page = () => {
           if (data.length === 0) {
             setDishes([])
           } else {
-            console.log(data, '<======= data')
             setDishes(data)
           }
         })
@@ -300,7 +310,10 @@ const Page = () => {
                         flipContentOptions={[
                           {
                             content: (
-                              <div className="p-4 text-white  w-[12rem] flex flex-col mx-auto ">
+                              <div
+                                className="p-4 text-white  w-[12rem] flex flex-col mx-auto"
+                                onClick={(e) => e.stopPropagation()}
+                              >
                                 <h2 className="text-xl font-semibold my-4 text-center">
                                   {item.name}
                                 </h2>
@@ -318,39 +331,7 @@ const Page = () => {
                                               origin="Italiano"
                                               lightIcon={false}
                                               customDialog={
-                                                // <div className="p-6 w-2/3 rounded-3xl mx-auto flex justify-center bg-white">
-                                                //   <Image
-                                                //     src={WineImageRerence}
-                                                //     alt={ingredient.name}
-                                                //     width={450}
-                                                //     // height={200}
-                                                //     className="rounded-lg mb-4 overflow-hidden self-center shadow-md"
-                                                //   />
-                                                //   <div>
-                                                //     <p className="capitalize text-3xl mx-auto text-center font-bold">
-                                                //       {ingredient.name}
-                                                //     </p>
-                                                //     {origin && (
-                                                //       <div className="flex gap-3 w-full my-3 justify-center items-center">
-                                                //         <Image
-                                                //           src={
-                                                //             ingredient.imageUrl
-                                                //           }
-                                                //           alt="Italian flag"
-                                                //           width={50}
-                                                //         />
-                                                //         <span className="text-xl">
-                                                //           {ingredient.origin}
-                                                //         </span>
-                                                //       </div>
-                                                //     )}
-
-                                                //     <p className="font-light text-xl mt-2  text-center">
-                                                //       {ingredient.description}
-                                                //     </p>
-                                                //   </div>
-                                                // </div>
-                                                <div className="bg-white w-[33rem] h-[25rem] flex justify-center items-center rounded-xl">
+                                                <div className="bg-white w-full p-5 h-full flex justify-center items-center rounded-xl">
                                                   <BeveragesDialogContent
                                                     title={ingredient.name}
                                                     img={WineImageRerence}
@@ -440,15 +421,49 @@ const Page = () => {
                             />
                             {item.type.toLowerCase() === 'insalate' ? (
                               <div
-                                className="bg-suggested-main  rounded-tl-full text-center h-8 flex items-center text-[13px] justify-start pl-6 text-white uppercase absolute w-full bottom-0"
+                                className="bg-suggested-main  rounded-tl-full text-center h-8 flex items-center text-[13px] justify-start pl-4 text-white uppercase absolute w-full bottom-0"
                                 onClick={(e) => {
                                   e.stopPropagation()
                                 }}
                               >
                                 <InfoWithPortal
-                                  text={item.vinaigrettes
-                                    .map((v) => v.name)
-                                    .join(', ')}
+                                  content={
+                                    <div className="text-pasta-main capitalize">
+                                      Vinagretas:{' '}
+                                      <span className="text-white lowercase">
+                                        {item.vinaigrettes
+                                          .map((v) => v.name)
+                                          .join(', ')}
+                                      </span>
+                                    </div>
+                                  }
+                                  label="Vinagretas"
+                                  id={item.id.toString()}
+                                  openId={openTooltipId}
+                                  setOpenId={setOpenTooltipId}
+                                />
+                              </div>
+                            ) : null}
+
+                            {item.name.toLowerCase() === 'entrecot' ? (
+                              <div
+                                className="bg-suggested-main  rounded-tl-full text-center h-8 flex items-center text-[13px] justify-start pl-4 text-white uppercase absolute w-full bottom-0"
+                                onClick={(e) => {
+                                  e.stopPropagation()
+                                }}
+                              >
+                                <InfoWithPortal
+                                  label="Salsas y Guarniciones"
+                                  content={
+                                    <div className="text-pasta-main capitalize">
+                                      Guarniciones:{' '}
+                                      <span className="text-white lowercase">
+                                        {item.side_dishes
+                                          .map((s) => s.name)
+                                          .join(', ')}
+                                      </span>
+                                    </div>
+                                  }
                                   id={item.id.toString()}
                                   openId={openTooltipId}
                                   setOpenId={setOpenTooltipId}

@@ -1,6 +1,5 @@
 import FlipIcon from '@/assets/svgs/flip-icon.svg'
 import StarIcon from '@/assets/svgs/star.svg'
-import Image from 'next/image'
 import React, { useState } from 'react'
 import { CardDialog } from '../Dialog/CardDialog'
 import { DialogTrigger } from '../Dialog/Dialog'
@@ -117,11 +116,7 @@ const Card = ({
                       {isSuggested && (
                         <div className="absolute inset-0 rounded-3xl ring-4 ring-checkmeeting-main">
                           {/* Optional star */}
-                          <Image
-                            src={StarIcon}
-                            alt="star-icon"
-                            className="absolute -top-3 -left-3 z-20"
-                          />
+                          <StarIcon />
                         </div>
                       )}
 
@@ -139,12 +134,15 @@ const Card = ({
                                     className={`${item.color} size-10 flex justify-center items-center p-2 rounded-full`}
                                     onClick={(e) => toggleFlip(e, item.label)}
                                   >
-                                    <Image
+                                    <item.icon
+                                      className={item.iconWidth ?? 'w-[1px5]'}
+                                    />
+                                    {/* <Image
                                       src={item.icon}
                                       alt={item.label}
                                       width={item.iconWidth ?? 15}
                                       height={24}
-                                    />
+                                    /> */}
                                   </button>
                                 )
                               })}
@@ -188,12 +186,17 @@ const Card = ({
                               setFlipState({ isFlipped: false, activeId: null })
                             }}
                           >
-                            <Image
+                            {activeBack?.icon ? (
+                              <activeBack.icon />
+                            ) : (
+                              <FlipIcon />
+                            )}
+                            {/* <Image
                               src={activeBack?.icon ?? FlipIcon}
                               alt={activeBack?.label ?? 'back'}
                               width={activeBack?.iconWidth ?? 15}
                               height={24}
-                            />
+                            /> */}
                           </button>
                         </div>
                       )}

@@ -6,7 +6,6 @@ import ItalianIcon from '@/assets/svgs/italian-navbar-icon.svg'
 import NotAvailable from '@/assets/svgs/not-available-navbar-icon.svg'
 import PastaIcon from '@/assets/svgs/pasta-navbar-icon.svg'
 import SuggestedIcon from '@/assets/svgs/suggested-navbar-icon.svg'
-import Image from 'next/image'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 
@@ -17,37 +16,37 @@ export const FloatingMenu = () => {
   const routes = [
     {
       name: 'recomendados',
-      icon: <Image src={SuggestedIcon} alt="Suggested" />,
+      icon: <SuggestedIcon />,
       color: 'bg-suggested-main',
       alt: 'Suggested',
     },
     {
       name: 'pasta',
-      icon: <Image src={PastaIcon} alt="Pasta" />,
+      icon: <PastaIcon />,
       color: 'bg-pasta-main',
       alt: 'Pasta',
     },
     {
       name: 'productos-italianos',
-      icon: <Image src={ItalianIcon} alt="Italian" />,
+      icon: <ItalianIcon />,
       color: 'bg-italian-main',
       alt: 'Italian',
     },
     {
       name: 'bebidas',
-      icon: <Image src={BeveragesIcon} alt="Beverages" />,
+      icon: <BeveragesIcon />,
       color: 'bg-beverages-main',
       alt: 'Beverages',
     },
     {
       name: 'check-meeting',
-      icon: <Image src={CheckmeetingIcon} alt="Checkmeeting" />,
+      icon: <CheckmeetingIcon />,
       color: 'bg-checkmeeting-main',
       alt: 'Checkmeeting',
     },
     {
       name: 'platos-no-disponibles',
-      icon: <Image src={NotAvailable} alt="Not Available" />,
+      icon: <NotAvailable />,
       color: 'bg-not-available-main',
       alt: 'Not Available',
     },
@@ -65,41 +64,6 @@ export const FloatingMenu = () => {
               color={r.color}
             />
           ))}
-        {/* <IconButton
-          href="/recomendados"
-          icon={<Image src={SuggestedIcon} alt="Suggested" />}
-          color="bg-suggested-main"
-        />
-        <IconButton
-          href="/pasta"
-          icon={<Image src={PastaIcon} alt="Pasta" />}
-          color="bg-pasta-main"
-        />
-        <IconButton
-          href="/productos-italianos"
-          icon={<Image src={ItalianIcon} alt="Italian" />}
-          color="bg-italian-main"
-        />
-        <IconButton
-          href="/bebidas"
-          icon={<Image src={BeveragesIcon} alt="Beverages" />}
-          color="bg-beverages-main"
-        />
-        <IconButton
-          href="/check-meeting"
-          icon={<Image src={CheckmeetingIcon} alt="Checkmeeting" />}
-          color="bg-checkmeeting-main"
-        />
-        <IconButton
-          href="/platos-no-disponibles"
-          icon={<Image src={NotAvailable} alt="Not Available" />}
-          color="bg-not-available-main"
-        /> */}
-        {/* <IconButton
-          href="/novedades/platos"
-          icon={<Image src={NewsIcon} alt="News" />}
-          color="bg-news-main"
-        /> */}
       </div>
     </div>
   )

@@ -4,7 +4,6 @@ import CardReferenceImage from '@/assets/images/card-reference-image.png'
 import InfoDark from '@/assets/svgs/help-circle-dark.svg'
 import InfoLight from '@/assets/svgs/help-circle-light.svg'
 import GeneralDialogContent from '@/components/Dialog/GeneralDialog'
-import Image from 'next/image'
 import { JSX } from 'react'
 import { Dialog, DialogClose, DialogContent, DialogTrigger } from './Dialog'
 
@@ -32,11 +31,7 @@ export const ClickableItem = ({
             className="flex mr-auto gap-4"
             onClick={(e) => e.stopPropagation()}
           >
-            {lightIcon ? (
-              <Image src={InfoLight} alt={title} />
-            ) : (
-              <Image src={InfoDark} alt={title} />
-            )}
+            {lightIcon ? <InfoLight /> : <InfoDark />}
             <span className='text-sm"'>{title}</span>
           </div>
         </DialogTrigger>
