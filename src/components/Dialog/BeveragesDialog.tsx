@@ -23,13 +23,15 @@ const BeveragesDialogContent = ({
 }: BeveragesDialogProps) => {
   return (
     <div className="flex gap-8">
-      <Image
-        src={img}
-        alt={title}
-        className="rounded-2xl shadow-xl"
-        width={280}
-        height={400}
-      />
+      {img ? (
+        <Image
+          src={img}
+          alt={title}
+          className="rounded-2xl shadow-xl"
+          width={280}
+          height={400}
+        />
+      ) : null}
       <div className="flex w-[18rem] flex-col gap-4">
         <span className="capitalize text-3xl font-bold ml-3">{title}</span>
         {origin && (

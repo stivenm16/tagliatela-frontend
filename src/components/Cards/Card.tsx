@@ -6,7 +6,7 @@ import { DialogTrigger } from '../Dialog/Dialog'
 
 interface FlipContentOptions {
   content: React.ReactNode
-  icon: string
+  icon: any
   label: string
   color: string
   iconWidth?: number
@@ -116,7 +116,7 @@ const Card = ({
                       {isSuggested && (
                         <div className="absolute inset-0 rounded-3xl ring-4 ring-checkmeeting-main">
                           {/* Optional star */}
-                          <StarIcon />
+                          <StarIcon className="absolute -top-3 -left-3" />
                         </div>
                       )}
 
@@ -135,14 +135,10 @@ const Card = ({
                                     onClick={(e) => toggleFlip(e, item.label)}
                                   >
                                     <item.icon
-                                      className={item.iconWidth ?? 'w-[1px5]'}
+                                      className={`${
+                                        item.iconWidth ?? 'w-[15px]'
+                                      } `}
                                     />
-                                    {/* <Image
-                                      src={item.icon}
-                                      alt={item.label}
-                                      width={item.iconWidth ?? 15}
-                                      height={24}
-                                    /> */}
                                   </button>
                                 )
                               })}
@@ -166,11 +162,12 @@ const Card = ({
                       <div
                         className={`w-full h-full ${
                           activeBack?.color ?? 'bg-gray-200'
-                        } rounded-3xl flex   relative`}
+                        } rounded-3xl flex relative`}
+                        onClick={(e) => e.preventDefault()}
                       >
                         {/* 🔴 Match suggested border on back too */}
                         {isSuggested && (
-                          <div className="absolute inset-0 rounded-3xl ring-4 ring-checkmeeting-main" />
+                          <div className="absolute inset-0 rounded-3xl ring-4 ring-checkmeeting-main pointer-events-none" />
                         )}
 
                         {activeBack?.content}

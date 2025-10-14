@@ -76,9 +76,17 @@ interface Props {
   id: string
   openId: string | null
   setOpenId: (id: string | null) => void
+  yAxis?: number
 }
 
-function InfoWithPortal({ content, id, openId, setOpenId, label }: Props) {
+function InfoWithPortal({
+  content,
+  id,
+  openId,
+  setOpenId,
+  label,
+  yAxis,
+}: Props) {
   const ref = useRef<HTMLDivElement | null>(null)
   const tooltipRef = useRef<HTMLDivElement | null>(null)
   const isOpen = openId === id
@@ -155,8 +163,8 @@ function InfoWithPortal({ content, id, openId, setOpenId, label }: Props) {
               left: pos.left,
               top: pos.top,
               transform: flip
-                ? 'translate(-100%, -120%)'
-                : 'translate(10%, -120%)',
+                ? `translate(-100%, -120%)`
+                : `translate(10%, -${yAxis ? yAxis : 120}%)`,
             }}
           >
             <div
@@ -262,6 +270,8 @@ const Page = () => {
     setOpen(false)
     setAlertMessage(suggestionsMessage)
   }
+
+  console.log(filteredDishes, '<========= filteredDishes')
   return (
     <div className="">
       {!filters.family ? (
@@ -312,7 +322,10 @@ const Page = () => {
                             content: (
                               <div
                                 className="p-4 text-white  w-[12rem] flex flex-col mx-auto"
-                                onClick={(e) => e.stopPropagation()}
+                                onClick={(e) => {
+                                  e.stopPropagation()
+                                  e.preventDefault()
+                                }}
                               >
                                 <h2 className="text-xl font-semibold my-4 text-center">
                                   {item.name}
@@ -328,7 +341,7 @@ const Page = () => {
                                               description={
                                                 ingredient.description!
                                               }
-                                              origin="Italiano"
+                                              origin={ingredient.origin}
                                               lightIcon={false}
                                               customDialog={
                                                 <div className="bg-white w-full p-5 h-full flex justify-center items-center rounded-xl">
@@ -455,15 +468,24 @@ const Page = () => {
                                 <InfoWithPortal
                                   label="Salsas y Guarniciones"
                                   content={
-                                    <div className="text-pasta-main capitalize">
-                                      Guarniciones:{' '}
-                                      <span className="text-white lowercase">
-                                        {item.side_dishes
-                                          .map((s) => s.name)
-                                          .join(', ')}
-                                      </span>
+                                    <div className="flex flex-col gap-2 p-2 ">
+                                      <div className="text-pasta-main capitalize">
+                                        Salsas:{' '}
+                                        <span className="text-white lowercase">
+                                          Regio Emilia y Queso Azul
+                                        </span>
+                                      </div>
+                                      <div className="text-pasta-main capitalize">
+                                        Guarniciones:{' '}
+                                        <span className="text-white lowercase">
+                                          {item.side_dishes
+                                            .map((s) => s.name)
+                                            .join(', ')}
+                                        </span>
+                                      </div>
                                     </div>
                                   }
+                                  yAxis={105}
                                   id={item.id.toString()}
                                   openId={openTooltipId}
                                   setOpenId={setOpenTooltipId}

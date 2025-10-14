@@ -1,5 +1,4 @@
 'use client'
-import CloseBtn from '@/assets/svgs/close-modal-btn.svg'
 import {
   FloatingFocusManager,
   FloatingOverlay,
@@ -12,8 +11,8 @@ import {
   useMergeRefs,
   useRole,
 } from '@floating-ui/react'
-import Image from 'next/image'
 import * as React from 'react'
+import CloseButton from '../buttons/AlertCloseButton'
 
 interface DialogOptions {
   initialOpen?: boolean
@@ -233,16 +232,10 @@ export const DialogClose = React.forwardRef<
       // @ts-expect-error spreading props from possibly non-React element
       ref={ref}
       onClick={handleClick}
-      className="text-gray-500 hover:text-black "
       aria-label="Close"
     >
-      <Image
-        src={CloseBtn}
-        alt="Next.js logo"
-        width={35}
-        height={20}
-        className=""
-      />
+      <CloseButton onClick={handleClick as () => void} size={8} />
+      {/* <CloseBtn /> */}
     </div>
   )
 })
