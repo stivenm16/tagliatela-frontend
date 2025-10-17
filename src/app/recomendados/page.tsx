@@ -227,6 +227,7 @@ const Page = () => {
           if (data.length === 0) {
             setDishes([])
           } else {
+            // console.log(JSON.stringify(data, null, 2))
             setDishes(data)
           }
         })
@@ -245,6 +246,8 @@ const Page = () => {
     filterValue: string | undefined | null,
   ) => {
     if (filterValue && dishValues) {
+      // console.log(dishValues, 'dishValues')
+      // console.log(filterValue, 'filterValue')
       return dishValues.some(
         (value) => value.name.toLowerCase() === filterValue.toLowerCase(),
       )
@@ -254,8 +257,10 @@ const Page = () => {
 
   // This filter implementation will now work as expected
   const filteredDishes = dishes.filter((dish) => {
-    const { filter, ingredients } = dish
+    const { filter, ingredients, type } = dish
 
+    console.log(filter, 'filter')
+    console.log(filters, 'filters')
     return (
       matchesFilter(filter.diets, filters.diet) &&
       matchesFilter(filter.allergens, filters.allergen) &&
@@ -266,12 +271,13 @@ const Page = () => {
     )
   })
 
+  console.log(filteredDishes, '<======= filtered dishes')
+
   const onCloseDialog = () => {
     setOpen(false)
     setAlertMessage(suggestionsMessage)
   }
 
-  console.log(filteredDishes, '<========= filteredDishes')
   return (
     <div className="">
       {!filters.family ? (

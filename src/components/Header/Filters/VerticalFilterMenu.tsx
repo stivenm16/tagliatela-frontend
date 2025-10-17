@@ -12,6 +12,7 @@ export type FilterItem = {
   id: string
   label: string
   icon: JSX.Element
+  selectedColorIcon?: string
 }
 const VerticalFilterItem = ({
   id,
