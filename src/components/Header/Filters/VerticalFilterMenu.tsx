@@ -79,7 +79,6 @@ const VerticalFilterItem = ({
       setIsPositioned(false)
     }
   }, [hovered, id])
-
   return (
     <div
       className="relative flex items-center"

@@ -6,7 +6,7 @@ import IngredientsIcon from '@/assets/svgs/filters/ingredients/ingredients-icon.
 import InfoIcon from '@/assets/svgs/info-icon.svg'
 import Alert from '@/components/Alert'
 import Card from '@/components/Cards/Card'
-import BeveragesDialogContent from '@/components/Dialog/BeveragesDialog'
+import { WineDialogContent } from '@/components/Dialog/BeveragesDialog'
 import { ClickableItem } from '@/components/Dialog/ClickableItem'
 import GeneralDialogContent from '@/components/Dialog/GeneralDialog'
 import OverlayPopup from '@/components/Dialog/OverlayPopup'
@@ -50,13 +50,17 @@ interface SideDish extends Omit<EntityT, 'isNew' | ' isRecommended'> {
   name: string
 }
 
+interface BasicObject {
+  id: string
+  name: string
+}
 interface Filter {
-  diets?: { id: string; name: string }[]
-  allergens?: { id: string; name: string }[]
-  flavors?: { id: string; name: string }[]
-  ingredients?: { id: string; name: string }[]
-  families?: { id: string; name: string }[]
-  basePastas?: { id: string; name: string }[]
+  diets?: BasicObject[]
+  allergens?: BasicObject[]
+  flavors?: BasicObject[]
+  ingredients?: BasicObject[]
+  families?: BasicObject[]
+  basePastas?: BasicObject[]
 }
 
 interface Dish extends EntityT {
@@ -67,6 +71,7 @@ interface Dish extends EntityT {
   pairing_wine: PairingWine[]
   side_dishes: SideDish[]
   vinaigrettes: SideDish[]
+  flavorsIceCream: BasicObject[]
   type: string
 }
 
@@ -227,7 +232,6 @@ const Page = () => {
           if (data.length === 0) {
             setDishes([])
           } else {
-            // console.log(JSON.stringify(data, null, 2))
             setDishes(data)
           }
         })
@@ -246,8 +250,6 @@ const Page = () => {
     filterValue: string | undefined | null,
   ) => {
     if (filterValue && dishValues) {
-      // console.log(dishValues, 'dishValues')
-      // console.log(filterValue, 'filterValue')
       return dishValues.some(
         (value) => value.name.toLowerCase() === filterValue.toLowerCase(),
       )
@@ -258,9 +260,6 @@ const Page = () => {
   // This filter implementation will now work as expected
   const filteredDishes = dishes.filter((dish) => {
     const { filter, ingredients, type } = dish
-
-    console.log(filter, 'filter')
-    console.log(filters, 'filters')
     return (
       matchesFilter(filter.diets, filters.diet) &&
       matchesFilter(filter.allergens, filters.allergen) &&
@@ -270,8 +269,6 @@ const Page = () => {
       matchesFilter(filter.families, filters.family)
     )
   })
-
-  console.log(filteredDishes, '<======= filtered dishes')
 
   const onCloseDialog = () => {
     setOpen(false)
@@ -351,7 +348,7 @@ const Page = () => {
                                               lightIcon={false}
                                               customDialog={
                                                 <div className="bg-white w-full p-5 h-full flex justify-center items-center rounded-xl">
-                                                  <BeveragesDialogContent
+                                                  <WineDialogContent
                                                     title={ingredient.name}
                                                     img={WineImageRerence}
                                                     origin={ingredient.origin}
@@ -457,6 +454,31 @@ const Page = () => {
                                     </div>
                                   }
                                   label="Vinagretas"
+                                  id={item.id.toString()}
+                                  openId={openTooltipId}
+                                  setOpenId={setOpenTooltipId}
+                                />
+                              </div>
+                            ) : null}
+                            {item?.flavorsIceCream.length > 0 ? (
+                              <div
+                                className="bg-suggested-main  rounded-tl-full text-center h-8 flex items-center text-[13px] justify-start pl-4 text-white uppercase absolute w-full bottom-0"
+                                onClick={(e) => {
+                                  e.stopPropagation()
+                                }}
+                              >
+                                <InfoWithPortal
+                                  content={
+                                    <div className="text-pasta-main capitalize">
+                                      Helados:{' '}
+                                      <span className="text-white lowercase">
+                                        {item.flavorsIceCream
+                                          .map((v) => v.name)
+                                          .join(', ')}
+                                      </span>
+                                    </div>
+                                  }
+                                  label="Sabores de helado"
                                   id={item.id.toString()}
                                   openId={openTooltipId}
                                   setOpenId={setOpenTooltipId}

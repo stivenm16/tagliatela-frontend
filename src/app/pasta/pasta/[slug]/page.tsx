@@ -1,36 +1,16 @@
 'use client'
 import PastaImgMedium from '@/assets/images/pasta-image-reference-medium.png'
-import { FilterSaucesOption, Sauce } from '@/types/global'
-import { fakeFilters } from '@/utils/data/fakeFilters'
 import { fakeSauces } from '@/utils/data/fakeSauces'
 import Image from 'next/image'
 import { useState } from 'react'
 import SaucesComponent from '../../components/SaucesComponent'
 const Page = () => {
-  const [filters, setFilters] = useState<FilterSaucesOption[]>(fakeFilters)
-
-  const [sauces, setSauces] = useState<Sauce[]>(fakeSauces)
   const [selectedSauceId, setSelectedSauceId] = useState<number | null>(null)
 
   const toggleSauceSelection = (id: number) => {
     setSelectedSauceId(id)
   }
 
-  const handleSelectChange = (
-    selectedIndex: number | null,
-    placeHolder: string,
-  ) => {
-    setFilters((prev) =>
-      prev.map((filter) =>
-        filter.placeHolder === placeHolder
-          ? {
-              ...filter,
-              selectedValue: selectedIndex !== null ? [selectedIndex] : [],
-            }
-          : filter,
-      ),
-    )
-  }
   return (
     <div className="">
       <div className="flex justify-start">
