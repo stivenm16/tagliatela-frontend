@@ -1,13 +1,12 @@
 import FlipIcon from '@/assets/svgs/flip-icon.svg'
 import StarIcon from '@/assets/svgs/star.svg'
-import Image from 'next/image'
 import React, { useState } from 'react'
 import { CardDialog } from '../Dialog/CardDialog'
 import { DialogTrigger } from '../Dialog/Dialog'
 
 interface FlipContentOptions {
   content: React.ReactNode
-  icon: string
+  icon: any
   label: string
   color: string
   iconWidth?: number
@@ -117,11 +116,7 @@ const Card = ({
                       {isSuggested && (
                         <div className="absolute inset-0 rounded-3xl ring-4 ring-checkmeeting-main">
                           {/* Optional star */}
-                          <Image
-                            src={StarIcon}
-                            alt="star-icon"
-                            className="absolute -top-3 -left-3 z-20"
-                          />
+                          <StarIcon className="absolute -top-3 -left-3" />
                         </div>
                       )}
 
@@ -139,11 +134,10 @@ const Card = ({
                                     className={`${item.color} size-10 flex justify-center items-center p-2 rounded-full`}
                                     onClick={(e) => toggleFlip(e, item.label)}
                                   >
-                                    <Image
-                                      src={item.icon}
-                                      alt={item.label}
-                                      width={item.iconWidth ?? 15}
-                                      height={24}
+                                    <item.icon
+                                      className={`${
+                                        item.iconWidth ?? 'w-[15px]'
+                                      } `}
                                     />
                                   </button>
                                 )
@@ -168,11 +162,12 @@ const Card = ({
                       <div
                         className={`w-full h-full ${
                           activeBack?.color ?? 'bg-gray-200'
-                        } rounded-3xl flex   relative`}
+                        } rounded-3xl flex relative`}
+                        onClick={(e) => e.preventDefault()}
                       >
                         {/* 🔴 Match suggested border on back too */}
                         {isSuggested && (
-                          <div className="absolute inset-0 rounded-3xl ring-4 ring-checkmeeting-main" />
+                          <div className="absolute inset-0 rounded-3xl ring-4 ring-checkmeeting-main pointer-events-none" />
                         )}
 
                         {activeBack?.content}
@@ -188,12 +183,17 @@ const Card = ({
                               setFlipState({ isFlipped: false, activeId: null })
                             }}
                           >
-                            <Image
+                            {activeBack?.icon ? (
+                              <activeBack.icon />
+                            ) : (
+                              <FlipIcon />
+                            )}
+                            {/* <Image
                               src={activeBack?.icon ?? FlipIcon}
                               alt={activeBack?.label ?? 'back'}
                               width={activeBack?.iconWidth ?? 15}
                               height={24}
-                            />
+                            /> */}
                           </button>
                         </div>
                       )}

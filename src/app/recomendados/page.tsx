@@ -1,85 +1,174 @@
 'use client'
 import CardReferenceImage from '@/assets/images/card-reference-image.png'
+import WineImageRerence from '@/assets/images/vini-reference-image.png'
 import BeveragesIcon from '@/assets/svgs/beverages-card-icon.svg'
 import IngredientsIcon from '@/assets/svgs/filters/ingredients/ingredients-icon.svg'
 import InfoIcon from '@/assets/svgs/info-icon.svg'
 import Alert from '@/components/Alert'
 import Card from '@/components/Cards/Card'
+import { WineDialogContent } from '@/components/Dialog/BeveragesDialog'
 import { ClickableItem } from '@/components/Dialog/ClickableItem'
 import GeneralDialogContent from '@/components/Dialog/GeneralDialog'
 import OverlayPopup from '@/components/Dialog/OverlayPopup'
-import { useFilters } from '@/components/Layout/context/FilterContext'
+import {
+  FilterAvaible,
+  useFilters,
+} from '@/components/Layout/context/FilterContext'
 import { Skeleton } from '@/components/ui/skeleton'
 import axiosInstance from '@/lib/axios'
+import { EntityT } from '@/types/global'
 import Image from 'next/image'
 import {
   JSX,
   useCallback,
   useEffect,
   useLayoutEffect,
+  useMemo,
   useRef,
   useState,
 } from 'react'
 import { createPortal } from 'react-dom'
 
-export interface Ingredient {
-  id: string
+export interface Ingredient extends EntityT {
   name: string
-  description?: string
-  imageUrl?: string
-  isAvaible?: boolean
-  isRecommended?: boolean
-  origin?: string
-  thubnailUrl?: string
+  typeIngredientId: number | null
+  typeIngredient: string | null
+  flavorsIceCream: string[]
 }
 
-interface Filter {
-  diets?: { id: string; name: string }[]
-  allergens?: { id: string; name: string }[]
-  flavors?: { id: string; name: string }[]
-  ingredients?: { id: string; name: string }[]
-  families?: { id: string; name: string }[]
-  basePastas?: { id: string; name: string }[]
+interface PairingWineDishes {
+  id: number
+  name: string
 }
-interface Dish {
-  description: string
+
+interface PairingWine extends EntityT {
+  name: string
+  isServedByBottle: boolean
+  isSevervedByBottle: boolean
+  origin: string
+  type: string
+  dishes: PairingWineDishes[]
+}
+
+interface SideDish extends Omit<EntityT, 'isNew' | ' isRecommended'> {
+  name: string
+}
+
+interface BasicObject {
+  id: string
+  name: string
+}
+interface Filter {
+  diets?: BasicObject[]
+  allergens?: BasicObject[]
+  flavors?: BasicObject[]
+  ingredients?: BasicObject[]
+  families?: BasicObject[]
+  basePastas?: BasicObject[]
+}
+
+interface Dish extends EntityT {
   familyName: string
   filter: Filter
-  id: string
-  imgUrl: string
   ingredients: Ingredient[]
-  isAvaible: boolean
-  isNew: boolean
-  isRecommended: boolean
   name: string
-  pairing_wine: Ingredient[]
-  thumbnailUrl: string
+  pairing_wine: PairingWine[]
+  side_dishes: SideDish[]
+  vinaigrettes: SideDish[]
+  flavorsIceCream: BasicObject[]
   type: string
 }
 
+function extractUniqueFilterData(dishes: any): FilterAvaible {
+  const result = {
+    allergens: new Set<string>(),
+    diets: new Set<string>(),
+    flavors: new Set<string>(),
+    ingredients: new Set<string>(),
+  }
+
+  for (const dish of dishes) {
+    const { filter, ingredients } = dish
+
+    filter?.allergens?.forEach((a: any) => result.allergens.add(a.name))
+    filter?.diets?.forEach((d: any) => result.diets.add(d.name))
+
+    if (filter?.flavors)
+      Object.values(filter.flavors).forEach((f: any) => {
+        if (typeof f?.name === 'string') result.flavors.add(f.name)
+      })
+
+    ingredients?.forEach((i: any) => result.ingredients.add(i.name))
+  }
+
+  return {
+    allergens: [...result.allergens],
+    diets: [...result.diets],
+    flavors: [...result.flavors],
+    ingredients: [...result.ingredients],
+  }
+}
 interface Props {
-  text: string
+  content: JSX.Element
+  label: string
   id: string
   openId: string | null
   setOpenId: (id: string | null) => void
+  yAxis?: number
 }
 
-function InfoWithPortal({ text, id, openId, setOpenId }: Props) {
+function InfoWithPortal({
+  content,
+  id,
+  openId,
+  setOpenId,
+  label,
+  yAxis,
+}: Props) {
   const ref = useRef<HTMLDivElement | null>(null)
   const tooltipRef = useRef<HTMLDivElement | null>(null)
   const isOpen = openId === id
   const [pos, setPos] = useState({ left: 0, top: 0 })
   const [flip, setFlip] = useState(false)
 
+  useEffect(() => {
+    if (!isOpen) return
+
+    const handleClickOutside = (e: MouseEvent) => {
+      const target = e.target as Node
+      if (
+        ref.current &&
+        !ref.current.contains(target) &&
+        tooltipRef.current &&
+        !tooltipRef.current.contains(target)
+      ) {
+        setOpenId(null)
+      }
+    }
+
+    const handleScrollOrDrag = () => {
+      setOpenId(null)
+    }
+
+    document.addEventListener('click', handleClickOutside)
+    window.addEventListener('scroll', handleScrollOrDrag, true)
+    window.addEventListener('touchmove', handleScrollOrDrag, { passive: true })
+
+    return () => {
+      document.removeEventListener('click', handleClickOutside)
+      window.removeEventListener('scroll', handleScrollOrDrag, true)
+      window.removeEventListener('touchmove', handleScrollOrDrag)
+    }
+  }, [isOpen, setOpenId])
+
   useLayoutEffect(() => {
     if (!isOpen || !ref.current) return
 
     const rect = ref.current.getBoundingClientRect()
 
-    // Calculate if we have enough space to the right
     const tooltipWidth = 150
     const spaceRight = window.innerWidth - rect.right
-    const needsFlip = spaceRight < tooltipWidth + 12 // padding
+    const needsFlip = spaceRight < tooltipWidth + 12
 
     setFlip(needsFlip)
     setPos({ left: rect.left + rect.width / 2, top: rect.top })
@@ -97,8 +186,8 @@ function InfoWithPortal({ text, id, openId, setOpenId }: Props) {
         onClick={handleToggle}
         className="flex items-center gap-2 cursor-pointer z-20 w-full"
       >
-        <Image src={InfoIcon} alt="info" width={15} />
-        <span className="pt-[1px]">vinagretas</span>
+        <InfoIcon />
+        <span className="pt-[1px]">{label}</span>
       </div>
 
       {isOpen &&
@@ -109,22 +198,19 @@ function InfoWithPortal({ text, id, openId, setOpenId }: Props) {
             className="fixed z-[9999] pointer-events-auto"
             style={{
               left: pos.left,
-              top: pos.top - 8,
+              top: pos.top,
               transform: flip
-                ? 'translate(-100%, -120%)'
-                : 'translate(10%, -120%)',
+                ? `translate(-100%, -120%)`
+                : `translate(10%, -${yAxis ? yAxis : 120}%)`,
             }}
           >
             <div
               ref={tooltipRef}
-              className={`bg-suggested-main p-3 text-xs shadow-lg w-[15rem] max-w-xs rounded-xl ${
+              className={`bg-suggested-main p-3 text-sm shadow-lg w-[15rem] max-w-xs rounded-xl ${
                 flip ? 'rounded-br-none' : 'rounded-bl-none'
               }`}
             >
-              <div className="text-pasta-main capitalize">
-                Vinagretas:{' '}
-                <span className="text-white normal-case">{text}</span>
-              </div>
+              {content}
             </div>
           </div>,
           document.body,
@@ -132,6 +218,7 @@ function InfoWithPortal({ text, id, openId, setOpenId }: Props) {
     </>
   )
 }
+
 const suggestionsMessage = (
   <>Por favor selecciona otro de los filtros para ver más recomendaciones</>
 )
@@ -150,7 +237,7 @@ const Page = () => {
   const [alertMessage, setAlertMessage] =
     useState<JSX.Element>(suggestionsMessage)
 
-  const { filters } = useFilters()
+  const { filters, updateFilter } = useFilters()
 
   const getContent = useCallback(async () => {
     const response = await axiosInstance.get(
@@ -159,6 +246,11 @@ const Page = () => {
         withCredentials: true,
       },
     )
+
+    if (response.status !== 200) {
+      throw new Error('Error fetching dishes')
+    }
+
     return response.data
   }, [filters.family])
 
@@ -177,6 +269,8 @@ const Page = () => {
           if (data.length === 0) {
             setDishes([])
           } else {
+            const filters = extractUniqueFilterData(data)
+            updateFilter('filtersAvaible', filters)
             setDishes(data)
           }
         })
@@ -203,23 +297,37 @@ const Page = () => {
   }
 
   // This filter implementation will now work as expected
-  const filteredDishes = dishes.filter((dish) => {
-    const { filter, ingredients } = dish
+  const filteredDishes = useMemo(() => {
+    return dishes.filter((dish) => {
+      const { filter, ingredients } = dish
+      return (
+        matchesFilter(filter.diets, filters.diet) &&
+        matchesFilter(filter.allergens, filters.allergen) &&
+        matchesFilter(filter.flavors, filters.flavour) &&
+        matchesFilter(ingredients, filters.ingredients) &&
+        matchesFilter(filter.basePastas, filters.basePasta) &&
+        matchesFilter(filter.families, filters.family)
+      )
+    })
+  }, [dishes, filters])
 
-    return (
-      matchesFilter(filter.diets, filters.diet) &&
-      matchesFilter(filter.allergens, filters.allergen) &&
-      matchesFilter(filter.flavors, filters.flavour) &&
-      matchesFilter(ingredients, filters.ingredients) &&
-      matchesFilter(filter.basePastas, filters.basePasta) &&
-      matchesFilter(filter.families, filters.family)
-    )
-  })
+  useEffect(() => {
+    const newFiltersAvailable = extractUniqueFilterData(filteredDishes)
+    const oldFilters = filters.filtersAvaible ?? {}
+
+    const isDifferent =
+      JSON.stringify(newFiltersAvailable) !== JSON.stringify(oldFilters)
+
+    if (isDifferent) {
+      updateFilter('filtersAvaible', newFiltersAvailable)
+    }
+  }, [filteredDishes])
 
   const onCloseDialog = () => {
     setOpen(false)
     setAlertMessage(suggestionsMessage)
   }
+
   return (
     <div className="">
       {!filters.family ? (
@@ -258,7 +366,7 @@ const Page = () => {
                         modalContent={
                           <GeneralDialogContent
                             title={item.name}
-                            description={item.description}
+                            description={item.description!}
                             img={CardReferenceImage}
                           />
                         }
@@ -268,7 +376,13 @@ const Page = () => {
                         flipContentOptions={[
                           {
                             content: (
-                              <div className="p-4 text-white  w-[12rem] flex flex-col mx-auto ">
+                              <div
+                                className="p-4 text-white  w-[12rem] flex flex-col mx-auto"
+                                onClick={(e) => {
+                                  e.stopPropagation()
+                                  e.preventDefault()
+                                }}
+                              >
                                 <h2 className="text-xl font-semibold my-4 text-center">
                                   {item.name}
                                 </h2>
@@ -277,14 +391,29 @@ const Page = () => {
                                   item.pairing_wine.length > 0
                                     ? item.pairing_wine.map((ingredient) => (
                                         <div key={ingredient.id}>
-                                          {ingredient.imageUrl ? (
+                                          {ingredient.origin ? (
                                             <ClickableItem
                                               title={ingredient.name}
                                               description={
                                                 ingredient.description!
                                               }
-                                              origin="Italiano"
+                                              origin={ingredient.origin}
                                               lightIcon={false}
+                                              customDialog={
+                                                <div className="bg-white w-full p-5 h-full flex justify-center items-center rounded-xl">
+                                                  <WineDialogContent
+                                                    title={ingredient.name}
+                                                    img={WineImageRerence}
+                                                    origin={ingredient.origin}
+                                                    description={
+                                                      ingredient.description
+                                                    }
+                                                    pairing={ingredient.dishes.map(
+                                                      (d) => d.name,
+                                                    )}
+                                                  />
+                                                </div>
+                                              }
                                             />
                                           ) : (
                                             <div className="flex gap-2 items-center">
@@ -315,7 +444,7 @@ const Page = () => {
                                   {item.ingredients.length > 0
                                     ? item.ingredients.map((ingredient) => (
                                         <div key={ingredient.id}>
-                                          {ingredient.imageUrl ? (
+                                          {ingredient?.imageUrl ? (
                                             <ClickableItem
                                               title={ingredient.name}
                                               description={
@@ -361,14 +490,84 @@ const Page = () => {
                             />
                             {item.type.toLowerCase() === 'insalate' ? (
                               <div
-                                className="bg-suggested-main  rounded-tl-full text-center h-8 flex items-center text-[13px] justify-start pl-6 text-white uppercase absolute w-full bottom-0"
+                                className="bg-suggested-main  rounded-tl-full text-center h-8 flex items-center text-[13px] justify-start pl-4 text-white uppercase absolute w-full bottom-0"
                                 onClick={(e) => {
                                   e.stopPropagation()
                                 }}
                               >
                                 <InfoWithPortal
-                                  text="miel y pistachos, mango y albahaca y aliño tradicional"
-                                  id={item.id}
+                                  content={
+                                    <div className="text-pasta-main capitalize">
+                                      Vinagretas:{' '}
+                                      <span className="text-white lowercase">
+                                        {item.vinaigrettes
+                                          .map((v) => v.name)
+                                          .join(', ')}
+                                      </span>
+                                    </div>
+                                  }
+                                  label="Vinagretas"
+                                  id={item.id.toString()}
+                                  openId={openTooltipId}
+                                  setOpenId={setOpenTooltipId}
+                                />
+                              </div>
+                            ) : null}
+                            {item?.flavorsIceCream.length > 0 ? (
+                              <div
+                                className="bg-suggested-main  rounded-tl-full text-center h-8 flex items-center text-[13px] justify-start pl-4 text-white uppercase absolute w-full bottom-0"
+                                onClick={(e) => {
+                                  e.stopPropagation()
+                                }}
+                              >
+                                <InfoWithPortal
+                                  content={
+                                    <div className="text-pasta-main capitalize">
+                                      Helados:{' '}
+                                      <span className="text-white lowercase">
+                                        {item.flavorsIceCream
+                                          .map((v) => v.name)
+                                          .join(', ')}
+                                      </span>
+                                    </div>
+                                  }
+                                  label="Sabores de helado"
+                                  id={item.id.toString()}
+                                  openId={openTooltipId}
+                                  setOpenId={setOpenTooltipId}
+                                />
+                              </div>
+                            ) : null}
+
+                            {item.name.toLowerCase() === 'entrecot' ? (
+                              <div
+                                className="bg-suggested-main  rounded-tl-full text-center h-8 flex items-center text-[13px] justify-start pl-4 text-white uppercase absolute w-full bottom-0"
+                                onClick={(e) => {
+                                  e.stopPropagation()
+                                }}
+                              >
+                                <InfoWithPortal
+                                  label="Salsas y Guarniciones"
+                                  content={
+                                    <div className="flex flex-col gap-2 p-2 ">
+                                      <div className="text-pasta-main capitalize">
+                                        Salsas:{' '}
+                                        <span className="text-white lowercase">
+                                          Regio Emilia y Queso Azul
+                                        </span>
+                                      </div>
+                                      <div className="text-pasta-main capitalize">
+                                        Guarniciones:{' '}
+                                        <span className="text-white lowercase">
+                                          {item.side_dishes
+                                            .map((s) => s.name)
+                                            .join(', ')}
+                                        </span>
+                                      </div>
+                                    </div>
+                                  }
+                                  yAxis={105}
+                                  id={item.id.toString()}
                                   openId={openTooltipId}
                                   setOpenId={setOpenTooltipId}
                                 />
@@ -376,7 +575,7 @@ const Page = () => {
                             ) : null}
                           </div>
                           <h2 className="font-medium text-sm text-center">
-                            {item.description.slice(0, 80)}...
+                            {item.description!.slice(0, 80)}...
                           </h2>
                         </div>
                       </Card>

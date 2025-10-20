@@ -49,71 +49,225 @@ import SpicyIcon from '@/assets/svgs/filters/flavours/spicy-icon.svg'
 import SweetIcon from '@/assets/svgs/filters/flavours/sweet-icon.svg'
 
 // Base pasta Icons
-import basePastaIcon from '@/assets/svgs/filters/base-pasta/base-pasta-icon.svg'
 import CreamyIcon from '@/assets/svgs/filters/base-pasta/creamy-icon.svg'
 import OilIcon from '@/assets/svgs/filters/base-pasta/oil-icon.svg'
 
 import { Filters, useFilters } from '@/components/Layout/context/FilterContext'
-import Image from 'next/image'
 import { useEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 
 const ingredientsFilters: FilterItem[] = [
-  { id: 'cheese', label: 'Queso', icon: CheeseIcon },
-  { id: 'meat', label: 'CArne', icon: MeatIcon },
-  { id: 'seafood', label: 'Productos del mar', icon: SeafoodIcon },
-  { id: 'stiff', label: 'Fiambre', icon: StiffIcon },
-  { id: 'mass', label: 'Masa', icon: MassIcon },
-  { id: 'vegetables', label: 'Vegetales', icon: VegetablesIcon },
-  { id: 'tomato', label: 'Tomate', icon: TomatoIcon },
+  {
+    id: 'queso',
+    label: 'Queso',
+    icon: CheeseIcon,
+    selectedColorIcon: '#FEE67B',
+  },
+  { id: 'carne', label: 'Carne', icon: MeatIcon, selectedColorIcon: '#E59A61' },
+  {
+    id: 'seafood',
+    label: 'Productos del mar',
+    icon: SeafoodIcon,
+    selectedColorIcon: '#E7A5AD',
+  },
+  {
+    id: 'stiff',
+    label: 'Fiambre',
+    icon: StiffIcon,
+    selectedColorIcon: '#734A84',
+  },
+  { id: 'masa', label: 'Masa', icon: MassIcon, selectedColorIcon: '#C5A468' },
+  {
+    id: 'vegetales',
+    label: 'Vegetales',
+    icon: VegetablesIcon,
+    selectedColorIcon: '#78B591',
+  },
+  {
+    id: 'tomate',
+    label: 'Tomate',
+    icon: TomatoIcon,
+    selectedColorIcon: '#B74A35',
+  },
 ]
 
 const basePastaFilters: FilterItem[] = [
-  { id: 'creamy', label: 'Crema', icon: CreamyIcon },
-  { id: 'oil', label: 'Aceite', icon: OilIcon },
-  { id: 'tomato', label: 'Tomate', icon: TomatoIcon },
+  {
+    id: 'creamy',
+    label: 'Crema',
+    icon: CreamyIcon,
+    selectedColorIcon: '#93CBDC',
+  },
+  {
+    id: 'aceite',
+    label: 'Aceite',
+    icon: OilIcon,
+    selectedColorIcon: '#FFA92D',
+  },
+  {
+    id: 'tomate',
+    label: 'Tomate',
+    icon: TomatoIcon,
+    selectedColorIcon: '#B74A35',
+  },
 ]
 
 const flavoursFilters: FilterItem[] = [
-  { id: 'crunchy', label: 'Crujiente', icon: CrunchyIcon },
-  { id: 'spicy', label: 'Picante', icon: SpicyIcon },
-  { id: 'sweet', label: 'Dulce', icon: SweetIcon },
-  { id: 'intense', label: 'Intenso', icon: IntenseIcon },
-  { id: 'fresh', label: 'Fresco', icon: FreshIcon },
-  { id: 'soft', label: 'Suave', icon: SoftIcon },
+  {
+    id: 'crujiente',
+    label: 'Crujiente',
+    icon: CrunchyIcon,
+    selectedColorIcon: '#A55D56',
+  },
+  {
+    id: 'picante',
+    label: 'Picante',
+    icon: SpicyIcon,
+    selectedColorIcon: '#9B3944',
+  },
+  {
+    id: 'dulce',
+    label: 'Dulce',
+    icon: SweetIcon,
+    selectedColorIcon: '#DDB1ED',
+  },
+  {
+    id: 'intenso',
+    label: 'Intenso',
+    icon: IntenseIcon,
+    selectedColorIcon: '#30709D',
+  },
+  {
+    id: 'fresco',
+    label: 'Fresco',
+    icon: FreshIcon,
+    selectedColorIcon: '#84C2A5',
+  },
+  { id: 'suave', label: 'Suave', icon: SoftIcon, selectedColorIcon: '#FFCFDC' },
 ]
 
 const dietFilters: FilterItem[] = [
-  { id: 'vegetarian', label: 'Vegetariana', icon: VegetarianIcon },
-  { id: 'pregnant', label: 'Embarazada', icon: PregnantIcon },
+  {
+    id: 'vegetariano',
+    label: 'Vegetariana',
+    icon: VegetarianIcon,
+    selectedColorIcon: '#648E31',
+  },
+  {
+    id: 'embarazadas',
+    label: 'Embarazada',
+    icon: PregnantIcon,
+    selectedColorIcon: '#FB8FEF',
+  },
 ]
 
 const allergensFilters: FilterItem[] = [
-  { id: 'gluten', label: 'Gluten', icon: GlutenIcon },
-  { id: 'milk', label: 'Lácteos', icon: MilkIcon },
-  { id: 'nuts', label: 'Frutos con cáscara', icon: NutsIcon },
-  { id: 'fish', label: 'Pescado', icon: FishIcon },
-  { id: 'eggs', label: 'Huevo', icon: EggsIcon },
-  { id: 'sulphites', label: 'Sulfitos', icon: SulphitesIcon },
-  { id: 'celery', label: 'Apio', icon: CeleryIcon },
-  { id: 'mollusks', label: 'Moluscos', icon: MollusksIcon },
-  { id: 'crustaceans', label: 'Crustaceos', icon: CrustaceansIcon },
-  { id: 'mustard', label: 'Mostaza', icon: MustardIcon },
-  { id: 'sesame', label: 'Sesamo', icon: SesameIcon },
+  {
+    id: 'gluten',
+    label: 'Gluten',
+    icon: GlutenIcon,
+    selectedColorIcon: '#F9AD73',
+  },
+  {
+    id: 'lacteos',
+    label: 'Lácteos',
+    icon: MilkIcon,
+    selectedColorIcon: '#93CBDC',
+  },
+  {
+    id: 'frutos con cascara',
+    label: 'Frutos con cáscara',
+    icon: NutsIcon,
+    selectedColorIcon: '#81582F',
+  },
+  {
+    id: 'pescado',
+    label: 'Pescado',
+    icon: FishIcon,
+    selectedColorIcon: '#4591C7',
+  },
+  { id: 'huevo', label: 'Huevo', icon: EggsIcon, selectedColorIcon: '#D8C3AC' },
+  {
+    id: 'sulfitos',
+    label: 'Sulfitos',
+    icon: SulphitesIcon,
+    selectedColorIcon: '#969D9E',
+  },
+  {
+    id: 'apio',
+    label: 'Apio',
+    icon: CeleryIcon,
+    selectedColorIcon: '#A5C295',
+  },
+  {
+    id: 'moluscos',
+    label: 'Moluscos',
+    icon: MollusksIcon,
+    selectedColorIcon: '#162847',
+  },
+  {
+    id: 'custaceos',
+    label: 'Crustaceos',
+    icon: CrustaceansIcon,
+    selectedColorIcon: '#E1664F',
+  },
+  {
+    id: 'mostaza',
+    label: 'Mostaza',
+    icon: MustardIcon,
+    selectedColorIcon: '#E2BD17',
+  },
+  {
+    id: 'sesamo',
+    label: 'Sesamo',
+    icon: SesameIcon,
+    selectedColorIcon: '#CAABD5',
+  },
 ]
 
 export const familyFilters: FilterItem[] = [
-  { id: 'aperitivi', label: 'Aperitivi', icon: AperitiviIcon },
-  { id: 'antipasti', label: 'Antipasti', icon: AntipastiIcon },
-  { id: 'insalate', label: 'Ensaladas', icon: SaladsIcon },
+  {
+    id: 'aperitivi',
+    label: 'Aperitivi',
+    icon: AperitiviIcon,
+    selectedColorIcon: '#E7CAA1',
+  },
+  {
+    id: 'antipasti',
+    label: 'Antipasti',
+    icon: AntipastiIcon,
+    selectedColorIcon: '#5D5F34',
+  },
+  {
+    id: 'insalate',
+    label: 'Ensaladas',
+    icon: SaladsIcon,
+    selectedColorIcon: '#9E9E26',
+  },
   {
     id: 'piatti-principali',
     label: 'Platos Principales',
     icon: MainDishesIcon,
+    selectedColorIcon: '#8D3984',
   },
-  { id: 'desserts', label: 'Postres', icon: DessertsIcon },
-  { id: 'le-pizze', label: 'Pizza', icon: PizzaIcon },
-  { id: 'cuore-felice', label: 'Cuore Felici', icon: HeartIcon },
+  {
+    id: 'postres',
+    label: 'Postres',
+    icon: DessertsIcon,
+    selectedColorIcon: '#E75E83',
+  },
+  {
+    id: 'le-pizze',
+    label: 'Pizza',
+    icon: PizzaIcon,
+    selectedColorIcon: '#E7B864',
+  },
+  {
+    id: 'cuore-felice',
+    label: 'Cuore Felici',
+    icon: HeartIcon,
+    selectedColorIcon: '#960313',
+  },
 ]
 
 const filterMap: Record<keyof Filters, FilterItem[]> = {
@@ -123,14 +277,15 @@ const filterMap: Record<keyof Filters, FilterItem[]> = {
   ingredients: ingredientsFilters,
   flavour: flavoursFilters,
   basePasta: basePastaFilters,
+  filtersAvaible: [],
 }
 
 const CategoryFilter = ({
-  triggerIcon,
+  triggerIcon: TriggerIcon,
   items,
   filterBy,
 }: {
-  triggerIcon: string
+  triggerIcon: any
   filterBy: keyof Filters
   items: FilterItem[]
 }) => {
@@ -165,35 +320,39 @@ const CategoryFilter = ({
     }
   }, [focusedFilter, filterBy, setFocusedFilter])
 
-  const selectedIcon =
+  const SelectedIcon =
     filters[filterBy] && filterMap[filterBy]
       ? filterMap[filterBy].find((item) => item.id === filters[filterBy])
-          ?.icon ?? triggerIcon
-      : triggerIcon
+          ?.icon ?? TriggerIcon
+      : TriggerIcon
+
+  const selectedColorIcon =
+    filters[filterBy] && filterMap[filterBy]
+      ? filterMap[filterBy].find((item) => item.id === filters[filterBy])
+          ?.selectedColorIcon
+      : ''
+
   return (
     <div>
       <div ref={ref} className="relative">
         <button
           className={` ${
-            disabled ? 'cursor-not-allowed opacity-50' : ''
-          } rounded-full bg-neutral-600 size-10 justify-center flex shadow-md text-xl`}
-          disabled={disabled}
+            disabled || items.length === 0
+              ? 'cursor-not-allowed opacity-50'
+              : ''
+          } rounded-full size-10 justify-center items-center flex shadow-md text-xl `}
+          disabled={disabled || items.length === 0}
           onClick={() =>
             setFocusedFilter((prev) => (prev === filterBy ? null : filterBy))
           }
+          style={{
+            backgroundColor: selectedColorIcon || '#525252', // fallback
+          }}
         >
           {!!filters[filterBy] ? (
-            <Image
-              src={selectedIcon}
-              alt={`${filterBy} icon`}
-              className="text-checkmeeting-main"
-            />
+            <SelectedIcon className=" mx-auto self-center px-auto flex [&_path]:fill-white" />
           ) : (
-            <Image
-              src={selectedIcon}
-              alt={`${filterBy} icon`}
-              className="text-checkmeeting-main"
-            />
+            <TriggerIcon />
           )}
         </button>
         {focusedFilter === filterBy &&
@@ -222,6 +381,21 @@ const CategoryFilter = ({
 }
 
 export const SuggestedFilters = () => {
+  const { filters } = useFilters()
+
+  const getItemName = (item: any) =>
+    (item.label ?? item.name ?? item.id ?? '').toString().toLowerCase()
+
+  const isInAvailable = (availableArr: string[] | undefined, item: any) => {
+    if (
+      !availableArr ||
+      !Array.isArray(availableArr) ||
+      availableArr.length === 0
+    )
+      return true
+    const name = getItemName(item)
+    return availableArr.some((av) => av.toString().toLowerCase() === name)
+  }
   return (
     <div className="w-fit ml-auto mr-5 flex gap-5" id="filters-container">
       <CategoryFilter
@@ -232,27 +406,51 @@ export const SuggestedFilters = () => {
       <CategoryFilter
         filterBy="allergen"
         triggerIcon={AlergensIcon}
-        items={allergensFilters}
+        items={allergensFilters.filter((item) => {
+          if (!filters.filtersAvaible?.allergens) return item
+          return filters.filtersAvaible.allergens?.some(
+            (available: string) =>
+              available.toLowerCase() === item.label.toLowerCase(),
+          )
+        })}
       />
       <CategoryFilter
         filterBy="diet"
         triggerIcon={DietIcon}
-        items={dietFilters}
+        items={dietFilters.filter((item) => {
+          if (!filters.filtersAvaible?.diets) return item
+          return filters.filtersAvaible.diets?.some(
+            (available: string) =>
+              available.toLowerCase() === item.id.toLowerCase(),
+          )
+        })}
       />
       <CategoryFilter
         filterBy="ingredients"
         triggerIcon={IngredientsIcon}
-        items={ingredientsFilters}
+        items={ingredientsFilters.filter((item) => {
+          const name = getItemName(item)
+          if (filters.family === 'le-pizze' && name === 'mass') return false
+          if (!isInAvailable(filters.filtersAvaible?.ingredients, item))
+            return false
+
+          return true
+        })}
       />
       <CategoryFilter
         filterBy="flavour"
         triggerIcon={FlavoursIcon}
-        items={flavoursFilters}
-      />
-      <CategoryFilter
-        filterBy="basePasta"
-        triggerIcon={basePastaIcon}
-        items={basePastaFilters}
+        items={flavoursFilters.filter((item) => {
+          const name = getItemName(item)
+          if (filters.family === 'le-pizze' && name === 'crujiente')
+            return false
+          if (filters.family === 'postres' && name === 'dulce') return false
+          if (!isInAvailable(filters.filtersAvaible?.flavors, item)) {
+            return false
+          }
+
+          return true
+        })}
       />
     </div>
   )

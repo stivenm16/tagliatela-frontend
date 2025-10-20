@@ -1,10 +1,21 @@
-import React from 'react'
-
-const CloseButton = ({ onClick }: { onClick: () => void }) => {
+const CloseButton = ({
+  onClick,
+  size,
+}: {
+  onClick: () => void
+  size?: number
+}) => {
   return (
     <button
       onClick={onClick}
-      className="absolute -top-2 -right-2 bg-red-600 text-white rounded-full w-6 h-6 flex items-center justify-center"
+      className={`absolute -top-${
+        size ? 10 : 2
+      }  bg-red-600 text-white rounded-full size-${
+        size ?? 8
+      } flex items-center justify-center`}
+      style={{
+        right: size ? 4 : -10,
+      }}
     >
       ✕
     </button>

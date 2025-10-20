@@ -6,7 +6,6 @@ import NotAvailable from '@/assets/svgs/not-available-home-icon.svg'
 import PastaIcon from '@/assets/svgs/pasta-home-icon.svg'
 import SuggestedIcon from '@/assets/svgs/suggested-home-icon.svg'
 import Logo from '@/components/Icons/LOGO.svg'
-import Image from 'next/image'
 import Link from 'next/link'
 
 const fakeData2 = [
@@ -55,7 +54,7 @@ const fakeData2 = [
 export default function Home() {
   return (
     <div className="flex flex-col bg-surface-2 items-center justify-center h-screen gap-10 text-white">
-      <Image src={Logo} alt="Next.js logo" width={180} height={38} priority />
+      <Logo />
 
       <div>
         <div className="grid grid-cols-2 gap-8 mt-4 ">
@@ -66,7 +65,7 @@ export default function Home() {
               key={index}
             >
               <>
-                <Image src={column.icon} alt={column.title} />
+                <column.icon />
                 <span className="text-center  w-40">{column.title}</span>
               </>
             </Link>
@@ -77,13 +76,13 @@ export default function Home() {
             href={'/check-meeting'}
             className={`flex  size-32 mt-8 justify-center text-wrap font-bold flex-row items-center uppercase rounded-full bg-checkmeeting-main`}
           >
-            <Image src={Checckmeeting} alt={'Checkmeeting'} />
+            <Checckmeeting />
           </Link>
           <Link
             href={'/platos-no-disponibles'}
             className={`flex  size-32 mt-8 justify-center text-wrap font-bold flex-row items-center uppercase rounded-full bg-not-available-main`}
           >
-            <Image src={NotAvailable} alt={'Not Available'} />
+            <NotAvailable />
           </Link>
         </div>
       </div>

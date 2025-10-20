@@ -6,16 +6,15 @@ import SojaRestrictionIcon from '@/assets/svgs/sauces/soja-restriction-icon.svg'
 import SulphiteRestrictionIcon from '@/assets/svgs/sauces/sulphite-restriction-icon.svg'
 import Alert from '@/components/Alert'
 import OverlayPopup from '@/components/Dialog/OverlayPopup'
-import Image from 'next/image'
 import { useState } from 'react'
 
 const iconsToMap = [
-  { icon: SojaRestrictionIcon, alt: 'Soja Restriction Icon' },
-  { icon: MilkRestrictionIcon, alt: 'Milk Restriction Icon' },
-  { icon: EggsRestrictionIcon, alt: 'Eggs Restriction Icon' },
-  { icon: GlutenRestrictionIcon, alt: 'Gluten Restriction Icon' },
-  { icon: CeleryRestrictionIcon, alt: 'Celery Restriction Icon' },
-  { icon: SulphiteRestrictionIcon, alt: 'Sulphite Restriction Icon' },
+  { Icon: SojaRestrictionIcon, alt: 'Soja Restriction Icon' },
+  { Icon: MilkRestrictionIcon, alt: 'Milk Restriction Icon' },
+  { Icon: EggsRestrictionIcon, alt: 'Eggs Restriction Icon' },
+  { Icon: GlutenRestrictionIcon, alt: 'Gluten Restriction Icon' },
+  { Icon: CeleryRestrictionIcon, alt: 'Celery Restriction Icon' },
+  { Icon: SulphiteRestrictionIcon, alt: 'Sulphite Restriction Icon' },
 ]
 
 const AlertSauces = () => {
@@ -32,8 +31,8 @@ const AlertSauces = () => {
               No se recomienda consumir pasta si el cliente tiene alergia a:
             </span>
             <div className="flex gap-4 mx-auto items-center justify-center my-4">
-              {iconsToMap.map(({ icon, alt }, index) => (
-                <Image src={icon} alt={alt} key={index} />
+              {iconsToMap.map(({ Icon, alt }, index) => (
+                <Icon key={index} />
               ))}
             </div>
             <span className="font-bold">

@@ -2,7 +2,7 @@
 import SecretTaste from '@/assets/images/secret-taste.png'
 import Card from '@/components/Cards/Card'
 import GeneralDialogContent from '@/components/Dialog/GeneralDialog'
-import Image from 'next/image'
+import CardDOPComponent from '../components/CardDOPComponent'
 
 const fakeCheeseData = [
   {
@@ -54,17 +54,17 @@ const fakeCheeseData = [
     isSuggested: true,
   },
 ]
-const page = () => {
+const Page = () => {
   return (
-    <div className="w-full">
-      <div className="flex flex-wrap gap-x-10 justify-center ">
+    <div className="w-full h-screen overflow-y-auto pb-56">
+      <div className="flex flex-wrap gap-x-3 justify-center ">
         {fakeCheeseData.map((cheese) => (
-          <div key={cheese.id} className="my-18">
+          <div key={cheese.id} className="my-16">
             <Card
               isFlippable={false}
               backgroundCard=""
               height="10rem"
-              width="15rem"
+              width="13.5rem"
               isModalAvailable={true}
               modalContent={
                 <GeneralDialogContent
@@ -75,11 +75,7 @@ const page = () => {
                 />
               }
             >
-              <div className="flex flex-col w-full h-full gap-3 relative">
-                {/* {item.isNew && <NewDishFloatingButton />} */}
-                <Image src={SecretTaste} alt={'tem.title'} />
-                <h2 className="text-center uppercase">{cheese.title}</h2>
-              </div>
+              <CardDOPComponent img={SecretTaste} title={cheese.title} />
             </Card>
           </div>
         ))}
@@ -88,4 +84,4 @@ const page = () => {
   )
 }
 
-export default page
+export default Page

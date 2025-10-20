@@ -1,6 +1,5 @@
 import { Filters, useFilters } from '@/components/Layout/context/FilterContext'
-import Image from 'next/image'
-import { useEffect, useRef, useState } from 'react'
+import { JSX, useEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 
 type VerticalFilterMenuProps = {
@@ -12,13 +11,13 @@ type VerticalFilterMenuProps = {
 export type FilterItem = {
   id: string
   label: string
-  icon: string
+  icon: JSX.Element
+  selectedColorIcon?: string
 }
 const VerticalFilterItem = ({
   id,
   label,
-  icon,
-  activeColor,
+  icon: Icon,
   hovered,
   setHovered,
   updateFilter,
@@ -27,7 +26,7 @@ const VerticalFilterItem = ({
 }: {
   id: string
   label: string
-  icon: string
+  icon: any
   activeColor: string
   hovered: string | null
   setHovered: (id: string | null) => void
@@ -80,7 +79,6 @@ const VerticalFilterItem = ({
       setIsPositioned(false)
     }
   }, [hovered, id])
-
   return (
     <div
       className="relative flex items-center"
@@ -92,13 +90,13 @@ const VerticalFilterItem = ({
     >
       <button
         ref={buttonRef}
-        className={`p-2 size-10 flex justify-center text-xl ${activeColor}`}
+        className={`p-2 size-10 flex justify-center text-xl `}
         onClick={() => {
           updateFilter(category, id === hovered ? null : id)
           setFocusedFilter(null)
         }}
       >
-        <Image src={icon} alt={label} />
+        <Icon />
       </button>
 
       {hovered === id &&
@@ -129,6 +127,7 @@ export const VerticalFilterMenu = ({
 }: VerticalFilterMenuProps) => {
   const [hovered, setHovered] = useState<string | null>(null)
   const { updateFilter, setFocusedFilter } = useFilters()
+
   return (
     <div className="flex flex-col items-center gap-4 bg-white rounded-full shadow-lg">
       {items.map(({ id, label, icon }) => (

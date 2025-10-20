@@ -3,6 +3,13 @@
 
 import React, { createContext, useContext, useState } from 'react'
 
+export type FilterAvaible = {
+  allergens?: string[]
+  diets?: string[]
+  ingredients?: string[]
+  flavors?: string[]
+}
+
 export type Filters = {
   diet: string | null
   allergen: string | null
@@ -10,12 +17,16 @@ export type Filters = {
   flavour: string | null
   family: string | null
   basePasta: string | null
+  filtersAvaible?: FilterAvaible | null
 }
 
 type FilterContextType = {
   filters: Filters
   setFilters: React.Dispatch<React.SetStateAction<Filters>>
-  updateFilter: (key: keyof Filters, value: string | null) => void
+  updateFilter: (
+    key: keyof Filters,
+    value: string | FilterAvaible | null,
+  ) => void
   focusedFilter: keyof Filters | null
   setFocusedFilter: React.Dispatch<React.SetStateAction<keyof Filters | null>>
 }
@@ -30,11 +41,14 @@ export const FilterProvider = ({ children }: { children: React.ReactNode }) => {
     flavour: null,
     family: null,
     basePasta: null,
+    filtersAvaible: null,
   })
-
   const [focusedFilter, setFocusedFilter] = useState<keyof Filters | null>(null)
 
-  const updateFilter = (key: keyof Filters, value: string | null) => {
+  const updateFilter = (
+    key: keyof Filters,
+    value: string | FilterAvaible | null,
+  ) => {
     setFilters((prev) => ({ ...prev, [key]: value }))
   }
 

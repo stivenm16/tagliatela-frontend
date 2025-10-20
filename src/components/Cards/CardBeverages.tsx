@@ -38,7 +38,7 @@ const CardBeverages = ({
           <div className=" w-fit" onClick={() => setIsOpenModal(true)}>
             <Image src={img} alt={title} className="rounded-3xl shadow-lg" />
             <div className="flex mt-3 ">
-              <Image src={BottleIcon} alt={title} className="mt-auto" />
+              <BottleIcon />
               <div className="flex flex-col gap-1 pl-4 w-40 mt-auto">
                 <span className="uppercase w-fit text-left leading-6 font-bold text-wrap">
                   {title}
