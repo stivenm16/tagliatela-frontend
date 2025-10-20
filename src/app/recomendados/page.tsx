@@ -90,14 +90,15 @@ function extractUniqueFilterData(dishes: any): FilterAvaible {
   for (const dish of dishes) {
     const { filter, ingredients } = dish
 
-    filter?.allergens?.forEach((a) => result.allergens.add(a.name))
-    filter?.diets?.forEach((d) => result.diets.add(d.name))
-    filter?.flavors &&
+    filter?.allergens?.forEach((a: any) => result.allergens.add(a.name))
+    filter?.diets?.forEach((d: any) => result.diets.add(d.name))
+
+    if (filter?.flavors)
       Object.values(filter.flavors).forEach((f: any) => {
         if (typeof f?.name === 'string') result.flavors.add(f.name)
       })
 
-    ingredients?.forEach((i) => result.ingredients.add(i.name))
+    ingredients?.forEach((i: any) => result.ingredients.add(i.name))
   }
 
   return {
