@@ -127,6 +127,7 @@ export const VerticalFilterMenu = ({
 }: VerticalFilterMenuProps) => {
   const [hovered, setHovered] = useState<string | null>(null)
   const { updateFilter, setFocusedFilter } = useFilters()
+
   return (
     <div className="flex flex-col items-center gap-4 bg-white rounded-full shadow-lg">
       {items.map(({ id, label, icon }) => (

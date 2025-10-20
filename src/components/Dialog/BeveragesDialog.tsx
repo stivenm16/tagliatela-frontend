@@ -115,7 +115,6 @@ export const WineDialogContent = ({
   pairing,
   description,
 }: BeveragesDialogProps) => {
-  console.log(origin)
   return (
     <div className="flex gap-8">
       <div className="flex flex-col gap-4">

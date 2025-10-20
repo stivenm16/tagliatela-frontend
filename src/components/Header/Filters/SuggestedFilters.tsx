@@ -378,6 +378,8 @@ const CategoryFilter = ({
 }
 
 export const SuggestedFilters = () => {
+  const { filters } = useFilters()
+
   return (
     <div className="w-fit ml-auto mr-5 flex gap-5" id="filters-container">
       <CategoryFilter
@@ -398,12 +400,28 @@ export const SuggestedFilters = () => {
       <CategoryFilter
         filterBy="ingredients"
         triggerIcon={IngredientsIcon}
-        items={ingredientsFilters}
+        items={ingredientsFilters.filter((item) => {
+          if (filters.family === 'le-pizze') {
+            return item.id !== 'mass'
+          }
+
+          return item
+        })}
       />
       <CategoryFilter
         filterBy="flavour"
         triggerIcon={FlavoursIcon}
-        items={flavoursFilters}
+        items={flavoursFilters.filter((item) => {
+          if (filters.family === 'le-pizze') {
+            return item.id !== 'crujiente'
+          }
+
+          if (filters.family === 'postres') {
+            return item.id !== 'dulce'
+          }
+
+          return item
+        })}
       />
     </div>
   )

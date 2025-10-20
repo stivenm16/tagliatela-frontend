@@ -205,7 +205,7 @@ const Page = () => {
   const [alertMessage, setAlertMessage] =
     useState<JSX.Element>(suggestionsMessage)
 
-  const { filters } = useFilters()
+  const { filters, updateFilter } = useFilters()
 
   const getContent = useCallback(async () => {
     const response = await axiosInstance.get(
@@ -214,6 +214,11 @@ const Page = () => {
         withCredentials: true,
       },
     )
+
+    if (response.status !== 200) {
+      throw new Error('Error fetching dishes')
+    }
+
     return response.data
   }, [filters.family])
 

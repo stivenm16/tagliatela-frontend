@@ -31,7 +31,6 @@ export const FilterProvider = ({ children }: { children: React.ReactNode }) => {
     family: null,
     basePasta: null,
   })
-
   const [focusedFilter, setFocusedFilter] = useState<keyof Filters | null>(null)
 
   const updateFilter = (key: keyof Filters, value: string | null) => {
