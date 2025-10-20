@@ -63,7 +63,7 @@ const ingredientsFilters: FilterItem[] = [
     icon: CheeseIcon,
     selectedColorIcon: '#FEE67B',
   },
-  { id: 'meat', label: 'Carne', icon: MeatIcon, selectedColorIcon: '#E59A61' },
+  { id: 'carne', label: 'Carne', icon: MeatIcon, selectedColorIcon: '#E59A61' },
   {
     id: 'seafood',
     label: 'Productos del mar',
@@ -76,15 +76,15 @@ const ingredientsFilters: FilterItem[] = [
     icon: StiffIcon,
     selectedColorIcon: '#734A84',
   },
-  { id: 'mass', label: 'Masa', icon: MassIcon, selectedColorIcon: '#C5A468' },
+  { id: 'masa', label: 'Masa', icon: MassIcon, selectedColorIcon: '#C5A468' },
   {
-    id: 'vegetables',
+    id: 'vegetales',
     label: 'Vegetales',
     icon: VegetablesIcon,
     selectedColorIcon: '#78B591',
   },
   {
-    id: 'tomato',
+    id: 'tomate',
     label: 'Tomate',
     icon: TomatoIcon,
     selectedColorIcon: '#B74A35',
@@ -277,6 +277,7 @@ const filterMap: Record<keyof Filters, FilterItem[]> = {
   ingredients: ingredientsFilters,
   flavour: flavoursFilters,
   basePasta: basePastaFilters,
+  filtersAvaible: [],
 }
 
 const CategoryFilter = ({
@@ -380,6 +381,8 @@ const CategoryFilter = ({
 export const SuggestedFilters = () => {
   const { filters } = useFilters()
 
+  console.log(filters.filtersAvaible, 'filters in suggested')
+  console.log(dietFilters, 'dietFilters in suggested')
   return (
     <div className="w-fit ml-auto mr-5 flex gap-5" id="filters-container">
       <CategoryFilter
@@ -390,12 +393,24 @@ export const SuggestedFilters = () => {
       <CategoryFilter
         filterBy="allergen"
         triggerIcon={AlergensIcon}
-        items={allergensFilters}
+        items={allergensFilters.filter((item) => {
+          if (!filters.filtersAvaible?.allergens) return item
+          return filters.filtersAvaible.allergens?.some(
+            (available: string) =>
+              available.toLowerCase() === item.label.toLowerCase(),
+          )
+        })}
       />
       <CategoryFilter
         filterBy="diet"
         triggerIcon={DietIcon}
-        items={dietFilters}
+        items={dietFilters.filter((item) => {
+          if (!filters.filtersAvaible?.diets) return item
+          return filters.filtersAvaible.diets?.some(
+            (available: string) =>
+              available.toLowerCase() === item.id.toLowerCase(),
+          )
+        })}
       />
       <CategoryFilter
         filterBy="ingredients"

@@ -10,7 +10,10 @@ import { WineDialogContent } from '@/components/Dialog/BeveragesDialog'
 import { ClickableItem } from '@/components/Dialog/ClickableItem'
 import GeneralDialogContent from '@/components/Dialog/GeneralDialog'
 import OverlayPopup from '@/components/Dialog/OverlayPopup'
-import { useFilters } from '@/components/Layout/context/FilterContext'
+import {
+  FilterAvaible,
+  useFilters,
+} from '@/components/Layout/context/FilterContext'
 import { Skeleton } from '@/components/ui/skeleton'
 import axiosInstance from '@/lib/axios'
 import { EntityT } from '@/types/global'
@@ -75,6 +78,35 @@ interface Dish extends EntityT {
   type: string
 }
 
+function extractUniqueFilterData(dishes: any): FilterAvaible {
+  const result = {
+    allergens: new Set<string>(),
+    diets: new Set<string>(),
+    flavors: new Set<string>(),
+    ingredients: new Set<string>(),
+  }
+
+  for (const dish of dishes) {
+    const { filter, ingredients } = dish
+
+    filter?.allergens?.forEach((a) => result.allergens.add(a.name))
+    filter?.diets?.forEach((d) => result.diets.add(d.name))
+    filter?.flavors &&
+      Object.values(filter.flavors).forEach((f: any) => {
+        if (typeof f?.name === 'string') result.flavors.add(f.name)
+      })
+
+    ingredients?.forEach((i) => result.ingredients.add(i.name))
+  }
+
+  // convert sets to arrays
+  return {
+    allergens: [...result.allergens],
+    diets: [...result.diets],
+    flavors: [...result.flavors],
+    ingredients: [...result.ingredients],
+  }
+}
 interface Props {
   content: JSX.Element
   label: string
@@ -237,6 +269,8 @@ const Page = () => {
           if (data.length === 0) {
             setDishes([])
           } else {
+            const filters = extractUniqueFilterData(data)
+            updateFilter('filtersAvaible', filters)
             setDishes(data)
           }
         })
