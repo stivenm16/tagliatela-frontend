@@ -23,6 +23,7 @@ import {
   useCallback,
   useEffect,
   useLayoutEffect,
+  useMemo,
   useRef,
   useState,
 } from 'react'
@@ -99,7 +100,6 @@ function extractUniqueFilterData(dishes: any): FilterAvaible {
     ingredients?.forEach((i) => result.ingredients.add(i.name))
   }
 
-  // convert sets to arrays
   return {
     allergens: [...result.allergens],
     diets: [...result.diets],
@@ -150,7 +150,7 @@ function InfoWithPortal({
     }
 
     document.addEventListener('click', handleClickOutside)
-    window.addEventListener('scroll', handleScrollOrDrag, true) // use capture to catch inner scrollables
+    window.addEventListener('scroll', handleScrollOrDrag, true)
     window.addEventListener('touchmove', handleScrollOrDrag, { passive: true })
 
     return () => {
@@ -165,10 +165,9 @@ function InfoWithPortal({
 
     const rect = ref.current.getBoundingClientRect()
 
-    // Calculate if we have enough space to the right
     const tooltipWidth = 150
     const spaceRight = window.innerWidth - rect.right
-    const needsFlip = spaceRight < tooltipWidth + 12 // padding
+    const needsFlip = spaceRight < tooltipWidth + 12
 
     setFlip(needsFlip)
     setPos({ left: rect.left + rect.width / 2, top: rect.top })
@@ -297,17 +296,31 @@ const Page = () => {
   }
 
   // This filter implementation will now work as expected
-  const filteredDishes = dishes.filter((dish) => {
-    const { filter, ingredients, type } = dish
-    return (
-      matchesFilter(filter.diets, filters.diet) &&
-      matchesFilter(filter.allergens, filters.allergen) &&
-      matchesFilter(filter.flavors, filters.flavour) &&
-      matchesFilter(ingredients, filters.ingredients) &&
-      matchesFilter(filter.basePastas, filters.basePasta) &&
-      matchesFilter(filter.families, filters.family)
-    )
-  })
+  const filteredDishes = useMemo(() => {
+    return dishes.filter((dish) => {
+      const { filter, ingredients } = dish
+      return (
+        matchesFilter(filter.diets, filters.diet) &&
+        matchesFilter(filter.allergens, filters.allergen) &&
+        matchesFilter(filter.flavors, filters.flavour) &&
+        matchesFilter(ingredients, filters.ingredients) &&
+        matchesFilter(filter.basePastas, filters.basePasta) &&
+        matchesFilter(filter.families, filters.family)
+      )
+    })
+  }, [dishes, filters])
+
+  useEffect(() => {
+    const newFiltersAvailable = extractUniqueFilterData(filteredDishes)
+    const oldFilters = filters.filtersAvaible ?? {}
+
+    const isDifferent =
+      JSON.stringify(newFiltersAvailable) !== JSON.stringify(oldFilters)
+
+    if (isDifferent) {
+      updateFilter('filtersAvaible', newFiltersAvailable)
+    }
+  }, [filteredDishes])
 
   const onCloseDialog = () => {
     setOpen(false)

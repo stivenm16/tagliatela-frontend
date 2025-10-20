@@ -337,9 +337,11 @@ const CategoryFilter = ({
       <div ref={ref} className="relative">
         <button
           className={` ${
-            disabled ? 'cursor-not-allowed opacity-50' : ''
+            disabled || items.length === 0
+              ? 'cursor-not-allowed opacity-50'
+              : ''
           } rounded-full size-10 justify-center items-center flex shadow-md text-xl `}
-          disabled={disabled}
+          disabled={disabled || items.length === 0}
           onClick={() =>
             setFocusedFilter((prev) => (prev === filterBy ? null : filterBy))
           }
@@ -381,8 +383,19 @@ const CategoryFilter = ({
 export const SuggestedFilters = () => {
   const { filters } = useFilters()
 
-  console.log(filters.filtersAvaible, 'filters in suggested')
-  console.log(dietFilters, 'dietFilters in suggested')
+  const getItemName = (item: any) =>
+    (item.label ?? item.name ?? item.id ?? '').toString().toLowerCase()
+
+  const isInAvailable = (availableArr: string[] | undefined, item: any) => {
+    if (
+      !availableArr ||
+      !Array.isArray(availableArr) ||
+      availableArr.length === 0
+    )
+      return true
+    const name = getItemName(item)
+    return availableArr.some((av) => av.toString().toLowerCase() === name)
+  }
   return (
     <div className="w-fit ml-auto mr-5 flex gap-5" id="filters-container">
       <CategoryFilter
@@ -416,26 +429,27 @@ export const SuggestedFilters = () => {
         filterBy="ingredients"
         triggerIcon={IngredientsIcon}
         items={ingredientsFilters.filter((item) => {
-          if (filters.family === 'le-pizze') {
-            return item.id !== 'mass'
-          }
+          const name = getItemName(item)
+          if (filters.family === 'le-pizze' && name === 'mass') return false
+          if (!isInAvailable(filters.filtersAvaible?.ingredients, item))
+            return false
 
-          return item
+          return true
         })}
       />
       <CategoryFilter
         filterBy="flavour"
         triggerIcon={FlavoursIcon}
         items={flavoursFilters.filter((item) => {
-          if (filters.family === 'le-pizze') {
-            return item.id !== 'crujiente'
+          const name = getItemName(item)
+          if (filters.family === 'le-pizze' && name === 'crujiente')
+            return false
+          if (filters.family === 'postres' && name === 'dulce') return false
+          if (!isInAvailable(filters.filtersAvaible?.flavors, item)) {
+            return false
           }
 
-          if (filters.family === 'postres') {
-            return item.id !== 'dulce'
-          }
-
-          return item
+          return true
         })}
       />
     </div>

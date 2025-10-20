@@ -35,7 +35,7 @@ export const ClickableItem = ({
             <span className='text-sm"'>{title}</span>
           </div>
         </DialogTrigger>
-        <DialogContent className="Dialog rounded-lg relative ">
+        <DialogContent className="Dialog rounded-lg relative">
           <div className="absolute -top-4 -right-4">
             <DialogClose />
           </div>
