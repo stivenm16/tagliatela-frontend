@@ -142,6 +142,7 @@ const DishCard = ({
         {item.name}
       </h2>
       <div className="relative overflow-visible">
+        {}
         <Image
           src={imgSrc}
           alt={item.name}
