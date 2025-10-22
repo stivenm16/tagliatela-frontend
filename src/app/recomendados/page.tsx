@@ -1,5 +1,4 @@
 'use client'
-import CardReferenceImage from '@/assets/images/card-reference-image.png'
 import WineImageRerence from '@/assets/images/vini-reference-image.png'
 import BeveragesIcon from '@/assets/svgs/beverages-card-icon.svg'
 import IngredientsIcon from '@/assets/svgs/filters/ingredients/ingredients-icon.svg'
@@ -247,7 +246,10 @@ const Page = () => {
                           <GeneralDialogContent
                             title={item.name}
                             description={item.description!}
-                            img={CardReferenceImage}
+                            img={{
+                              name: item.name,
+                              type: item.type,
+                            }}
                           />
                         }
                         height="28rem"
