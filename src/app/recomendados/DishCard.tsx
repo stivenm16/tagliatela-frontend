@@ -135,21 +135,23 @@ const DishCard = ({
     }
   }, [item.name])
 
-  //   console.log(item, '<=== item in DishCard')
   return (
     <div className="flex flex-col items-center gap-2 p-4 h-full w-full ">
       <h2 className="capitalize text-center font-bold text-xl h-16 self-center flex items-center">
         {item.name}
       </h2>
       <div className="relative overflow-visible">
-        {}
-        <Image
-          src={imgSrc}
-          alt={item.name}
-          width={210}
-          height={50}
-          className="rounded-2xl overflow-hidden"
-        />
+        {!!imgSrc ? (
+          <Image
+            src={imgSrc}
+            alt={item.name}
+            width={210}
+            height={50}
+            className="rounded-2xl overflow-hidden"
+          />
+        ) : (
+          <div className="w-[210px] h-[150px] bg-gray-200 animate-pulse rounded-2xl" />
+        )}
         {item.type.toLowerCase() === 'insalate' ? (
           <div
             className="bg-suggested-main  rounded-tl-full text-center h-8 flex items-center text-[13px] justify-start pl-4 text-white uppercase absolute w-full bottom-0"

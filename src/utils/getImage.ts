@@ -7,7 +7,6 @@ export const getDishImage = async (dishName: string, category: string): Promise<
         word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()
       ).join('')
   
-      console.log(`@/assets/images/dishes/${category.toLowerCase()}/${dishName}/${category.toUpperCase()}_${normalized}_148,5x148,5.png`, '<====== normalized')
     try {
       // Try to import dynamically (only if exists)
       const image = await import(

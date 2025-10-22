@@ -93,6 +93,12 @@ const VerticalFilterItem = ({
         className={`p-2 size-10 flex justify-center text-xl `}
         onClick={() => {
           updateFilter(category, id === hovered ? null : id)
+          if (category === 'family') {
+            updateFilter('allergen', null)
+            updateFilter('diet', null)
+            updateFilter('flavour', null)
+            updateFilter('ingredients', null)
+          }
           setFocusedFilter(null)
         }}
       >
