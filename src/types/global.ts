@@ -23,12 +23,14 @@ export interface EntityT {
   description?: string
 }
 
-enum FamilyType  {
+export enum FamilyType  {
   INSALATE = "INSALATE",
   APERITIVI = "APERITIVI",
   ANTIPASTI = "ANTIPASTI",
   POSTRES = "POSTRES",
-  PIZZA = "LE PIZZA",
+  LE_PIZZE = "LE PIZZE",
   CUORE_FELICE = "CUORE FELICE",
   PIATTI_PRINCIPALI = "PIATTI PRINCIPALI",
+  SALSAS = "SALSAS",
+  GUARNICIONES = "GUARNICIONES",
 }
