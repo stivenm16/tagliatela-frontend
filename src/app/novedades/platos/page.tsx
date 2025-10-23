@@ -2,7 +2,6 @@
 import CardReferenceImage from '@/assets/images/card-reference-image.png'
 import Card from '@/components/Cards/Card'
 import { ClickableItem } from '@/components/Dialog/ClickableItem'
-import { default as GeneralDialogContent } from '@/components/Dialog/GeneralDialog'
 import Layout from '@/components/Layout/Layout'
 import Image from 'next/image'
 
@@ -27,13 +26,13 @@ const Page = () => {
           {fakeData.map((item, i) => (
             <Card
               key={item.id}
-              modalContent={
-                <GeneralDialogContent
-                  title={item.title}
-                  description={item.description}
-                  img={CardReferenceImage}
-                />
-              }
+              // modalContent={
+              //   <GeneralDialogContent
+              //     title={item.title}
+              //     description={item.description}
+              //     img={CardReferenceImage}
+              //   />
+              // }
               height="33rem"
               width="18rem"
               backgroundCard="bg-neutral-50"

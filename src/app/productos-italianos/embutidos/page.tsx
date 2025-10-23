@@ -118,8 +118,11 @@ const Page = () => {
                 <GeneralDialogContent
                   title={cheese.title}
                   description={cheese.description}
-                  img={SausagesImg}
                   origin="Italiano"
+                  img={{
+                    name: 'SausagesImg',
+                    type: 'png',
+                  }}
                 />
               }
             >

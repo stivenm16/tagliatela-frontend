@@ -1,5 +1,4 @@
 'use client'
-import CardReferenceImage from '@/assets/images/card-reference-image.png'
 
 import InfoDark from '@/assets/svgs/help-circle-dark.svg'
 import InfoLight from '@/assets/svgs/help-circle-light.svg'
@@ -45,7 +44,10 @@ export const ClickableItem = ({
             <GeneralDialogContent
               title={title}
               description={description}
-              img={CardReferenceImage}
+              img={{
+                name: 'CardReferenceImage',
+                type: 'png',
+              }}
               origin={origin}
             />
           )}
