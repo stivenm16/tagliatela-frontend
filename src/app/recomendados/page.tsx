@@ -1,5 +1,4 @@
 'use client'
-import CardReferenceImage from '@/assets/images/card-reference-image.png'
 import WineImageRerence from '@/assets/images/vini-reference-image.png'
 import BeveragesIcon from '@/assets/svgs/beverages-card-icon.svg'
 import IngredientsIcon from '@/assets/svgs/filters/ingredients/ingredients-icon.svg'
@@ -240,129 +239,137 @@ const Page = () => {
               <div className="flex flex-col gap-3  ">
                 <div className="grid grid-cols-3 gap-x-2 px-4 gap-y-5 py-10 pb-32 mt-2 overflow-y-auto h-[950px]">
                   {filteredDishes.length > 0 &&
-                    filteredDishes.map((item, i) => (
-                      <Card
-                        key={item.id}
-                        modalContent={
-                          <GeneralDialogContent
-                            title={item.name}
-                            description={item.description!}
-                            img={CardReferenceImage}
+                    filteredDishes
+                      .sort(
+                        (a, b) =>
+                          (b.isRecommended ? 1 : 0) - (a.isRecommended ? 1 : 0),
+                      )
+                      .map((item, i) => (
+                        <Card
+                          key={item.id}
+                          modalContent={
+                            <GeneralDialogContent
+                              title={item.name}
+                              description={item.description!}
+                              img={{
+                                name: item.name,
+                                type: item.type,
+                              }}
+                            />
+                          }
+                          height="28rem"
+                          width="14.5rem"
+                          backgroundCard="bg-neutral-50"
+                          flipContentOptions={[
+                            {
+                              content: (
+                                <div
+                                  className="p-4 text-white  w-[12rem] flex flex-col mx-auto"
+                                  onClick={(e) => {
+                                    e.stopPropagation()
+                                    e.preventDefault()
+                                  }}
+                                >
+                                  <h2 className="text-xl font-semibold my-4 text-center">
+                                    {item.name}
+                                  </h2>
+                                  <ul className="flex flex-col gap-1 w-44 overflow-y-auto pr-2 mx-auto justify-center">
+                                    {item.pairing_wine &&
+                                    item.pairing_wine.length > 0
+                                      ? item.pairing_wine.map((ingredient) => (
+                                          <div key={ingredient.id}>
+                                            {ingredient.origin ? (
+                                              <ClickableItem
+                                                title={ingredient.name}
+                                                description={
+                                                  ingredient.description!
+                                                }
+                                                origin={ingredient.origin}
+                                                lightIcon={false}
+                                                customDialog={
+                                                  <div className="bg-white w-full p-5 h-full flex justify-center items-center rounded-xl">
+                                                    <WineDialogContent
+                                                      title={ingredient.name}
+                                                      img={WineImageRerence}
+                                                      origin={ingredient.origin}
+                                                      description={
+                                                        ingredient.description
+                                                      }
+                                                      pairing={ingredient.dishes.map(
+                                                        (d) => d.name,
+                                                      )}
+                                                    />
+                                                  </div>
+                                                }
+                                              />
+                                            ) : (
+                                              <div className="flex gap-2 items-center">
+                                                <div className="size-2 rounded-full bg-white ml-[5px] text-sm" />
+                                                <span className="ml-3">
+                                                  {ingredient.name}
+                                                </span>
+                                              </div>
+                                            )}
+                                          </div>
+                                        ))
+                                      : null}
+                                  </ul>
+                                </div>
+                              ),
+                              icon: BeveragesIcon,
+                              label: 'Bebidas',
+                              color: 'bg-pasta-main',
+                              iconWidth: 15,
+                            },
+                            {
+                              content: (
+                                <div className="p-4 text-white  w-[12rem] flex flex-col mx-auto ">
+                                  <h2 className="text-xl font-semibold my-4 text-center">
+                                    {item.name}
+                                  </h2>
+                                  <ul className="flex flex-col gap-1 w-44 overflow-y-auto pr-2 mx-auto justify-center">
+                                    {item.ingredients.length > 0
+                                      ? item.ingredients.map((ingredient) => (
+                                          <div key={ingredient.id}>
+                                            {ingredient?.imageUrl ? (
+                                              <ClickableItem
+                                                title={ingredient.name}
+                                                description={
+                                                  ingredient.description!
+                                                }
+                                                origin="Italiano"
+                                                lightIcon={false}
+                                              />
+                                            ) : (
+                                              <div className="flex gap-2 items-center">
+                                                <div className="size-2 rounded-full bg-white ml-[5px]" />
+                                                <span className="ml-3 text-sm">
+                                                  {ingredient.name}
+                                                </span>
+                                              </div>
+                                            )}
+                                          </div>
+                                        ))
+                                      : null}
+                                  </ul>
+                                </div>
+                              ),
+                              icon: IngredientsIcon,
+                              label: 'Ingredientes',
+                              color: 'bg-italian-main',
+                              iconWidth: 24,
+                            },
+                          ]}
+                          isSuggested={item.isRecommended}
+                          hasPairing={item.pairing_wine.length > 0}
+                        >
+                          <DishCard
+                            item={item}
+                            openTooltipId={openTooltipId}
+                            setOpenTooltipId={setOpenTooltipId}
                           />
-                        }
-                        height="28rem"
-                        width="14.5rem"
-                        backgroundCard="bg-neutral-50"
-                        flipContentOptions={[
-                          {
-                            content: (
-                              <div
-                                className="p-4 text-white  w-[12rem] flex flex-col mx-auto"
-                                onClick={(e) => {
-                                  e.stopPropagation()
-                                  e.preventDefault()
-                                }}
-                              >
-                                <h2 className="text-xl font-semibold my-4 text-center">
-                                  {item.name}
-                                </h2>
-                                <ul className="flex flex-col gap-1 w-44 overflow-y-auto pr-2 mx-auto justify-center">
-                                  {item.pairing_wine &&
-                                  item.pairing_wine.length > 0
-                                    ? item.pairing_wine.map((ingredient) => (
-                                        <div key={ingredient.id}>
-                                          {ingredient.origin ? (
-                                            <ClickableItem
-                                              title={ingredient.name}
-                                              description={
-                                                ingredient.description!
-                                              }
-                                              origin={ingredient.origin}
-                                              lightIcon={false}
-                                              customDialog={
-                                                <div className="bg-white w-full p-5 h-full flex justify-center items-center rounded-xl">
-                                                  <WineDialogContent
-                                                    title={ingredient.name}
-                                                    img={WineImageRerence}
-                                                    origin={ingredient.origin}
-                                                    description={
-                                                      ingredient.description
-                                                    }
-                                                    pairing={ingredient.dishes.map(
-                                                      (d) => d.name,
-                                                    )}
-                                                  />
-                                                </div>
-                                              }
-                                            />
-                                          ) : (
-                                            <div className="flex gap-2 items-center">
-                                              <div className="size-2 rounded-full bg-white ml-[5px] text-sm" />
-                                              <span className="ml-3">
-                                                {ingredient.name}
-                                              </span>
-                                            </div>
-                                          )}
-                                        </div>
-                                      ))
-                                    : null}
-                                </ul>
-                              </div>
-                            ),
-                            icon: BeveragesIcon,
-                            label: 'Bebidas',
-                            color: 'bg-pasta-main',
-                            iconWidth: 15,
-                          },
-                          {
-                            content: (
-                              <div className="p-4 text-white  w-[12rem] flex flex-col mx-auto ">
-                                <h2 className="text-xl font-semibold my-4 text-center">
-                                  {item.name}
-                                </h2>
-                                <ul className="flex flex-col gap-1 w-44 overflow-y-auto pr-2 mx-auto justify-center">
-                                  {item.ingredients.length > 0
-                                    ? item.ingredients.map((ingredient) => (
-                                        <div key={ingredient.id}>
-                                          {ingredient?.imageUrl ? (
-                                            <ClickableItem
-                                              title={ingredient.name}
-                                              description={
-                                                ingredient.description!
-                                              }
-                                              origin="Italiano"
-                                              lightIcon={false}
-                                            />
-                                          ) : (
-                                            <div className="flex gap-2 items-center">
-                                              <div className="size-2 rounded-full bg-white ml-[5px]" />
-                                              <span className="ml-3 text-sm">
-                                                {ingredient.name}
-                                              </span>
-                                            </div>
-                                          )}
-                                        </div>
-                                      ))
-                                    : null}
-                                </ul>
-                              </div>
-                            ),
-                            icon: IngredientsIcon,
-                            label: 'Ingredientes',
-                            color: 'bg-italian-main',
-                            iconWidth: 24,
-                          },
-                        ]}
-                        isSuggested={i == 0}
-                        hasPairing={item.pairing_wine.length > 0}
-                      >
-                        <DishCard
-                          item={item}
-                          openTooltipId={openTooltipId}
-                          setOpenTooltipId={setOpenTooltipId}
-                        />
-                      </Card>
-                    ))}
+                        </Card>
+                      ))}
                 </div>
               </div>
             </>

@@ -1,11 +1,16 @@
 import ItalianImg from '@/assets/images/italian-flag.png'
+import { getDishImage } from '@/utils/getImage'
 import { StaticImport } from 'next/dist/shared/lib/get-img-props'
 import Image from 'next/image'
+import { useEffect, useState } from 'react'
 
 interface GeneralDialogProps {
   title: string
   description: string
-  img: string | StaticImport
+  img: {
+    name: string
+    type: string
+  }
   origin?: string
 }
 const GeneralDialogContent = ({
@@ -14,15 +19,27 @@ const GeneralDialogContent = ({
   img,
   origin,
 }: GeneralDialogProps) => {
+  const [imgSrc, setImgSrc] = useState<StaticImport | string>('')
+  useEffect(() => {
+    let isMounted = true
+    getDishImage(img.name, img.type, '424x400').then((src) => {
+      if (isMounted) setImgSrc(src as any)
+    })
+    return () => {
+      isMounted = false
+    }
+  }, [img.name])
   return (
     <div className="p-6 w-full rounded-3xl mx-auto flex flex-col justify-center bg-white">
-      <Image
-        src={img}
-        alt={title}
-        width={420}
-        height={200}
-        className="rounded-lg mb-4 overflow-hidden self-center shadow-md"
-      />
+      {!!imgSrc ? (
+        <Image
+          src={imgSrc}
+          alt={title}
+          width={420}
+          height={200}
+          className="rounded-lg mb-4 overflow-hidden self-center shadow-md"
+        />
+      ) : null}
 
       <p className="capitalize text-3xl mx-auto text-center font-bold">
         {title}

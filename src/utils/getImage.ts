@@ -1,6 +1,8 @@
 import CardReferenceImage from '@/assets/images/card-reference-image.png'
 import { StaticImageData } from 'next/image'
-export const getDishImage = async (dishName: string, category: string): Promise<string | StaticImageData> => {
+
+type Variant = '148,5x148,5' | '200x200' | '424x400'
+export const getDishImage = async (dishName: string, category: string, variant: Variant = '148,5x148,5'): Promise<string | StaticImageData> => {
     if (!dishName) return CardReferenceImage
   
     const normalized = dishName.split(' ').map(
@@ -11,7 +13,7 @@ export const getDishImage = async (dishName: string, category: string): Promise<
       // Try to import dynamically (only if exists)
       const image = await import(
         /* @vite-ignore */
-        `@/assets/images/dishes/${category.toLowerCase()}/${dishName}/${category.toUpperCase()}_${normalized}_148,5x148,5.png`
+        `@/assets/images/dishes/${category.toLowerCase()}/${dishName}/${category.toUpperCase()}_${normalized}_${variant}.png`
       )
       return image.default
     } catch {

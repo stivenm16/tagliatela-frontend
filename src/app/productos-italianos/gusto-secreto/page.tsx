@@ -70,7 +70,10 @@ const Page = () => {
                 <GeneralDialogContent
                   title={cheese.title}
                   description={cheese.description}
-                  img={SecretTaste}
+                  img={{
+                    name: 'SecretTaste',
+                    type: 'png',
+                  }}
                   origin="Italiano"
                 />
               }

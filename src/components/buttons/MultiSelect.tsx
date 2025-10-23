@@ -1,11 +1,15 @@
 'use client'
 
+import { FamilyType } from '@/types/global'
 import { ChevronDown } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
 
 interface CustomMultiSelectProps {
-  label: string
-  options: string[]
+  label: string | FamilyType
+  options: {
+    id: number
+    name: string
+  }[]
   selectedIndices?: number[]
   onChange: (newSelected: number[]) => void
   variant?: 'check-meeting' | 'no-disponibles'
@@ -55,6 +59,7 @@ export const CustomMultiSelect: React.FC<CustomMultiSelectProps> = ({
         : 'bg-not-available-main'
     }
   }
+
   return (
     <div ref={wrapperRef} className="relative w-64 text-sm font-medium">
       <button
@@ -70,11 +75,10 @@ export const CustomMultiSelect: React.FC<CustomMultiSelectProps> = ({
         />
       </button>
 
-      {/* Dropdown */}
       <div
         className={`absolute z-10 mt-2 w-full rounded-md bg-white border border-gray-200 shadow-xl overflow-hidden transform transition-all duration-300 origin-top ${
           open
-            ? 'opacity-100 scale-y-100 max-h-96'
+            ? 'opacity-100 scale-y-100 max-h-96 overflow-y-scroll'
             : 'opacity-0 scale-y-95 max-h-0 pointer-events-none'
         }`}
       >
@@ -83,16 +87,18 @@ export const CustomMultiSelect: React.FC<CustomMultiSelectProps> = ({
             <li
               key={idx}
               className="flex items-center cursor-pointer"
-              onClick={() => toggleSelection(idx)}
+              onClick={() => {
+                toggleSelection(option.id)
+              }}
             >
               <span
                 className={`inline-block h-4 w-4 rounded-sm border-2 mr-3 transition-all duration-200 ${
-                  selectedIndices.includes(idx)
+                  selectedIndices.includes(option.id)
                     ? 'bg-[#5B0D31] border-[#5B0D31]'
                     : 'border-[#5B0D31]'
                 }`}
               />
-              <span className="text-[#5B0D31] uppercase">{option}</span>
+              <span className="text-[#5B0D31] uppercase">{option.name}</span>
             </li>
           ))}
         </ul>
