@@ -9,7 +9,7 @@ const Page = () => {
       <span className="uppercase text-pasta-main text-xl drop-shadow-2xl font-bold my-10 ">
         Por favor selecciona una categoria:
       </span>
-      <div className=" grid grid-cols-2 items-center font-bold uppercase text-xl justify-center px-5 gap-12">
+      <div className=" grid grid-cols-1 sm:grid-cols-2  items-center font-bold uppercase text-xl justify-center px-5 gap-12">
         <LinkImgContainer
           title="Quesos"
           href="/productos-italianos/quesos"

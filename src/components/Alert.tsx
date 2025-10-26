@@ -31,11 +31,11 @@ const Alert = ({
 
   return (
     <AlertPortal>
-      <div className="fixed top-[45%] left-1/4 -50">
+      <div className="fixed top-[45%] left-[25px] md:left-1/4 ">
         <div
-          className={`p-5  bg-white/80 backdrop-blur-sm uppercase w-[26rem] px-10 ${
+          className={`p-5  bg-white/80 backdrop-blur-sm uppercase  md:w-[26rem] w-[23rem] px-10 ${
             applyBorder ? 'border-2 border-red-600' : ''
-          } rounded-2xl w-2/3 text-center shadow-lg relative`}
+          } rounded-2xl text-center shadow-lg relative`}
         >
           <span>{children}</span>
           {closeButton ? <CloseButton onClick={() => setOpen(false)} /> : null}

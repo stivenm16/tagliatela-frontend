@@ -16,20 +16,10 @@ interface SaucesComponentProps {
   sauces: Sauce[]
   toggleSauceSelection: (id: number) => void
   selectedSauceId: number | null
-  showTitle?: boolean
 }
-const SaucesComponent = ({
-  sauces,
-  showTitle = true,
-}: SaucesComponentProps) => {
+const SaucesComponent = ({ sauces }: SaucesComponentProps) => {
   return (
     <div className="flex flex-col items-center justify-center mt-10 px-[30px]">
-      {showTitle && (
-        <h2 className="font-bold text-2xl uppercase text-pasta-main mb-6">
-          Salsa disponibles
-        </h2>
-      )}
-      {/* <Alert /> */}
       <div className="flex gap-5 gap-y-4 flex-wrap">
         {sauces.map((sauce) => (
           <Dialog key={sauce.id}>

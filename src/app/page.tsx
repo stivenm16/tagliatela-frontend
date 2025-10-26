@@ -10,7 +10,7 @@ import Link from 'next/link'
 
 const fakeData2 = [
   {
-    title: 'Recomendados',
+    title: 'Recomendar',
     color: 'bg-suggested-main',
     icon: SuggestedIcon,
     items: [
@@ -21,12 +21,22 @@ const fakeData2 = [
     ],
   },
   {
-    title: 'Pasta',
+    title: 'Pastas',
     color: 'bg-pasta-main',
     icon: PastaIcon,
     items: [
       { title: 'Salsa', href: '/pasta/' },
       { title: 'Tipo de Pastas', href: '/pasta/tipo-de-pastas' },
+    ],
+  },
+  {
+    title: 'Producto Italiano',
+    color: 'bg-italian-main',
+    icon: ItalianIcon,
+    items: [
+      { title: 'Quesos', href: '/productos-italianos' },
+      { title: 'Embutidos', href: '/productos-italianos/embutidos' },
+      { title: 'Gusto Secreto', href: '/productos-italianos/gusto-secreto' },
     ],
   },
   {
@@ -39,16 +49,6 @@ const fakeData2 = [
       { title: 'Sangría', href: '/bebidas/sangria' },
     ],
   },
-  {
-    title: 'Productos Italianos',
-    color: 'bg-italian-main',
-    icon: ItalianIcon,
-    items: [
-      { title: 'Quesos', href: '/productos-italianos' },
-      { title: 'Embutidos', href: '/productos-italianos/embutidos' },
-      { title: 'Gusto Secreto', href: '/productos-italianos/gusto-secreto' },
-    ],
-  },
 ]
 
 export default function Home() {
@@ -57,11 +57,11 @@ export default function Home() {
       <Logo />
 
       <div>
-        <div className="grid grid-cols-2 gap-8 mt-4 ">
+        <div className="grid grid-cols-2 gap-16 ">
           {fakeData2.map((column, index) => (
             <Link
               href={column.items[0].href}
-              className={`flex flex-col  size-[13rem]  justify-center text-wrap gap-4 font-bold items-center uppercase rounded-full  ${column.color} p-3`}
+              className={`flex flex-col shadow-xl size-[11rem]  justify-center text-wrap gap-2 font-bold items-center uppercase rounded-full  ${column.color} p-3`}
               key={index}
             >
               <>
@@ -74,13 +74,13 @@ export default function Home() {
         <div className="flex gap-28 justify-center mx-auto">
           <Link
             href={'/check-meeting'}
-            className={`flex  size-32 mt-8 justify-center text-wrap font-bold flex-row items-center uppercase rounded-full bg-checkmeeting-main`}
+            className={`flex shadow-xl  size-32 mt-8 justify-center text-wrap font-bold flex-row items-center uppercase rounded-full bg-checkmeeting-main`}
           >
             <Checckmeeting />
           </Link>
           <Link
             href={'/platos-no-disponibles'}
-            className={`flex  size-32 mt-8 justify-center text-wrap font-bold flex-row items-center uppercase rounded-full bg-not-available-main`}
+            className={`flex shadow-xl size-32 mt-8 justify-center text-wrap font-bold flex-row items-center uppercase rounded-full bg-not-available-main`}
           >
             <NotAvailable />
           </Link>

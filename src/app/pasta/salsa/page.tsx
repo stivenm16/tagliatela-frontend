@@ -4,7 +4,6 @@ import { fakeFilters } from '@/utils/data/fakeFilters'
 import { fakeSauces } from '@/utils/data/fakeSauces'
 import { useState } from 'react'
 import AlertSauces from '../components/AlertSauces'
-import { FiltersSauces } from '../components/FiltersSauces'
 import SaucesComponent from '../components/SaucesComponent'
 
 const Page = () => {
@@ -34,15 +33,8 @@ const Page = () => {
   return (
     <div>
       <AlertSauces />
-      <div className="flex justify-center items-center gap-5 mt-20">
-        <FiltersSauces
-          filters={filters}
-          handleSelectChange={handleSelectChange}
-        />
-      </div>
       <SaucesComponent
         sauces={sauces}
-        showTitle={true}
         toggleSauceSelection={toggleSauceSelection}
         selectedSauceId={selectedSauceId}
       />

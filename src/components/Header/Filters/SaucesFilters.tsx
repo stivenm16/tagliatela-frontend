@@ -1,32 +1,21 @@
-'use client'
-// Family Icons
-import FamilyIcon from '@/assets/svgs/filters/family/family-icon.svg'
+import { useFilters } from '@/components/Layout/context/FilterContext'
 
-// Alergens Icons
 import AlergensIcon from '@/assets/svgs/filters/alergens/alergens-icon.svg'
-
-// Diet Icons
 import DietIcon from '@/assets/svgs/filters/diet/diet-icon.svg'
-
 // Ingredients Icons
 import IngredientsIcon from '@/assets/svgs/filters/ingredients/ingredients-icon.svg'
 
 //Flavours Icons
 import FlavoursIcon from '@/assets/svgs/filters/flavours/flavours-icon.svg'
-
-// Base pasta Icons
-
-import { useFilters } from '@/components/Layout/context/FilterContext'
 import { CategoryFilter } from './CategoryFitler'
 import {
   allergensFilters,
   dietFilters,
-  familyFilters,
   flavoursFilters,
   ingredientsFilters,
 } from './constants'
 
-export const SuggestedFilters = () => {
+export const SaucesFilters = () => {
   const { filters } = useFilters()
 
   const getItemName = (item: any) =>
@@ -45,12 +34,6 @@ export const SuggestedFilters = () => {
   return (
     <div className="w-fit ml-auto mr-5  gap-5  flex " id="filters-container">
       <CategoryFilter
-        filterBy="family"
-        triggerIcon={FamilyIcon}
-        items={familyFilters}
-        page="recomendados"
-      />
-      <CategoryFilter
         filterBy="allergen"
         triggerIcon={AlergensIcon}
         items={allergensFilters.filter((item) => {
@@ -60,7 +43,7 @@ export const SuggestedFilters = () => {
               available.toLowerCase() === item.label.toLowerCase(),
           )
         })}
-        page="recomendados"
+        page="pasta"
       />
       <CategoryFilter
         filterBy="diet"
@@ -72,7 +55,7 @@ export const SuggestedFilters = () => {
               available.toLowerCase() === item.id.toLowerCase(),
           )
         })}
-        page="recomendados"
+        page="pasta"
       />
       <CategoryFilter
         filterBy="ingredients"
@@ -85,7 +68,7 @@ export const SuggestedFilters = () => {
 
           return true
         })}
-        page="recomendados"
+        page="pasta"
       />
       <CategoryFilter
         filterBy="flavour"
@@ -101,7 +84,7 @@ export const SuggestedFilters = () => {
 
           return true
         })}
-        page="recomendados"
+        page="pasta"
       />
     </div>
   )

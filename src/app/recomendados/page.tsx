@@ -237,7 +237,7 @@ const Page = () => {
                 </div>
               </OverlayPopup>
               <div className="flex flex-col gap-3  ">
-                <div className="grid grid-cols-3 gap-x-2 px-4 gap-y-5 py-10 pb-32 mt-2 overflow-y-auto h-[950px]">
+                <div className="grid  grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-x-2 px-4 gap-y-5 py-10 pb-32 mt-2 overflow-y-auto h-[950px]">
                   {filteredDishes.length > 0 &&
                     filteredDishes
                       .sort(
