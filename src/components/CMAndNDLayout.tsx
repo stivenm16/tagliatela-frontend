@@ -1,4 +1,5 @@
 'use client'
+import MinusIcon from '@/assets/svgs/minus-icon.svg'
 import SaveIcon from '@/assets/svgs/SaveIcon.svg'
 import TrashIcon from '@/assets/svgs/TrashIcon.svg'
 import axiosInstance from '@/lib/axios'
@@ -35,10 +36,14 @@ const SelectedDishCard = ({
   name,
   category,
   variant,
+  id,
+  removeDish,
 }: {
   name: string
   category: FamilyType
   variant: CMAndNDLayoutProps['variant']
+  id: number
+  removeDish: (dishId: number, category: FamilyType) => void
 }) => {
   const [imgSrc, setImgSrc] = useState<StaticImport | string>('')
 
@@ -55,7 +60,11 @@ const SelectedDishCard = ({
   return (
     <div className="flex flex-col w-full h-full relative  justify-center items-center gap-2">
       <div className="relative">
-        <CloseButton onClick={() => {}} variant={variant} />
+        <CloseButton
+          onClick={() => removeDish(id, category)}
+          variant={variant}
+          icon={<MinusIcon />}
+        />
         {!!imgSrc ? (
           <Image
             src={imgSrc}
@@ -65,7 +74,17 @@ const SelectedDishCard = ({
         ) : null}
       </div>
 
-      <h2 className="text-center text-sm uppercase font-bold ">{name}</h2>
+      <h2
+        className="text-center text-md uppercase font-semibold"
+        style={{
+          color:
+            variant === 'check-meeting'
+              ? 'var(--pasta-main)'
+              : 'var(--suggested-main)',
+        }}
+      >
+        {name}
+      </h2>
     </div>
   )
 }
@@ -115,13 +134,7 @@ const Skeletons = ({ variant }: { variant: CMAndNDLayoutProps['variant'] }) => {
       {Array.from({ length: 8 }).map((_, i) => (
         <div
           key={i}
-          className=" animate-pulse h-6 w-full rounded mb-4"
-          style={{
-            backgroundColor:
-              variant === 'no-disponibles'
-                ? 'var(--not-available-main)'
-                : 'var(--checkmeeting-main)',
-          }}
+          className=" animate-pulse h-6 w-full rounded mb-4 bg-white/40"
         />
       ))}
     </div>
@@ -131,6 +144,7 @@ const CMAndNDLayout = ({ title, variant }: CMAndNDLayoutProps) => {
   const [selectedDishes, setSelectedDishes] =
     useState<SelectedDishes[]>(initialState)
   const [fields, setFields] = useState<FieldDishes[]>([])
+  const [isLoading, setIsLoading] = useState<boolean>(true)
   const baseUrl =
     variant === 'check-meeting'
       ? 'checkmeeting/recommended'
@@ -204,6 +218,7 @@ const CMAndNDLayout = ({ title, variant }: CMAndNDLayoutProps) => {
       .catch((error) => {
         console.error('Error fetching data:', error)
       })
+      .finally(() => setIsLoading(false))
   }, [])
 
   const handleOnChange = (fieldName: FamilyType, selectedIndices: number[]) => {
@@ -228,6 +243,19 @@ const CMAndNDLayout = ({ title, variant }: CMAndNDLayoutProps) => {
     } else {
       updateDishes(filteredDishes)
     }
+  }
+
+  const removeDishesFromSelected = (dishId: number, category: FamilyType) => {
+    const updatedSelectedDishes = selectedDishes.map((s) => {
+      if (s.name === category) {
+        return {
+          ...s,
+          dishes: s.dishes.filter((d) => d !== dishId),
+        }
+      }
+      return s
+    })
+    setSelectedDishes(updatedSelectedDishes)
   }
   return (
     <div className="w-full flex flex-col">
@@ -266,15 +294,24 @@ const CMAndNDLayout = ({ title, variant }: CMAndNDLayoutProps) => {
               <SaveIcon />
             </div>
           </div>
-          <div className="flex flex-col mt-4 h-[45rem] pb-20 overflow-y-auto  w-full mb-2">
+          <div className="flex flex-col mt-2 h-[45rem] pb-20 overflow-y-auto  w-full mb-2">
+            {isLoading ? (
+              <div className="h-full">
+                {Array.from({ length: 4 }).map((_, i) => (
+                  <div
+                    key={i}
+                    className=" animate-pulse size-48 rounded-md mx-auto my-2 mb-4 bg-white/40"
+                  />
+                ))}
+              </div>
+            ) : null}
+
             {selectedDishes.map((s, i) => {
               return (
                 <div key={i} className="flex flex-col items-center gap-3">
                   {s.dishes.length > 0 && (
                     <h2
-                      className={`text-center uppercase font-bold ${
-                        i > 0 ? 'mt-6' : ''
-                      } ${
+                      className={`text-center uppercase mt-8 font-bold  text-lg ${
                         variant === 'check-meeting'
                           ? 'text-checkmeeting-main'
                           : 'text-not-available-main'
@@ -287,8 +324,14 @@ const CMAndNDLayout = ({ title, variant }: CMAndNDLayoutProps) => {
                     return (
                       <SelectedDishCard
                         key={index}
+                        removeDish={removeDishesFromSelected}
                         category={s.name}
                         variant={variant}
+                        id={
+                          fields
+                            .find((f) => f.name === s.name)
+                            ?.dishes.find((dish) => dish.id === d)?.id || 0
+                        }
                         name={
                           fields
                             .find((f) => f.name === s.name)
@@ -303,7 +346,7 @@ const CMAndNDLayout = ({ title, variant }: CMAndNDLayoutProps) => {
           </div>
         </div>
         <div className="border-r border-checkmeeting-main  h-[45rem]" />
-        <div className="w-full flex flex-col gap-4 items-center">
+        <div className="w-full flex flex-col gap-6 items-center">
           {fields.length > 0 ? (
             fields.map((field, i) => (
               <CustomMultiSelect

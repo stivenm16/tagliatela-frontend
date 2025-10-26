@@ -1,6 +1,5 @@
 import ItalianImg from '@/assets/images/italian-flag.png'
 import SpanishFlag from '@/assets/images/spanish-flag.png'
-import BottleIcon from '@/assets/svgs/bottle.svg'
 import { DialogTrigger } from '@/components/Dialog/Dialog'
 import { StaticImport } from 'next/dist/shared/lib/get-img-props'
 import Image from 'next/image'
@@ -13,6 +12,7 @@ interface CardBeveragesProps {
   origin: 'italino' | string
   modalContent?: React.ReactNode
   classNameModal?: string
+  showFlag?: boolean
 }
 const CardBeverages = ({
   title,
@@ -20,6 +20,7 @@ const CardBeverages = ({
   img,
   modalContent,
   classNameModal,
+  showFlag,
 }: CardBeveragesProps) => {
   const [isOpenModal, setIsOpenModal] = useState(false)
   return (
@@ -38,20 +39,23 @@ const CardBeverages = ({
           <div className=" w-fit" onClick={() => setIsOpenModal(true)}>
             <Image src={img} alt={title} className="rounded-3xl shadow-lg" />
             <div className="flex mt-3 ">
-              <BottleIcon />
-              <div className="flex flex-col gap-1 pl-4 w-40 mt-auto">
-                <span className="uppercase w-fit text-left leading-6 font-bold text-wrap">
+              <div className="flex flex-col gap-1 w-full mt-auto justify-center text-center">
+                <span className="uppercase w-full text-center leading-6 font-bold text-wrap">
                   {title}
                 </span>
-                <div className="flex w-full gap-3">
-                  {origin.toLowerCase() === 'italiano' ? (
-                    <Image src={ItalianImg} alt="Italian flag" className="" />
-                  ) : (
-                    <Image src={SpanishFlag} alt="Italian flag" className="" />
-                  )}
-
-                  <span className="text-lg ">{origin}</span>
-                </div>
+                {showFlag && (
+                  <div className="flex w-full gap-3 justify-center">
+                    {origin.toLowerCase() === 'italiano' ? (
+                      <Image src={ItalianImg} alt="Italian flag" className="" />
+                    ) : (
+                      <Image
+                        src={SpanishFlag}
+                        alt="Italian flag"
+                        className=""
+                      />
+                    )}
+                  </div>
+                )}
               </div>
             </div>
           </div>

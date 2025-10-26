@@ -12,16 +12,17 @@ const DummySangria = () => {
     <CardBeverages
       title="Sangría di lambrusco"
       origin="Italiano"
+      classNameModal="w-[20rem]"
       modalContent={
         <BeveragesDialogContent
-          ingredients={['Aperol', 'Royal Bliss Aromantic Berry']}
-          qualities={['Refrescante', 'Afrutado', 'Ligero toque amargo']}
-          pairing={['Entrantes frescos', ' Ensaladas', 'Quesos suaves']}
           title="Sangría di lambrusco"
           origin="Italiano"
           img={SangriaImg}
+          description="lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+          showFlag
         />
       }
+      showFlag
       img={SangriaImg}
     />
   )
@@ -33,12 +34,10 @@ const DummyCocktail = () => {
       origin="Italiano"
       modalContent={
         <BeveragesDialogContent
-          ingredients={['Aperol', 'Royal Bliss Aromantic Berry']}
-          qualities={['Refrescante', 'Afrutado', 'Ligero toque amargo']}
-          pairing={['Entrantes frescos', ' Ensaladas', 'Quesos suaves']}
           title="Aperol Spritz"
           origin="Italiano"
           img={CocktailImg}
+          description="lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
         />
       }
       img={CocktailImg}

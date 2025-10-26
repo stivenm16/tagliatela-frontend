@@ -1,9 +1,8 @@
 'use client'
 import WineThumbnail from '@/assets/images/vini-reference-image.png'
-import { Button } from '@/components/buttons/Button'
 import CardBeverages from '@/components/Cards/CardBeverages'
-import BeveragesDialogContent from '@/components/Dialog/BeveragesDialog'
-import { CustomSelect } from '@/components/Select'
+import { WineDialogContent } from '@/components/Dialog/BeveragesDialog'
+import Link from 'next/link'
 import { useState } from 'react'
 
 interface WineProps {
@@ -90,12 +89,13 @@ const WinesWrapper = ({ wines }: { wines: WineProps[] }) => {
           title={wine.title}
           origin={wine.origin}
           modalContent={
-            <BeveragesDialogContent
+            <WineDialogContent
               qualities={wine.qualities}
               pairing={wine.pairing}
               title={wine.title}
               origin={wine.origin}
               img={WineThumbnail}
+              description="lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
             />
           }
           img={WineThumbnail}
@@ -131,44 +131,24 @@ const Page = () => {
     setWineType(value)
   }
   return (
-    <div className="flex flex-col justify-center px-20 mt-20 gap-10">
-      <div className="flex gap-5 ">
-        <Button
-          label="I vini"
-          mainColor="bg-beverages-main"
-          activedColor="bg-pasta-main"
-          style={{ width: '100%' }}
-          isSelected={selectedTab === 0}
-          onClick={() => setSelectedTab(0)}
-        />
-        <Button
-          label="Vini D' Italia"
-          mainColor="bg-beverages-main"
-          activedColor="bg-pasta-main"
-          style={{ width: '100%' }}
-          isSelected={selectedTab === 1}
-          onClick={() => setSelectedTab(1)}
-        />
-      </div>
-      <CustomSelect
-        label={wineType ? wineTypes[wineType].label : ''}
-        placeHolder="vini"
-        options={wineTypes}
-        selectedIndex={wineType ?? null}
-        onChange={handleChange}
-        customStyles={{ width: '100%', marginRight: '10px' }}
-        mainColor="bg-beverages-main"
-        activedColor="bg-pasta-main"
-        allowClear={true}
-        handleClear={() => setWineType(null)}
-      />
+    <div>
+      <span className="uppercase text-pasta-main font-bold text-lg mx-auto w-full flex justify-center mt-20">
+        Por favor selecciona una categoría:
+      </span>
 
-      <div>
-        {selectedTab === 0 ? (
-          <WinesWrapper wines={spanishWines} />
-        ) : (
-          <WinesWrapper wines={italianWines} />
-        )}
+      <div className="flex gap-10 justify-center mt-10 mb-20">
+        <Link
+          href={'/bebidas/vinos/vinos-de-españa'}
+          className="bg-beverages-main text-white w-[18rem] text-center rounded-3xl uppercase text-md p-2"
+        >
+          Vinos de España
+        </Link>
+        <Link
+          href={'/bebidas/vinos/vinos-de-italia'}
+          className="bg-beverages-main text-white text-center w-[18rem] rounded-3xl uppercase text-md p-2"
+        >
+          Vinos de Italia
+        </Link>
       </div>
     </div>
   )

@@ -4,10 +4,12 @@ const CloseButton = ({
   onClick,
   size,
   variant,
+  icon = '✕',
 }: {
   onClick: () => void
   variant?: CMAndNDLayoutProps['variant']
   size?: number
+  icon?: React.ReactNode | string
 }) => {
   return (
     <button
@@ -24,7 +26,7 @@ const CloseButton = ({
             : 'var(--checkmeeting-main)',
       }}
     >
-      ✕
+      {icon}
     </button>
   )
 }
