@@ -187,11 +187,13 @@ const CMAndNDLayout = ({ title, variant }: CMAndNDLayoutProps) => {
   const getSelectedDishesFromDB = async (
     variant: CMAndNDLayoutProps['variant'],
   ) => {
-    if (variant === 'no-disponibles') return
     try {
-      const response = await axiosInstance.get(baseUrl, {
-        withCredentials: true,
-      })
+      const response = await axiosInstance.get(
+        variant === 'check-meeting' ? baseUrl : '/unavailable',
+        {
+          withCredentials: true,
+        },
+      )
       return response.data
     } catch (error) {
       console.error('Error fetching selected dishes:', error)
