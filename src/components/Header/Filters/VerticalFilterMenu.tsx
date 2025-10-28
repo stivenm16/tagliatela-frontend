@@ -135,7 +135,7 @@ export const VerticalFilterMenu = ({
   const { updateFilter, setFocusedFilter } = useFilters()
 
   return (
-    <div className="flex flex-col items-center gap-4 bg-white rounded-full shadow-lg">
+    <div className="flex flex-col items-center gap-4 pt-6 bg-white rounded-full rounded-t-none shadow-lg">
       {items.map(({ id, label, icon }) => (
         <VerticalFilterItem
           key={id}

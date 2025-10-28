@@ -103,18 +103,12 @@ export const CategoryFilter = ({
             setFocusedFilter((prev) => (prev === filterBy ? null : filterBy))
           }
           style={{
-            backgroundColor: selectedColorIcon || getFallbackColor(page ?? ''), // fallback
+            backgroundColor: selectedColorIcon || getFallbackColor(page ?? ''),
           }}
         >
           {!!filters[filterBy] ? (
             <SelectedIcon
               className={` mx-auto self-center px-auto flex [&_path]:fill-white `}
-              // className={` mx-auto self-center px-auto flex [&_path]:fill-[var(--icon-color)] `}
-              // style={
-              //   {
-              //     '--icon-color': getFallbackColor(page ?? ''),
-              //   } as React.CSSProperties
-              // }
             />
           ) : (
             <TriggerIcon
@@ -132,7 +126,7 @@ export const CategoryFilter = ({
           container &&
           createPortal(
             <div
-              className="absolute top-18 left-0 z-[9999]"
+              className="absolute top-10 left-0 -z-[9999]"
               style={{
                 position: 'absolute',
                 transform: `translateX(${ref.current?.offsetLeft ?? 0}px)`,

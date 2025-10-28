@@ -41,7 +41,6 @@ export const Header = () => {
     if (arrayPath[arrayPath.length - 1] === 'tipos-de-pasta')
       return router.back()
 
-    console.log({ depth, arrayPath })
     if (depth === arrayPath.length) {
       router.push('/')
     } else {
