@@ -20,15 +20,13 @@ const Alert = ({
   children,
   applyBorder,
   closeButton = true,
+  onClose,
 }: {
   children: ReactNode
   applyBorder?: boolean
   closeButton?: boolean
+  onClose: () => void
 }) => {
-  const [open, setOpen] = useState(true)
-
-  if (!open) return null
-
   return (
     <AlertPortal>
       <div className="fixed top-[45%] left-[25px] md:left-1/4 ">
@@ -38,7 +36,7 @@ const Alert = ({
           } rounded-2xl text-center shadow-lg relative`}
         >
           <span>{children}</span>
-          {closeButton ? <CloseButton onClick={() => setOpen(false)} /> : null}
+          {closeButton ? <CloseButton onClick={onClose} /> : null}
         </div>
       </div>
     </AlertPortal>

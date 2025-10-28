@@ -25,7 +25,7 @@ const AlertSauces = () => {
   return (
     <OverlayPopup open={open} onClose={onCloseDialog}>
       <div className="bg-red-200 w-full h-screen rounded shadow-lg">
-        <Alert closeButton={true} applyBorder={true}>
+        <Alert closeButton={true} applyBorder={true} onClose={onCloseDialog}>
           <div>
             <span>
               No se recomienda consumir pasta si el cliente tiene alergia a:
