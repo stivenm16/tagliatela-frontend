@@ -51,9 +51,7 @@ const GeneralDialogContent = ({
         </div>
       )}
 
-      <p className="font-light text-xl mt-2 max-w-[27rem] text-center">
-        {description}
-      </p>
+      <p className=" text-xl mt-2 max-w-[27rem] text-center">{description}</p>
     </div>
   )
 }

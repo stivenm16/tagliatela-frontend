@@ -210,7 +210,7 @@ const Page = () => {
   return (
     <div className="">
       {!filters.family ? (
-        <Alert closeButton={false}>
+        <Alert closeButton={false} onClose={() => {}}>
           POR FAVOR SELECCIONA LA FAMILIA DE PLATOS DESEADA
         </Alert>
       ) : (

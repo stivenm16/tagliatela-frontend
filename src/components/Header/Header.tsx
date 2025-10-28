@@ -37,11 +37,7 @@ export const Header = () => {
 
   const route = arrayPath[0] as ROUTES
   const handleGoBack = () => {
-    const depth = levelOfDepthPerCategory[route] || 1
-    if (arrayPath[arrayPath.length - 1] === 'tipos-de-pasta')
-      return router.back()
-
-    if (depth === arrayPath.length) {
+    if (arrayPath.length === 1) {
       router.push('/')
     } else {
       router.back()

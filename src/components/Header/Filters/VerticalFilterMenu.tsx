@@ -20,8 +20,7 @@ const VerticalFilterItem = ({
   icon: Icon,
   hovered,
   setHovered,
-  updateFilter,
-  setFocusedFilter,
+
   category,
 }: {
   id: string
@@ -30,14 +29,13 @@ const VerticalFilterItem = ({
   activeColor: string
   hovered: string | null
   setHovered: (id: string | null) => void
-  updateFilter: (category: keyof Filters, value: string | null) => void
-  setFocusedFilter: (filter: keyof Filters | null) => void
   category: keyof Filters
 }) => {
   const [position, setPosition] = useState<'left' | 'right'>('right')
   const [coords, setCoords] = useState<{ top: number; left: number } | null>(
     null,
   )
+  const { updateFilter, setFocusedFilter, filters } = useFilters()
   const [isPositioned, setIsPositioned] = useState(false)
   const buttonRef = useRef<HTMLButtonElement>(null)
   const tooltipRef = useRef<HTMLSpanElement>(null)
@@ -92,7 +90,10 @@ const VerticalFilterItem = ({
         ref={buttonRef}
         className={`p-2 size-10 flex justify-center text-xl `}
         onClick={() => {
-          updateFilter(category, id === hovered ? null : id)
+          updateFilter(
+            category,
+            id === hovered || filters[category] === id ? null : id,
+          )
           if (category === 'family') {
             updateFilter('allergen', null)
             updateFilter('diet', null)
@@ -132,7 +133,6 @@ export const VerticalFilterMenu = ({
   category,
 }: VerticalFilterMenuProps) => {
   const [hovered, setHovered] = useState<string | null>(null)
-  const { updateFilter, setFocusedFilter } = useFilters()
 
   return (
     <div className="flex flex-col items-center gap-4 pt-6 bg-white rounded-full rounded-t-none shadow-lg">
@@ -145,8 +145,6 @@ export const VerticalFilterMenu = ({
           activeColor={activeColor}
           hovered={hovered}
           setHovered={setHovered}
-          updateFilter={updateFilter}
-          setFocusedFilter={setFocusedFilter}
           category={category}
         />
       ))}
