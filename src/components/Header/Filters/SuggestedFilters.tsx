@@ -77,30 +77,40 @@ export const SuggestedFilters = () => {
       <CategoryFilter
         filterBy="ingredients"
         triggerIcon={IngredientsIcon}
-        items={ingredientsFilters.filter((item) => {
-          const name = getItemName(item)
-          if (filters.family === 'le-pizze' && name === 'mass') return false
-          if (!isInAvailable(filters.filtersAvaible?.ingredients, item))
-            return false
+        items={
+          filters.filtersAvaible?.ingredients?.length
+            ? ingredientsFilters.filter((item) => {
+                const name = getItemName(item)
+                if (filters.family === 'le-pizze' && name === 'mass')
+                  return false
+                if (!isInAvailable(filters.filtersAvaible?.ingredients, item))
+                  return false
 
-          return true
-        })}
+                return true
+              })
+            : []
+        }
         page="recomendados"
       />
       <CategoryFilter
         filterBy="flavour"
         triggerIcon={FlavoursIcon}
-        items={flavoursFilters.filter((item) => {
-          const name = getItemName(item)
-          if (filters.family === 'le-pizze' && name === 'crujiente')
-            return false
-          if (filters.family === 'postres' && name === 'dulce') return false
-          if (!isInAvailable(filters.filtersAvaible?.flavors, item)) {
-            return false
-          }
+        items={
+          filters.filtersAvaible?.flavors?.length
+            ? flavoursFilters.filter((item) => {
+                const name = getItemName(item)
+                if (filters.family === 'le-pizze' && name === 'crujiente')
+                  return false
+                if (filters.family === 'postres' && name === 'dulce')
+                  return false
+                if (!isInAvailable(filters.filtersAvaible?.flavors, item)) {
+                  return false
+                }
 
-          return true
-        })}
+                return true
+              })
+            : []
+        }
         page="recomendados"
       />
     </div>

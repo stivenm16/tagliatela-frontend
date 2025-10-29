@@ -10,7 +10,7 @@ import Image from 'next/image'
 import { useEffect, useState } from 'react'
 import { toast } from 'sonner'
 import CloseButton from './buttons/AlertCloseButton'
-import { CustomMultiSelect } from './buttons/MultiSelect'
+import { CustomMultiSelect } from './Selects/MultiSelect'
 
 export interface CMAndNDLayoutProps {
   variant: 'check-meeting' | 'no-disponibles'
@@ -206,14 +206,17 @@ const CMAndNDLayout = ({ title, variant }: CMAndNDLayoutProps) => {
           setFields(fieldsData)
         }
         if (selectedDishesData) {
-          const formattedSelectedDishes: SelectedDishes[] = (
-            selectedDishesData as FieldDishes[]
-          ).map((dish) => {
-            return {
-              name: dish.name as FamilyType,
-              dishes: dish.dishes.map((d: Dish) => d.id) || [],
-            }
-          })
+          const formattedSelectedDishes: SelectedDishes[] = selectedDishes.map(
+            (s) => {
+              const fieldFromDB = (selectedDishesData as FieldDishes[]).find(
+                (f) => f.name === s.name,
+              )
+              return {
+                name: s.name,
+                dishes: fieldFromDB ? fieldFromDB.dishes.map((d) => d.id) : [],
+              }
+            },
+          )
           setSelectedDishes(formattedSelectedDishes)
         }
       })
@@ -365,9 +368,9 @@ const CMAndNDLayout = ({ title, variant }: CMAndNDLayoutProps) => {
                   selectedDishes.find((s) => s.name === field.name)?.dishes ||
                   []
                 }
-                onChange={(selectedOptions) =>
+                onChange={(selectedOptions) => {
                   handleOnChange(field.name, selectedOptions)
-                }
+                }}
               />
             ))
           ) : (

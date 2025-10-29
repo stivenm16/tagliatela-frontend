@@ -39,11 +39,13 @@ export const CategoryFilter = ({
   items,
   filterBy,
   page,
+  disableIcon = false,
 }: {
   triggerIcon: any
   filterBy: keyof Filters
   items: FilterItem[]
   page?: string
+  disableIcon?: boolean
 }) => {
   const { focusedFilter, setFocusedFilter, filters, setFilters } = useFilters()
   const [mounted, setMounted] = useState(false)
@@ -54,8 +56,10 @@ export const CategoryFilter = ({
 
   const ref = useRef<HTMLDivElement>(null)
 
+  const noFamilySelected =
+    filters.family === null || filters.family === undefined
   const disabled =
-    filterBy !== 'family' && filters.family === null && page === 'recomendados'
+    filterBy !== 'family' && noFamilySelected && page === 'recomendados'
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
@@ -89,14 +93,14 @@ export const CategoryFilter = ({
           ?.selectedColorIcon
       : '#FFFFFF'
 
+  const shouldDisable =
+    (items.length === 0 && !['family'].includes(filterBy)) || disabled
   return (
     <div>
       <div ref={ref} className="relative">
         <button
           className={` ${
-            disabled || items.length === 0
-              ? 'cursor-not-allowed opacity-50'
-              : ''
+            shouldDisable || disabled ? 'cursor-not-allowed opacity-50' : ''
           } rounded-full size-10 justify-center items-center flex shadow-md text-xl `}
           disabled={disabled || items.length === 0}
           onClick={() =>

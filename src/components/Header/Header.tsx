@@ -58,7 +58,13 @@ export const Header = () => {
         </div>
 
         <span className=" w-fit items-center text-xl font-bold">
-          {path.split('/').pop()?.split('-').join(' ')?.toUpperCase() || 'Home'}
+          {path
+            .split('/')
+            .pop()
+            ?.split('-')
+            .join(' ')
+            ?.replace('%C3%B1', 'ñ')
+            ?.toUpperCase() || 'Home'}
         </span>
       </div>
       <FiltersToDisplay />

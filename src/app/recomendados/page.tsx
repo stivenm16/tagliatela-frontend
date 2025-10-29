@@ -327,7 +327,13 @@ const Page = () => {
                             },
                             {
                               content: (
-                                <div className="p-4 text-white  w-[12rem] flex flex-col mx-auto ">
+                                <div
+                                  className="p-4 text-white  w-[12rem] flex flex-col mx-auto"
+                                  onClick={(e) => {
+                                    e.stopPropagation()
+                                    e.preventDefault()
+                                  }}
+                                >
                                   <h2 className="text-xl font-semibold my-4 text-center">
                                     {item.name}
                                   </h2>
