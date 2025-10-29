@@ -32,6 +32,44 @@ interface SelectedDishes {
   dishes: number[]
 }
 
+const SideDishesCard = ({
+  onClick,
+  variant,
+  name,
+}: {
+  onClick: () => void
+  variant?: CMAndNDLayoutProps['variant']
+  name: string
+}) => {
+  return (
+    <div className="flex w-full my-2 justify-between gap-2 px-2">
+      <button
+        onClick={onClick}
+        className={`  
+      }  text-white rounded-full size-8 flex items-center justify-center`}
+        style={{
+          backgroundColor:
+            variant === 'no-disponibles'
+              ? 'var(--not-available-main)'
+              : 'var(--checkmeeting-main)',
+        }}
+      >
+        <MinusIcon />
+      </button>
+      <h2
+        className="flex self-center mr-auto ml-2 text-md uppercase font-semibold"
+        style={{
+          color:
+            variant === 'check-meeting'
+              ? 'var(--pasta-main)'
+              : 'var(--suggested-main)',
+        }}
+      >
+        {name}
+      </h2>
+    </div>
+  )
+}
 const SelectedDishCard = ({
   name,
   category,
@@ -59,32 +97,44 @@ const SelectedDishCard = ({
 
   return (
     <div className="flex flex-col w-full h-full relative  justify-center items-center gap-2">
-      <div className="relative">
-        <CloseButton
-          onClick={() => removeDish(id, category)}
-          variant={variant}
-          icon={<MinusIcon />}
-        />
-        {!!imgSrc ? (
-          <Image
-            src={imgSrc}
-            alt={name}
-            className="object-cover size-40 rounded-xl shadow-lg"
+      {category.toLowerCase() === 'guarniciones' ? (
+        <div className="flex w-full">
+          <SideDishesCard
+            onClick={() => removeDish(id, category)}
+            variant={variant}
+            name={name}
           />
-        ) : null}
-      </div>
+        </div>
+      ) : (
+        <>
+          <div className="relative">
+            <CloseButton
+              onClick={() => removeDish(id, category)}
+              variant={variant}
+              icon={<MinusIcon />}
+            />
+            {!!imgSrc ? (
+              <Image
+                src={imgSrc}
+                alt={name}
+                className="object-cover size-40 rounded-xl shadow-lg"
+              />
+            ) : null}
+          </div>
 
-      <h2
-        className="text-center text-md uppercase font-semibold"
-        style={{
-          color:
-            variant === 'check-meeting'
-              ? 'var(--pasta-main)'
-              : 'var(--suggested-main)',
-        }}
-      >
-        {name}
-      </h2>
+          <h2
+            className="text-center text-md uppercase font-semibold"
+            style={{
+              color:
+                variant === 'check-meeting'
+                  ? 'var(--pasta-main)'
+                  : 'var(--suggested-main)',
+            }}
+          >
+            {name}
+          </h2>
+        </>
+      )}
     </div>
   )
 }
@@ -313,7 +363,7 @@ const CMAndNDLayout = ({ title, variant }: CMAndNDLayoutProps) => {
 
             {selectedDishes.map((s, i) => {
               return (
-                <div key={i} className="flex flex-col items-center gap-3">
+                <div key={i} className="flex flex-col items-center gap-3 px-2">
                   {s.dishes.length > 0 && (
                     <h2
                       className={`text-center uppercase mt-8 font-bold  text-lg ${
@@ -325,26 +375,34 @@ const CMAndNDLayout = ({ title, variant }: CMAndNDLayoutProps) => {
                       {s.name}
                     </h2>
                   )}
-                  {s.dishes.map((d, index) => {
-                    return (
-                      <SelectedDishCard
-                        key={index}
-                        removeDish={removeDishesFromSelected}
-                        category={s.name}
-                        variant={variant}
-                        id={
-                          fields
-                            .find((f) => f.name === s.name)
-                            ?.dishes.find((dish) => dish.id === d)?.id || 0
-                        }
-                        name={
-                          fields
-                            .find((f) => f.name === s.name)
-                            ?.dishes.find((dish) => dish.id === d)?.name || ''
-                        }
-                      />
-                    )
-                  })}
+                  <div
+                    className={`${
+                      s.name.toLowerCase() === 'guarniciones'
+                        ? 'bg-black/10 shadow-lg rounded-xl '
+                        : null
+                    } flex flex-col w-full `}
+                  >
+                    {s.dishes.map((d, index) => {
+                      return (
+                        <SelectedDishCard
+                          key={index}
+                          removeDish={removeDishesFromSelected}
+                          category={s.name}
+                          variant={variant}
+                          id={
+                            fields
+                              .find((f) => f.name === s.name)
+                              ?.dishes.find((dish) => dish.id === d)?.id || 0
+                          }
+                          name={
+                            fields
+                              .find((f) => f.name === s.name)
+                              ?.dishes.find((dish) => dish.id === d)?.name || ''
+                          }
+                        />
+                      )
+                    })}
+                  </div>
                 </div>
               )
             })}

@@ -35,7 +35,8 @@ const VerticalFilterItem = ({
   const [coords, setCoords] = useState<{ top: number; left: number } | null>(
     null,
   )
-  const { updateFilter, setFocusedFilter, filters } = useFilters()
+  const { updateFilter, setFocusedFilter, filters, focusedFilter } =
+    useFilters()
   const [isPositioned, setIsPositioned] = useState(false)
   const buttonRef = useRef<HTMLButtonElement>(null)
   const tooltipRef = useRef<HTMLSpanElement>(null)
@@ -77,9 +78,12 @@ const VerticalFilterItem = ({
       setIsPositioned(false)
     }
   }, [hovered, id])
+
+  console.log(id, '<=====')
+
   return (
     <div
-      className="relative flex items-center"
+      className="relative flex items-center "
       onMouseDown={() => setHovered(id)}
       onMouseUp={() => setHovered(null)}
       onMouseLeave={() => setHovered(null)}
@@ -88,7 +92,11 @@ const VerticalFilterItem = ({
     >
       <button
         ref={buttonRef}
-        className={`p-2 size-10 flex justify-center text-xl `}
+        className={`p-2 size-10 flex justify-center text-xl ${
+          filters[category] === id
+            ? 'bg-neutral-100 rounded-full shadow-[0_3px_3px_0px] shadow-neutral-300'
+            : ''
+        }`}
         onClick={() => {
           updateFilter(
             category,
@@ -135,7 +143,7 @@ export const VerticalFilterMenu = ({
   const [hovered, setHovered] = useState<string | null>(null)
 
   return (
-    <div className="flex flex-col items-center gap-4 pt-6 bg-white rounded-full rounded-t-none shadow-lg">
+    <div className="flex flex-col items-center gap-4 pt-6 px-[0-5px] bg-white rounded-full rounded-t-none shadow-lg">
       {items.map(({ id, label, icon }) => (
         <VerticalFilterItem
           key={id}
