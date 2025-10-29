@@ -5,20 +5,22 @@ import Link from 'next/link'
 import AlertSauces from '../components/AlertSauces'
 import NewDishFloatingButton from '../components/NewDishFloatingButton'
 
+/*************  ✨ Windsurf Command ⭐  *************/
+/*******  971afac5-72a4-470b-8b5c-fd3c3c984ec1  *******/
 const Page = () => {
   const fakeData = Array.from({ length: 6 }, (_, i) => ({
     id: i + 1,
     title: `Pasta ${i + 1}`,
     description: `Descripción del tipo de pasta ${i + 1}`,
     img: `https://picsum.photos/100/200?random=${i + 1}`,
-    isNew: i == 0, // Just for demonstration, every even index is new
+    isNew: i == 0,
   }))
   const fakeData2 = Array.from({ length: 6 }, (_, i) => ({
     id: i + 1,
     title: `Pasta ${i + 1}`,
     description: `Descripción del tipo de pasta ${i + 1}`,
     img: `https://picsum.photos/200/300?random=${i + 1}`,
-    isNew: i % 2 === 0, // Just for demonstration, every even index is new
+    isNew: i % 2 === 0,
   }))
   return (
     <div className="px-[30px]  ">
@@ -34,7 +36,7 @@ const Page = () => {
           </h3>
           <div className="flex gap-5 flex-wrap gap-y-4">
             {fakeData.map((item) => (
-              <Link href={`/pasta/pasta/${item.id}`} key={item.id}>
+              <Link href={`/pasta/pasta/tipos-de-pasta`} key={item.id}>
                 <div className="flex flex-col w-full h-full gap-3 relative">
                   {item.isNew && <NewDishFloatingButton />}
                   <Image
@@ -54,7 +56,7 @@ const Page = () => {
           </h3>
           <div className="flex gap-5 gap-y-4 flex-wrap ">
             {fakeData2.map((item) => (
-              <Link href={`/pasta/pasta/${item.id}`} key={item.id}>
+              <Link href={`/pasta/pasta/tipos-de-pasta`} key={item.id}>
                 <div className="flex flex-col w-full h-full gap-3 relative">
                   {item.isNew && <NewDishFloatingButton />}
                   <Image

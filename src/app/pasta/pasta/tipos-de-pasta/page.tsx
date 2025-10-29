@@ -18,7 +18,6 @@ const Page = () => {
           toggleSauceSelection={toggleSauceSelection}
           sauces={fakeSauces.filter((sauce, index) => index < 5)}
           selectedSauceId={selectedSauceId}
-          showTitle={false}
         />
       </div>
       <div className="flex flex-col mt-40 gap-6 p-4 rounded-3xl shadow-xl text-white bg-beverages-main w-fit mx-auto">

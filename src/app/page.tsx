@@ -6,11 +6,13 @@ import NotAvailable from '@/assets/svgs/not-available-home-icon.svg'
 import PastaIcon from '@/assets/svgs/pasta-home-icon.svg'
 import SuggestedIcon from '@/assets/svgs/suggested-home-icon.svg'
 import Logo from '@/components/Icons/LOGO.svg'
+import axiosInstance from '@/lib/axios'
 import Link from 'next/link'
+import { useEffect, useState } from 'react'
 
 const fakeData2 = [
   {
-    title: 'Recomendados',
+    title: 'Recomendar',
     color: 'bg-suggested-main',
     icon: SuggestedIcon,
     items: [
@@ -21,12 +23,22 @@ const fakeData2 = [
     ],
   },
   {
-    title: 'Pasta',
+    title: 'Pastas',
     color: 'bg-pasta-main',
     icon: PastaIcon,
     items: [
       { title: 'Salsa', href: '/pasta/' },
       { title: 'Tipo de Pastas', href: '/pasta/tipo-de-pastas' },
+    ],
+  },
+  {
+    title: 'Producto Italiano',
+    color: 'bg-italian-main',
+    icon: ItalianIcon,
+    items: [
+      { title: 'Quesos', href: '/productos-italianos' },
+      { title: 'Embutidos', href: '/productos-italianos/embutidos' },
+      { title: 'Gusto Secreto', href: '/productos-italianos/gusto-secreto' },
     ],
   },
   {
@@ -39,29 +51,47 @@ const fakeData2 = [
       { title: 'Sangría', href: '/bebidas/sangria' },
     ],
   },
-  {
-    title: 'Productos Italianos',
-    color: 'bg-italian-main',
-    icon: ItalianIcon,
-    items: [
-      { title: 'Quesos', href: '/productos-italianos' },
-      { title: 'Embutidos', href: '/productos-italianos/embutidos' },
-      { title: 'Gusto Secreto', href: '/productos-italianos/gusto-secreto' },
-    ],
-  },
 ]
 
 export default function Home() {
+  const [suggestedDishes, setSuggestedDishes] = useState<number>(0)
+  const getContent = async () => {
+    const response = await axiosInstance.get(`checkmeeting/recommended`, {
+      withCredentials: true,
+    })
+
+    if (response.status !== 200) {
+      throw new Error('Error fetching dishes')
+    }
+
+    return response.data
+  }
+
+  useEffect(() => {
+    getContent()
+      .then((data) => {
+        const recommendedDishesCount = data.reduce(
+          (count: number, dish: { name: string; dishes: any[] }) =>
+            count + dish.dishes.length,
+          0,
+        ) as number
+        setSuggestedDishes(recommendedDishesCount)
+      })
+
+      .catch((error) => {
+        console.error('Error fetching checkmeeting data:', error)
+      })
+  }, [])
   return (
     <div className="flex flex-col bg-surface-2 items-center justify-center h-screen gap-10 text-white">
       <Logo />
 
       <div>
-        <div className="grid grid-cols-2 gap-8 mt-4 ">
+        <div className="grid grid-cols-2 gap-16 ">
           {fakeData2.map((column, index) => (
             <Link
               href={column.items[0].href}
-              className={`flex flex-col  size-[13rem]  justify-center text-wrap gap-4 font-bold items-center uppercase rounded-full  ${column.color} p-3`}
+              className={`flex flex-col shadow-xl size-[11rem]  justify-center text-wrap gap-2 font-bold items-center uppercase rounded-full  ${column.color} p-3`}
               key={index}
             >
               <>
@@ -71,16 +101,21 @@ export default function Home() {
             </Link>
           ))}
         </div>
-        <div className="flex gap-28 justify-center mx-auto">
+        <div className="flex gap-28 justify-center mx-auto ml-2">
           <Link
             href={'/check-meeting'}
-            className={`flex  size-32 mt-8 justify-center text-wrap font-bold flex-row items-center uppercase rounded-full bg-checkmeeting-main`}
+            className={`flex shadow-xl  size-32 mt-8 justify-center text-wrap font-bold flex-row items-center uppercase rounded-full bg-checkmeeting-main relative`}
           >
+            {!!suggestedDishes && (
+              <span className="mr-2 size-12 -right-4 -top-4 rounded-full bg-checkmeeting-main text-white drop-shadow-2xl text-center font-bold text-xl flex justify-center items-center absolute">
+                {suggestedDishes}
+              </span>
+            )}
             <Checckmeeting />
           </Link>
           <Link
             href={'/platos-no-disponibles'}
-            className={`flex  size-32 mt-8 justify-center text-wrap font-bold flex-row items-center uppercase rounded-full bg-not-available-main`}
+            className={`flex shadow-xl size-32 mt-8 justify-center text-wrap font-bold flex-row items-center uppercase rounded-full bg-not-available-main`}
           >
             <NotAvailable />
           </Link>

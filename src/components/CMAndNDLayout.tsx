@@ -1,4 +1,5 @@
 'use client'
+import MinusIcon from '@/assets/svgs/minus-icon.svg'
 import SaveIcon from '@/assets/svgs/SaveIcon.svg'
 import TrashIcon from '@/assets/svgs/TrashIcon.svg'
 import axiosInstance from '@/lib/axios'
@@ -9,7 +10,7 @@ import Image from 'next/image'
 import { useEffect, useState } from 'react'
 import { toast } from 'sonner'
 import CloseButton from './buttons/AlertCloseButton'
-import { CustomMultiSelect } from './buttons/MultiSelect'
+import { CustomMultiSelect } from './Selects/MultiSelect'
 
 export interface CMAndNDLayoutProps {
   variant: 'check-meeting' | 'no-disponibles'
@@ -31,14 +32,56 @@ interface SelectedDishes {
   dishes: number[]
 }
 
+const SideDishesCard = ({
+  onClick,
+  variant,
+  name,
+}: {
+  onClick: () => void
+  variant?: CMAndNDLayoutProps['variant']
+  name: string
+}) => {
+  return (
+    <div className="flex w-full my-2 justify-between gap-2 px-2">
+      <button
+        onClick={onClick}
+        className={`  
+      }  text-white rounded-full size-8 flex items-center justify-center`}
+        style={{
+          backgroundColor:
+            variant === 'no-disponibles'
+              ? 'var(--not-available-main)'
+              : 'var(--checkmeeting-main)',
+        }}
+      >
+        <MinusIcon />
+      </button>
+      <h2
+        className="flex self-center mr-auto ml-2 text-md uppercase font-semibold"
+        style={{
+          color:
+            variant === 'check-meeting'
+              ? 'var(--pasta-main)'
+              : 'var(--suggested-main)',
+        }}
+      >
+        {name}
+      </h2>
+    </div>
+  )
+}
 const SelectedDishCard = ({
   name,
   category,
   variant,
+  id,
+  removeDish,
 }: {
   name: string
   category: FamilyType
   variant: CMAndNDLayoutProps['variant']
+  id: number
+  removeDish: (dishId: number, category: FamilyType) => void
 }) => {
   const [imgSrc, setImgSrc] = useState<StaticImport | string>('')
 
@@ -54,18 +97,44 @@ const SelectedDishCard = ({
 
   return (
     <div className="flex flex-col w-full h-full relative  justify-center items-center gap-2">
-      <div className="relative">
-        <CloseButton onClick={() => {}} variant={variant} />
-        {!!imgSrc ? (
-          <Image
-            src={imgSrc}
-            alt={name}
-            className="object-cover size-40 rounded-xl shadow-lg"
+      {category.toLowerCase() === 'guarniciones' ? (
+        <div className="flex w-full">
+          <SideDishesCard
+            onClick={() => removeDish(id, category)}
+            variant={variant}
+            name={name}
           />
-        ) : null}
-      </div>
+        </div>
+      ) : (
+        <>
+          <div className="relative">
+            <CloseButton
+              onClick={() => removeDish(id, category)}
+              variant={variant}
+              icon={<MinusIcon />}
+            />
+            {!!imgSrc ? (
+              <Image
+                src={imgSrc}
+                alt={name}
+                className="object-cover size-40 rounded-xl shadow-lg"
+              />
+            ) : null}
+          </div>
 
-      <h2 className="text-center text-sm uppercase font-bold ">{name}</h2>
+          <h2
+            className="text-center text-md uppercase font-semibold"
+            style={{
+              color:
+                variant === 'check-meeting'
+                  ? 'var(--pasta-main)'
+                  : 'var(--suggested-main)',
+            }}
+          >
+            {name}
+          </h2>
+        </>
+      )}
     </div>
   )
 }
@@ -115,13 +184,7 @@ const Skeletons = ({ variant }: { variant: CMAndNDLayoutProps['variant'] }) => {
       {Array.from({ length: 8 }).map((_, i) => (
         <div
           key={i}
-          className=" animate-pulse h-6 w-full rounded mb-4"
-          style={{
-            backgroundColor:
-              variant === 'no-disponibles'
-                ? 'var(--not-available-main)'
-                : 'var(--checkmeeting-main)',
-          }}
+          className=" animate-pulse h-6 w-full rounded mb-4 bg-white/40"
         />
       ))}
     </div>
@@ -131,6 +194,7 @@ const CMAndNDLayout = ({ title, variant }: CMAndNDLayoutProps) => {
   const [selectedDishes, setSelectedDishes] =
     useState<SelectedDishes[]>(initialState)
   const [fields, setFields] = useState<FieldDishes[]>([])
+  const [isLoading, setIsLoading] = useState<boolean>(true)
   const baseUrl =
     variant === 'check-meeting'
       ? 'checkmeeting/recommended'
@@ -173,11 +237,13 @@ const CMAndNDLayout = ({ title, variant }: CMAndNDLayoutProps) => {
   const getSelectedDishesFromDB = async (
     variant: CMAndNDLayoutProps['variant'],
   ) => {
-    if (variant === 'no-disponibles') return
     try {
-      const response = await axiosInstance.get(baseUrl, {
-        withCredentials: true,
-      })
+      const response = await axiosInstance.get(
+        variant === 'check-meeting' ? baseUrl : '/unavailable',
+        {
+          withCredentials: true,
+        },
+      )
       return response.data
     } catch (error) {
       console.error('Error fetching selected dishes:', error)
@@ -190,20 +256,24 @@ const CMAndNDLayout = ({ title, variant }: CMAndNDLayoutProps) => {
           setFields(fieldsData)
         }
         if (selectedDishesData) {
-          const formattedSelectedDishes: SelectedDishes[] = (
-            selectedDishesData as FieldDishes[]
-          ).map((dish) => {
-            return {
-              name: dish.name as FamilyType,
-              dishes: dish.dishes.map((d: Dish) => d.id) || [],
-            }
-          })
+          const formattedSelectedDishes: SelectedDishes[] = selectedDishes.map(
+            (s) => {
+              const fieldFromDB = (selectedDishesData as FieldDishes[]).find(
+                (f) => f.name === s.name,
+              )
+              return {
+                name: s.name,
+                dishes: fieldFromDB ? fieldFromDB.dishes.map((d) => d.id) : [],
+              }
+            },
+          )
           setSelectedDishes(formattedSelectedDishes)
         }
       })
       .catch((error) => {
         console.error('Error fetching data:', error)
       })
+      .finally(() => setIsLoading(false))
   }, [])
 
   const handleOnChange = (fieldName: FamilyType, selectedIndices: number[]) => {
@@ -228,6 +298,19 @@ const CMAndNDLayout = ({ title, variant }: CMAndNDLayoutProps) => {
     } else {
       updateDishes(filteredDishes)
     }
+  }
+
+  const removeDishesFromSelected = (dishId: number, category: FamilyType) => {
+    const updatedSelectedDishes = selectedDishes.map((s) => {
+      if (s.name === category) {
+        return {
+          ...s,
+          dishes: s.dishes.filter((d) => d !== dishId),
+        }
+      }
+      return s
+    })
+    setSelectedDishes(updatedSelectedDishes)
   }
   return (
     <div className="w-full flex flex-col">
@@ -266,15 +349,24 @@ const CMAndNDLayout = ({ title, variant }: CMAndNDLayoutProps) => {
               <SaveIcon />
             </div>
           </div>
-          <div className="flex flex-col mt-4 h-[45rem] pb-20 overflow-y-auto  w-full mb-2">
+          <div className="flex flex-col mt-2 h-[45rem] pb-20 overflow-y-auto  w-full mb-2">
+            {isLoading ? (
+              <div className="h-full">
+                {Array.from({ length: 4 }).map((_, i) => (
+                  <div
+                    key={i}
+                    className=" animate-pulse size-48 rounded-md mx-auto my-2 mb-4 bg-white/40"
+                  />
+                ))}
+              </div>
+            ) : null}
+
             {selectedDishes.map((s, i) => {
               return (
-                <div key={i} className="flex flex-col items-center gap-3">
+                <div key={i} className="flex flex-col items-center gap-3 px-2">
                   {s.dishes.length > 0 && (
                     <h2
-                      className={`text-center uppercase font-bold ${
-                        i > 0 ? 'mt-6' : ''
-                      } ${
+                      className={`text-center uppercase mt-8 font-bold  text-lg ${
                         variant === 'check-meeting'
                           ? 'text-checkmeeting-main'
                           : 'text-not-available-main'
@@ -283,27 +375,41 @@ const CMAndNDLayout = ({ title, variant }: CMAndNDLayoutProps) => {
                       {s.name}
                     </h2>
                   )}
-                  {s.dishes.map((d, index) => {
-                    return (
-                      <SelectedDishCard
-                        key={index}
-                        category={s.name}
-                        variant={variant}
-                        name={
-                          fields
-                            .find((f) => f.name === s.name)
-                            ?.dishes.find((dish) => dish.id === d)?.name || ''
-                        }
-                      />
-                    )
-                  })}
+                  <div
+                    className={`${
+                      s.name.toLowerCase() === 'guarniciones'
+                        ? 'bg-black/10 shadow-lg rounded-xl '
+                        : null
+                    } flex flex-col w-full `}
+                  >
+                    {s.dishes.map((d, index) => {
+                      return (
+                        <SelectedDishCard
+                          key={index}
+                          removeDish={removeDishesFromSelected}
+                          category={s.name}
+                          variant={variant}
+                          id={
+                            fields
+                              .find((f) => f.name === s.name)
+                              ?.dishes.find((dish) => dish.id === d)?.id || 0
+                          }
+                          name={
+                            fields
+                              .find((f) => f.name === s.name)
+                              ?.dishes.find((dish) => dish.id === d)?.name || ''
+                          }
+                        />
+                      )
+                    })}
+                  </div>
                 </div>
               )
             })}
           </div>
         </div>
         <div className="border-r border-checkmeeting-main  h-[45rem]" />
-        <div className="w-full flex flex-col gap-4 items-center">
+        <div className="w-full flex flex-col gap-6 items-center">
           {fields.length > 0 ? (
             fields.map((field, i) => (
               <CustomMultiSelect
@@ -320,9 +426,9 @@ const CMAndNDLayout = ({ title, variant }: CMAndNDLayoutProps) => {
                   selectedDishes.find((s) => s.name === field.name)?.dishes ||
                   []
                 }
-                onChange={(selectedOptions) =>
+                onChange={(selectedOptions) => {
                   handleOnChange(field.name, selectedOptions)
-                }
+                }}
               />
             ))
           ) : (

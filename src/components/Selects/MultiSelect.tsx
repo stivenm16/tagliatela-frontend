@@ -51,22 +51,28 @@ export const CustomMultiSelect: React.FC<CustomMultiSelectProps> = ({
   const variantCheked = () => {
     if (variant == 'check-meeting') {
       return selectedIndices.length > 0
-        ? 'bg-news-main'
+        ? 'bg-pasta-main'
         : 'bg-checkmeeting-main'
     } else {
       return selectedIndices.length > 0
-        ? 'bg-news-main'
+        ? 'bg-suggested-main'
         : 'bg-not-available-main'
     }
+  }
+
+  const getLabel = (label: string) => {
+    if (label.toLowerCase() === 'postres') return 'Dolci'
+    if (label.toLowerCase() === 'le pizze') return 'Pizzas'
+    return label
   }
 
   return (
     <div ref={wrapperRef} className="relative w-64 text-sm font-medium">
       <button
         onClick={() => setOpen((prev) => !prev)}
-        className={`flex items-center justify-between w-full rounded-md ${variantCheked()} px-4 py-2 text-white shadow-md transition-all duration-200`}
+        className={`flex items-center justify-between w-full rounded-3xl ${variantCheked()} px-6 py-2 text-white shadow-md transition-all duration-200`}
       >
-        <span className="uppercase font-bold">{label}</span>
+        <span className="uppercase font-bold">{getLabel(label)}</span>
         <ChevronDown
           size={16}
           className={`transition-transform duration-200 ${

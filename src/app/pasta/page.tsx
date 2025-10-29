@@ -6,7 +6,7 @@ const Page = () => {
   return (
     <div className="flex flex-col items-center font-bold uppercase text-xl justify-center px-5 pt-10 gap-10">
       <span>Por favor selecciona una categoría:</span>
-      <div className="flex gap-10">
+      <div className="grid grid-cols-1 md:grid-cols-2  gap-10">
         <LinkImgContainer title="Salsa" href="/pasta/salsa" img={SauceImg} />
         <LinkImgContainer title="Pasta" href="/pasta/pasta" img={PastaImg} />
       </div>

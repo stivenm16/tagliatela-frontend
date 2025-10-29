@@ -210,7 +210,7 @@ const Page = () => {
   return (
     <div className="">
       {!filters.family ? (
-        <Alert closeButton={false}>
+        <Alert closeButton={false} onClose={() => {}}>
           POR FAVOR SELECCIONA LA FAMILIA DE PLATOS DESEADA
         </Alert>
       ) : (
@@ -231,13 +231,17 @@ const Page = () => {
             <>
               <OverlayPopup open={open} onClose={onCloseDialog}>
                 <div className="bg-red-200 w-full h-screen rounded shadow-lg">
-                  <Alert closeButton={true} applyBorder={true}>
+                  <Alert
+                    closeButton={true}
+                    applyBorder={true}
+                    onClose={onCloseDialog}
+                  >
                     {alertMessage}
                   </Alert>
                 </div>
               </OverlayPopup>
               <div className="flex flex-col gap-3  ">
-                <div className="grid grid-cols-3 gap-x-2 px-4 gap-y-5 py-10 pb-32 mt-2 overflow-y-auto h-[950px]">
+                <div className="grid  grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-x-2 px-4 gap-y-5 py-10 pb-32 mt-2 overflow-y-auto h-[950px]">
                   {filteredDishes.length > 0 &&
                     filteredDishes
                       .sort(
@@ -323,7 +327,13 @@ const Page = () => {
                             },
                             {
                               content: (
-                                <div className="p-4 text-white  w-[12rem] flex flex-col mx-auto ">
+                                <div
+                                  className="p-4 text-white  w-[12rem] flex flex-col mx-auto"
+                                  onClick={(e) => {
+                                    e.stopPropagation()
+                                    e.preventDefault()
+                                  }}
+                                >
                                   <h2 className="text-xl font-semibold my-4 text-center">
                                     {item.name}
                                   </h2>
