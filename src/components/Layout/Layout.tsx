@@ -7,9 +7,9 @@ import { FilterProvider } from './context/FilterContext'
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
     <FilterProvider>
-      <div className="bg-surface-2 h-screen">
+      <div className="bg-surface-2">
         <Header />
-        <div className=" h-fit">{children}</div>
+        <div className="h-fit mt-24">{children}</div>
         <FloatingMenu />
       </div>
     </FilterProvider>

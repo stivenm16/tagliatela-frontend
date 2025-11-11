@@ -50,7 +50,7 @@ export const Header = () => {
         backgroundColor: colorMatcher(route),
         color: 'white',
       }}
-      className={`relative uppercase h-20  z-1 justify-between flex gap-5  items-center bg-neutral-50`}
+      className={`fixed w-full top-0 uppercase h-20  z-1 justify-between flex gap-5  items-center bg-neutral-50`}
     >
       <div className="flex  gap-5">
         <div onClick={handleGoBack} className="cursor-pointer ml-5">

@@ -107,7 +107,7 @@ const SelectedDishCard = ({
         </div>
       ) : (
         <>
-          <div className="relative">
+          <div className="relative my-1">
             <CloseButton
               onClick={() => removeDish(id, category)}
               variant={variant}
@@ -123,7 +123,7 @@ const SelectedDishCard = ({
           </div>
 
           <h2
-            className="text-center text-md uppercase font-semibold"
+            className="text-center text-md uppercase font-semibold mb-2"
             style={{
               color:
                 variant === 'check-meeting'
@@ -174,6 +174,10 @@ const initialState: SelectedDishes[] = [
   },
   {
     name: FamilyType.CUORE_FELICE,
+    dishes: [],
+  },
+  {
+    name: FamilyType.VINAGRETAS,
     dishes: [],
   },
 ]
