@@ -3,6 +3,7 @@ import WineImageRerence from '@/assets/images/vini-reference-image.png'
 import BeveragesIcon from '@/assets/svgs/beverages-card-icon.svg'
 import IngredientsIcon from '@/assets/svgs/filters/ingredients/ingredients-icon.svg'
 import Alert from '@/components/Alert'
+import CloseButton from '@/components/buttons/AlertCloseButton'
 import Card from '@/components/Cards/Card'
 import { WineDialogContent } from '@/components/Dialog/BeveragesDialog'
 import { ClickableItem } from '@/components/Dialog/ClickableItem'
@@ -15,7 +16,7 @@ import {
 import { Skeleton } from '@/components/ui/skeleton'
 import axiosInstance from '@/lib/axios'
 import { EntityT } from '@/types/global'
-import { JSX, useCallback, useEffect, useMemo, useState } from 'react'
+import { JSX, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import DishCard from './DishCard'
 
 export interface Ingredient extends EntityT {
@@ -68,7 +69,7 @@ export interface Dish extends EntityT {
   type: string
 }
 
-function extractUniqueFilterData(dishes: any): FilterAvaible {
+export function extractUniqueFilterData(dishes: any): FilterAvaible {
   const result = {
     allergens: new Set<string>(),
     diets: new Set<string>(),
@@ -116,6 +117,9 @@ const Page = () => {
   const [alertMessage, setAlertMessage] =
     useState<JSX.Element>(suggestionsMessage)
 
+  const [isVerticalScroll, setIsVerticalScroll] = useState(false)
+  const gridRef = useRef<HTMLDivElement>(null)
+
   const { filters, updateFilter } = useFilters()
 
   const getContent = useCallback(async () => {
@@ -139,29 +143,6 @@ const Page = () => {
       setAlertMessage(supervisorMessage)
     }
   }, [filters.allergen])
-
-  useEffect(() => {
-    if (filters.family) {
-      setIsLoading(true)
-      getContent()
-        .then((data) => {
-          if (data.length === 0) {
-            setDishes([])
-          } else {
-            const filters = extractUniqueFilterData(data)
-            updateFilter('filtersAvaible', filters)
-            setDishes(data)
-          }
-        })
-        .catch((error) => {
-          console.error('Error fetching dishes:', error)
-          setDishes([])
-        })
-        .finally(() => {
-          setIsLoading(false)
-        })
-    }
-  }, [filters.family, getContent])
 
   const matchesFilter = (
     dishValues: { name: string }[] | undefined,
@@ -202,6 +183,68 @@ const Page = () => {
     }
   }, [filteredDishes])
 
+  useEffect(() => {
+    if (filters.family) {
+      setIsLoading(true)
+      getContent()
+        .then((data) => {
+          if (data.length === 0) {
+            setDishes([])
+          } else {
+            const filters = extractUniqueFilterData(data)
+            updateFilter('filtersAvaible', filters)
+            setDishes(data)
+          }
+        })
+        .catch((error) => {
+          console.error('Error fetching dishes:', error)
+          setDishes([])
+        })
+        .finally(() => {
+          setIsLoading(false)
+        })
+    }
+  }, [filters.family, getContent])
+
+  useEffect(() => {
+    const el = gridRef.current
+    if (!el) return
+
+    const updateScrollDirection = () => {
+      const hasVertical = el.scrollHeight > el.clientHeight
+      const hasHorizontal = el.scrollWidth > el.clientWidth
+
+      // log for debug
+      // console.log({ hasVertical, hasHorizontal })
+
+      // prioritize vertical if both exist
+      if (hasVertical && !hasHorizontal) {
+        setIsVerticalScroll(true)
+      } else if (hasHorizontal && !hasVertical) {
+        setIsVerticalScroll(false)
+      } else if (hasVertical && hasHorizontal) {
+        setIsVerticalScroll(true) // or false, depending on what “dominant” means in your case
+      } else {
+        setIsVerticalScroll(false)
+      }
+    }
+
+    updateScrollDirection()
+
+    const resizeObserver = new ResizeObserver(updateScrollDirection)
+    resizeObserver.observe(el)
+
+    const mutationObserver = new MutationObserver(updateScrollDirection)
+    mutationObserver.observe(el, { childList: true, subtree: true })
+
+    window.addEventListener('resize', updateScrollDirection)
+
+    return () => {
+      resizeObserver.disconnect()
+      mutationObserver.disconnect()
+      window.removeEventListener('resize', updateScrollDirection)
+    }
+  }, [filteredDishes])
   const onCloseDialog = () => {
     setOpen(false)
     setAlertMessage(suggestionsMessage)
@@ -216,7 +259,10 @@ const Page = () => {
       ) : (
         <>
           {isLoading ? (
-            <div className="grid grid-cols-3 gap-5 px-6 mt-10">
+            <div className="grid grid-cols-[repeat(auto-fill,minmax(14.5rem,1fr))] gap-x-2 px-4 gap-y-5 py-10 pt-6">
+              <Skeleton className="h-72 w-[220px] bg-white/50" />
+              <Skeleton className="h-72 w-[220px] bg-white/50" />
+              <Skeleton className="h-72 w-[220px] bg-white/50" />
               <Skeleton className="h-72 w-[220px] bg-white/50" />
               <Skeleton className="h-72 w-[220px] bg-white/50" />
               <Skeleton className="h-72 w-[220px] bg-white/50" />
@@ -230,18 +276,22 @@ const Page = () => {
           ) : (
             <>
               <OverlayPopup open={open} onClose={onCloseDialog}>
-                <div className="bg-red-200 w-full h-screen rounded shadow-lg">
-                  <Alert
-                    closeButton={true}
-                    applyBorder={true}
-                    onClose={onCloseDialog}
-                  >
-                    {alertMessage}
-                  </Alert>
+                <div
+                  className={`p-5  bg-white/80 backdrop-blur-sm uppercase  md:w-[26rem] w-[23rem] px-10 ${'border-2 border-red-600'} rounded-2xl text-center shadow-lg relative`}
+                >
+                  <span>{alertMessage}</span>
+                  <CloseButton onClick={onCloseDialog} />
                 </div>
               </OverlayPopup>
               <div className="flex flex-col gap-3  ">
-                <div className="grid  grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-x-2 px-4 gap-y-5 py-10 pb-32 mt-2 overflow-y-auto h-[950px]">
+                <div
+                  className={`grid grid-cols-[repeat(auto-fill,minmax(14.5rem,1fr))] gap-x-2 px-4 gap-y-5 py-10 ${
+                    !isVerticalScroll ? 'pb-[25rem]' : 'pb-[10rem]'
+                  } mt-2 overflow-y-auto
+                    h-[950px]
+                  `}
+                  ref={gridRef}
+                >
                   {filteredDishes.length > 0 &&
                     filteredDishes
                       .sort(

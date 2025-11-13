@@ -1,12 +1,12 @@
 'use client'
 import PastaImgMedium from '@/assets/images/pasta-image-reference-medium.png'
-import { fakeSauces } from '@/utils/data/fakeSauces'
+import { SauceT, useFilters } from '@/components/Layout/context/FilterContext'
 import Image from 'next/image'
 import { useState } from 'react'
 import SaucesComponent from '../../components/SaucesComponent'
 const Page = () => {
   const [selectedSauceId, setSelectedSauceId] = useState<number | null>(null)
-
+  const { pasta } = useFilters()
   const toggleSauceSelection = (id: number) => {
     setSelectedSauceId(id)
   }
@@ -16,7 +16,13 @@ const Page = () => {
       <div className="flex justify-start">
         <SaucesComponent
           toggleSauceSelection={toggleSauceSelection}
-          sauces={fakeSauces.filter((sauce, index) => index < 5)}
+          sauces={(pasta?.sauces as SauceT[]).map((sauce: SauceT) => ({
+            ...sauce,
+            description: 'lorem',
+            title: sauce.name,
+            highlightedContent: '',
+            isSuggested: false,
+          }))}
           selectedSauceId={selectedSauceId}
         />
       </div>

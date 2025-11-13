@@ -33,34 +33,6 @@ const SaucesComponent = ({ sauces }: SaucesComponentProps) => {
                   {
                     content: (
                       <>
-                        {/* <div className="p-4 text-white  w-[12rem] flex flex-col mx-auto ">
-                        <h2 className="text-xl font-semibold my-4 text-center">
-                          {sauce.id}
-                        </h2>
-                        <ul className="flex flex-col gap-1 w-44 overflow-y-auto pr-2 mx-auto justify-center">
-                          {sauce.ingredients.length > 0
-            ? sauce.ingredients.map((ingredient) => (
-                <div key={ingredient.id}>
-                  {ingredient.imageUrl ? (
-                    <ClickableItem
-                      title={ingredient.name}
-                      description={ingredient.description!}
-                      origin="Italiano"
-                      lightIcon={false}
-                    />
-                  ) : (
-                    <div className="flex gap-2 items-center">
-                      <div className="size-2 rounded-full bg-white ml-[5px] text-sm" />
-                      <span className="ml-3">
-                        {ingredient.name}
-                      </span>
-                    </div>
-                  )}
-                </div>
-              ))
-            : null}
-                        </ul>
-                      </div> */}
                         <div
                           key={sauce.id}
                           onClick={(e) => e.stopPropagation()}
@@ -90,34 +62,6 @@ const SaucesComponent = ({ sauces }: SaucesComponentProps) => {
                   {
                     content: (
                       <>
-                        {/* <div className="p-4 text-white  w-[12rem] flex flex-col mx-auto ">
-                        <h2 className="text-xl font-semibold my-4 text-center">
-                          {sauce.id}
-                        </h2>
-                        <ul className="flex flex-col gap-1 w-44 overflow-y-auto pr-2 mx-auto justify-center">
-                          {sauce.ingredients.length > 0
-            ? sauce.ingredients.map((ingredient) => (
-                <div key={ingredient.id}>
-                  {ingredient.imageUrl ? (
-                    <ClickableItem
-                      title={ingredient.name}
-                      description={ingredient.description!}
-                      origin="Italiano"
-                      lightIcon={false}
-                    />
-                  ) : (
-                    <div className="flex gap-2 items-center">
-                      <div className="size-2 rounded-full bg-white ml-[5px] text-sm" />
-                      <span className="ml-3">
-                        {ingredient.name}
-                      </span>
-                    </div>
-                  )}
-                </div>
-              ))
-            : null}
-                        </ul>
-                      </div> */}
                         <div
                           key={sauce.id}
                           onClick={(e) => e.stopPropagation()}
@@ -145,7 +89,6 @@ const SaucesComponent = ({ sauces }: SaucesComponentProps) => {
                     iconWidth: 24,
                   },
                 ]}
-                // isSuggested
               >
                 <div
                   key={sauce.id}

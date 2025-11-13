@@ -29,7 +29,7 @@ const Alert = ({
 }) => {
   return (
     <AlertPortal>
-      <div className="fixed top-[45%] left-[25px] md:left-1/4 ">
+      <div className="h-full w-full justify-center items-center flex pb-32 ">
         <div
           className={`p-5  bg-white/80 backdrop-blur-sm uppercase  md:w-[26rem] w-[23rem] px-10 ${
             applyBorder ? 'border-2 border-red-600' : ''

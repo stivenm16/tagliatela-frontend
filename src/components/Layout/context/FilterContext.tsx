@@ -20,6 +20,21 @@ export type Filters = {
   filtersAvaible?: FilterAvaible | null
 }
 
+export interface SauceT {
+  id: number
+  name: string
+  isNew: boolean
+}
+
+export type PastaType = 'tradizionale' | 'ripiena'
+export interface PastaT {
+  id: number
+  name: string
+  type: PastaType
+  description: string
+  sauces: SauceT[]
+}
+
 type FilterContextType = {
   filters: Filters
   setFilters: React.Dispatch<React.SetStateAction<Filters>>
@@ -29,6 +44,8 @@ type FilterContextType = {
   ) => void
   focusedFilter: keyof Filters | null
   setFocusedFilter: React.Dispatch<React.SetStateAction<keyof Filters | null>>
+  pasta: PastaT | null
+  setPasta: React.Dispatch<React.SetStateAction<PastaT | null>>
 }
 
 const FilterContext = createContext<FilterContextType | undefined>(undefined)
@@ -44,6 +61,7 @@ export const FilterProvider = ({ children }: { children: React.ReactNode }) => {
     filtersAvaible: null,
   })
   const [focusedFilter, setFocusedFilter] = useState<keyof Filters | null>(null)
+  const [pasta, setPasta] = useState<PastaT | null>(null)
 
   const updateFilter = (
     key: keyof Filters,
@@ -60,6 +78,8 @@ export const FilterProvider = ({ children }: { children: React.ReactNode }) => {
         updateFilter,
         focusedFilter,
         setFocusedFilter,
+        pasta,
+        setPasta,
       }}
     >
       {children}
