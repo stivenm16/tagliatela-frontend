@@ -33,6 +33,7 @@ export interface PastaT {
   type: PastaType
   description: string
   sauces: SauceT[]
+  ingredients: string[]
 }
 
 type FilterContextType = {

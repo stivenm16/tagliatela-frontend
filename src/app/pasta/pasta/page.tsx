@@ -8,7 +8,6 @@ import {
 import { Skeleton } from '@/components/ui/skeleton'
 import axiosInstance from '@/lib/axios'
 import Image from 'next/image'
-import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useEffect, useMemo, useState } from 'react'
 import AlertSauces from '../components/AlertSauces'
@@ -146,7 +145,14 @@ const Page = () => {
                 <div className="flex gap-5 flex-wrap gap-y-4">
                   {pastasTradizionale &&
                     pastasTradizionale.map(
-                      ({ id, description, name, isNew, pairing_sauces }) => (
+                      ({
+                        id,
+                        description,
+                        name,
+                        isNew,
+                        pairing_sauces,
+                        filter,
+                      }) => (
                         <div
                           onClick={() => {
                             navigateToDetails({
@@ -161,6 +167,9 @@ const Page = () => {
                                   isNew: false,
                                 }
                               }),
+                              ingredients: filter.ingredients.map(
+                                (i) => i.name,
+                              ),
                             })
                           }}
                           key={id}
@@ -193,31 +202,59 @@ const Page = () => {
                   }`}
                 >
                   {pastasRipiena &&
-                    pastasRipiena.map((item) => (
-                      <Link
-                        href={`/pasta/pasta/tipos-de-pasta`}
-                        onClick={() => console.log(item)}
-                        key={item.id}
-                      >
-                        <div className="flex flex-col w-full h-full gap-3 relative">
-                          {item.isNew && <NewDishFloatingButton />}
-                          <Image
-                            src={PastaImg}
-                            alt={item.description}
-                            className="w-full h-40 rounded-xl shadow-lg"
-                          />
-                          <h2 className="text-center uppercase ">
-                            {item.name}
-                          </h2>
+                    pastasRipiena.map(
+                      ({
+                        id,
+                        description,
+                        name,
+                        isNew,
+                        pairing_sauces,
+                        filter,
+                      }) => (
+                        <div
+                          onClick={() => {
+                            navigateToDetails({
+                              id,
+                              description,
+                              name,
+                              type: pastas[1].type,
+                              sauces: pairing_sauces.map((s) => {
+                                return {
+                                  id: s.id,
+                                  name: s.name,
+                                  isNew: false,
+                                }
+                              }),
+                              ingredients: filter.ingredients.map(
+                                (i) => i.name,
+                              ),
+                            })
+                          }}
+                          key={id}
+                        >
+                          <div className="flex flex-col w-full h-full gap-3 relative">
+                            {isNew && <NewDishFloatingButton />}
+                            <Image
+                              src={PastaImg}
+                              alt={description}
+                              className="w-full h-40 rounded-xl shadow-lg"
+                            />
+                            <h2 className="text-center uppercase max-w-40">
+                              {name}
+                            </h2>
+                          </div>
                         </div>
-                      </Link>
-                    ))}
+                      ),
+                    )}
                 </div>
               </div>
             </div>
           </>
         ) : (
           <div className="grid grid-cols-[repeat(auto-fill,minmax(14.5rem,1fr))] gap-y-4 gap-x-1 py-10 pt-6">
+            <Skeleton className="h-72 w-[220px] bg-white/50" />
+            <Skeleton className="h-72 w-[220px] bg-white/50" />
+            <Skeleton className="h-72 w-[220px] bg-white/50" />
             <Skeleton className="h-72 w-[220px] bg-white/50" />
             <Skeleton className="h-72 w-[220px] bg-white/50" />
             <Skeleton className="h-72 w-[220px] bg-white/50" />

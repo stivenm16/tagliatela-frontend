@@ -145,7 +145,7 @@ const SaucesComponent = ({ sauces }: SaucesComponentProps) => {
                     alt={sauce.title}
                     className="size-40 rounded-xl shadow-lg"
                   />
-                  <h2 className="text-center uppercase">{sauce.title}</h2>
+                  <h2 className="text-center uppercase w-40 ">{sauce.title}</h2>
                 </div>
               </div>
             </DialogTrigger>
