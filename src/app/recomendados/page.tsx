@@ -2,7 +2,6 @@
 import WineImageRerence from '@/assets/images/vini-reference-image.png'
 import BeveragesIcon from '@/assets/svgs/beverages-card-icon.svg'
 import IngredientsIcon from '@/assets/svgs/filters/ingredients/ingredients-icon.svg'
-import Alert from '@/components/Alert'
 import CloseButton from '@/components/buttons/AlertCloseButton'
 import Card from '@/components/Cards/Card'
 import { WineDialogContent } from '@/components/Dialog/BeveragesDialog'
@@ -14,6 +13,7 @@ import {
   useFilters,
 } from '@/components/Layout/context/FilterContext'
 import { Skeleton } from '@/components/ui/skeleton'
+import useIsLandscape from '@/hooks/useIsLandscape'
 import axiosInstance from '@/lib/axios'
 import { EntityT } from '@/types/global'
 import { JSX, useCallback, useEffect, useMemo, useRef, useState } from 'react'
@@ -99,6 +99,33 @@ export function extractUniqueFilterData(dishes: any): FilterAvaible {
   }
 }
 
+const AlertSuggested = ({
+  text,
+  isClosed,
+}: {
+  text: string
+  isClosed: boolean
+}) => {
+  const [open, setOpen] = useState(true)
+  if (isClosed) setOpen(false)
+  const onCloseDialog = () => {
+    setOpen(false)
+  }
+  return (
+    <OverlayPopup open={open} onClose={() => {}}>
+      <div className="h-full w-full justify-center items-center flex  ">
+        <div
+          className={`p-5  bg-white/80 backdrop-blur-sm uppercase rounded-xl md:w-[26rem] w-[23rem] px-10rounded-2xl text-center shadow-lg relative`}
+        >
+          <div>
+            <span>{text}</span>
+          </div>
+        </div>
+      </div>
+    </OverlayPopup>
+  )
+}
+
 const suggestionsMessage = (
   <>Por favor selecciona otro de los filtros para ver más recomendaciones</>
 )
@@ -116,9 +143,11 @@ const Page = () => {
   const [open, setOpen] = useState(true)
   const [alertMessage, setAlertMessage] =
     useState<JSX.Element>(suggestionsMessage)
+  const [isClosedMainAlert, setIsClosedMainAlert] = useState(false)
 
   const [isVerticalScroll, setIsVerticalScroll] = useState(false)
   const gridRef = useRef<HTMLDivElement>(null)
+  const isLandscape = useIsLandscape()
 
   const { filters, updateFilter } = useFilters()
 
@@ -253,9 +282,10 @@ const Page = () => {
   return (
     <div className="">
       {!filters.family ? (
-        <Alert closeButton={false} onClose={() => {}}>
-          POR FAVOR SELECCIONA LA FAMILIA DE PLATOS DESEADA
-        </Alert>
+        <AlertSuggested
+          text="POR FAVOR SELECCIONA LA FAMILIA DE PLATOS DESEADA"
+          isClosed={isClosedMainAlert}
+        />
       ) : (
         <>
           {isLoading ? (
@@ -285,9 +315,13 @@ const Page = () => {
               </OverlayPopup>
               <div className="flex flex-col gap-3  ">
                 <div
-                  className={`grid grid-cols-[repeat(auto-fill,minmax(14.5rem,1fr))] gap-x-2 px-4 gap-y-5 py-10 ${
-                    !isVerticalScroll ? 'pb-[25rem]' : 'pb-[10rem]'
-                  } mt-2 overflow-y-auto
+                  className={`grid grid-cols-[repeat(auto-fill,minmax(14.5rem,1fr))] gap-x-2 px-4 gap-y-5 mt-2 overflow-y-auto ${
+                    filteredDishes && filteredDishes.length > 3 && !isLandscape
+                      ? 'pb-40'
+                      : ''
+                  } ${
+                    isLandscape && filteredDishes.length > 4 ? 'pb-[25rem]' : ''
+                  }
                     h-[950px]
                   `}
                   ref={gridRef}

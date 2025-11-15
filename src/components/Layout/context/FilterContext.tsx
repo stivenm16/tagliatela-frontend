@@ -24,6 +24,7 @@ export interface SauceT {
   id: number
   name: string
   isNew: boolean
+  isRecommended: boolean
 }
 
 export type PastaType = 'tradizionale' | 'ripiena'

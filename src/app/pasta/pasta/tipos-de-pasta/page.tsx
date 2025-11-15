@@ -1,53 +1,51 @@
 'use client'
 import PastaImgMedium from '@/assets/images/pasta-image-reference-medium.png'
 import { SauceT, useFilters } from '@/components/Layout/context/FilterContext'
+import useIsLandscape from '@/hooks/useIsLandscape'
 import Image from 'next/image'
 import { useState } from 'react'
 import SaucesComponent from '../../components/SaucesComponent'
+
 const Page = () => {
   const [selectedSauceId, setSelectedSauceId] = useState<number | null>(null)
   const { pasta } = useFilters()
+  const isLandscape = useIsLandscape()
+
   const toggleSauceSelection = (id: number) => {
     setSelectedSauceId(id)
   }
-  const shouldGrow = pasta?.sauces && pasta?.sauces.length > 5
-  const type = pasta?.type.split(' ')[1].toLowerCase()
 
   return (
     <div
-      className="overflow-y-auto h-screen pb-14 flex flex-col justify-between"
-      style={{
-        paddingTop:
-          (type === 'tradizionale' && shouldGrow) ||
-          (type === 'ripiena' && !shouldGrow)
-            ? '90px'
-            : '0px',
-      }}
+      className={` pb-24 flex flex-col  justify-center gap-28 overflow-y-scroll ring-0 border-0 pt-5 ${
+        pasta?.sauces && pasta?.sauces.length > 5 && isLandscape
+          ? 'h-screen pt-72'
+          : ''
+      } `}
     >
-      <div className="flex-grow">
+      <>
         <div className="flex justify-start">
           <SaucesComponent
             toggleSauceSelection={toggleSauceSelection}
+            selectedPasta={pasta?.name.toLowerCase() || ''}
             sauces={(pasta?.sauces as SauceT[]).map((sauce: SauceT) => ({
               ...sauce,
               description: 'lorem',
               title: sauce.name,
               highlightedContent: '',
-              isSuggested: false,
+              isSuggested: sauce.isRecommended,
+              isNew: sauce.isNew,
             }))}
             selectedSauceId={selectedSauceId}
           />
         </div>
-      </div>
+      </>
       <div
         className={`flex flex-col  gap-6 p-4 rounded-3xl shadow-xl text-white ${
           pasta?.type.split(' ')[1].toLowerCase() === 'tradizionale'
             ? 'bg-suggested-main'
             : 'bg-beverages-main'
         } w-fit mx-auto mb-40`}
-        style={{
-          marginBottom: shouldGrow ? '5rem' : '10rem',
-        }}
       >
         <div className="flex gap-4 items-start">
           <Image

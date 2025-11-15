@@ -1,10 +1,18 @@
+import { SauceT } from "@/components/Layout/context/FilterContext"
+
+interface RelatedPastas extends SauceT {
+  type: string
+}
 export interface Sauce {
   id: number
   title: string
+  name: string
   description: string
   isNew: boolean
   highlightedContent: string
   isSuggested: boolean
+  type?: string
+  pastas?: RelatedPastas[]
 }
 
 export interface FilterSaucesOption {

@@ -133,7 +133,7 @@ const Page = () => {
       <>
         {pastas && pastas.length > 1 ? (
           <>
-            <h1 className="text-center font-bold text-xl mt-4 uppercase">
+            <h1 className="text-center font-bold text-xl uppercase">
               Tipo de pastas
             </h1>
 
@@ -160,11 +160,12 @@ const Page = () => {
                               description,
                               name,
                               type: pastas[0].type,
-                              sauces: pairing_sauces.map((s) => {
+                              sauces: pairing_sauces.map((s: any) => {
                                 return {
                                   id: s.id,
                                   name: s.name,
-                                  isNew: false,
+                                  isNew: s.is_new,
+                                  isRecommended: s.is_recommended,
                                 }
                               }),
                               ingredients: filter.ingredients.map(
