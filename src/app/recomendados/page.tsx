@@ -313,9 +313,9 @@ const Page = () => {
                   <CloseButton onClick={onCloseDialog} />
                 </div>
               </OverlayPopup>
-              <div className="flex flex-col gap-3  ">
+              <div className="flex flex-col gap-3 ">
                 <div
-                  className={`grid grid-cols-[repeat(auto-fill,minmax(14.5rem,1fr))] gap-x-2 px-4 gap-y-5 mt-2 overflow-y-auto ${
+                  className={`grid grid-cols-[repeat(auto-fill,minmax(14.5rem,1fr))] gap-x-2 px-4 gap-y-5 pt-4 overflow-y-auto ${
                     filteredDishes && filteredDishes.length > 3 && !isLandscape
                       ? 'pb-40'
                       : ''
