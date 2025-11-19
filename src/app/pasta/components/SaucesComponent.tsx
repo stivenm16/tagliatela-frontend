@@ -60,6 +60,7 @@ const SaucesComponent = ({ sauces, selectedPasta }: SaucesComponentProps) => {
     })
   }
 
+  console.log({ sauceSelectedInfo })
   const backgroundCardColor = (type: string) =>
     type !== 'ripiena' ? 'bg-[rgba(132,133,105,0.6)]' : 'bg-[#F3D1D1]'
   return (
@@ -104,6 +105,40 @@ const SaucesComponent = ({ sauces, selectedPasta }: SaucesComponentProps) => {
                   {
                     content: (
                       <>
+                        {/* <div
+                          className="p-4 text-white  w-[12rem] flex flex-col mx-auto"
+                          onClick={(e) => {
+                            e.stopPropagation()
+                            e.preventDefault()
+                          }}
+                        >
+                          <h2 className="text-xl font-semibold my-4 text-center">
+                            {item.name}
+                          </h2>
+                          <ul className="flex flex-col gap-1 w-44 overflow-y-auto pr-2 mx-auto justify-center">
+                            {item.ingredients.length > 0
+                              ? item.ingredients.map((ingredient) => (
+                                  <div key={ingredient.id}>
+                                    {ingredient?.imageUrl ? (
+                                      <ClickableItem
+                                        title={ingredient.name}
+                                        description={ingredient.description!}
+                                        origin="Italiano"
+                                        lightIcon={false}
+                                      />
+                                    ) : (
+                                      <div className="flex gap-2 items-center">
+                                        <div className="size-2 rounded-full bg-white ml-[5px]" />
+                                        <span className="ml-3 text-sm">
+                                          {ingredient.name}
+                                        </span>
+                                      </div>
+                                    )}
+                                  </div>
+                                ))
+                              : null}
+                          </ul>
+                        </div> */}
                         <div
                           key={sauce.id}
                           onClick={(e) => e.stopPropagation()}

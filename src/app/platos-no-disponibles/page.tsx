@@ -4,7 +4,7 @@ import Layout from '@/components/Layout/Layout'
 const Page = () => {
   return (
     <Layout>
-      <div className="mt-14">
+      <div className="mt-6">
         <CMAndNDLayout variant="no-disponibles" />
       </div>
     </Layout>
