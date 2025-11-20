@@ -33,7 +33,9 @@ const BeveragesDialogContent = ({
         />
       ) : null}
       <div className="flex  flex-col gap-4">
-        <span className="capitalize text-3xl font-bold ml-3">{title}</span>
+        <span className="capitalize text-3xl max-w-72 font-bold ml-3">
+          {title}
+        </span>
         {origin && showFlag && (
           <div className="flex gap-3 px-3">
             {origin.toLowerCase() === 'italiano' ? (

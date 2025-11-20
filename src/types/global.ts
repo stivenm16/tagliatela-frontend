@@ -12,6 +12,11 @@ export interface Sauce {
   highlightedContent: string
   isSuggested: boolean
   type?: string
+  filter?: {
+    ingredients: any[]
+    diets: any[]
+    allergens: any[]
+  }
   pastas?: RelatedPastas[]
 }
 

@@ -5,11 +5,13 @@ import BeveragesIcon from '@/assets/svgs/beverages-card-icon.svg'
 import IngredientsIcon from '@/assets/svgs/filters/ingredients/ingredients-icon.svg'
 import StarIcon from '@/assets/svgs/star.svg'
 import Card from '@/components/Cards/Card'
+import { ClickableItem } from '@/components/Dialog/ClickableItem'
 import {
   Dialog,
   DialogContent,
   DialogTrigger,
 } from '@/components/Dialog/Dialog'
+import { useFilters } from '@/components/Layout/context/FilterContext'
 import { Skeleton } from '@/components/ui/skeleton'
 import axiosInstance from '@/lib/axios'
 import { Sauce } from '@/types/global'
@@ -25,7 +27,10 @@ interface SaucesComponentProps {
 }
 const SaucesComponent = ({ sauces, selectedPasta }: SaucesComponentProps) => {
   const [sauceSelectedInfo, setSauceSelectedInfo] = useState<Sauce | null>(null)
+  const [saucesToRender, setSaucesToRender] = useState<Sauce[]>(sauces)
+  const { filters, updateFilter } = useFilters()
 
+  console.log('sauces', sauces)
   const getSauceData = async (id: number) => {
     const response = await axiosInstance.get(`/sauce/${id}`, {
       withCredentials: true,
@@ -59,14 +64,12 @@ const SaucesComponent = ({ sauces, selectedPasta }: SaucesComponentProps) => {
       return aMatch === bMatch ? 0 : aMatch ? -1 : 1
     })
   }
-
-  console.log({ sauceSelectedInfo })
   const backgroundCardColor = (type: string) =>
     type !== 'ripiena' ? 'bg-[rgba(132,133,105,0.6)]' : 'bg-[#F3D1D1]'
   return (
     <div className="">
       <div className="flex gap-5 gap-y-4 flex-wrap px-6 justify-start w-fit">
-        {sauces.map((sauce) => (
+        {saucesToRender.map((sauce) => (
           <Dialog key={sauce.id}>
             <DialogContent>
               <Card
@@ -105,59 +108,54 @@ const SaucesComponent = ({ sauces, selectedPasta }: SaucesComponentProps) => {
                   {
                     content: (
                       <>
-                        {/* <div
-                          className="p-4 text-white  w-[12rem] flex flex-col mx-auto"
-                          onClick={(e) => {
-                            e.stopPropagation()
-                            e.preventDefault()
-                          }}
-                        >
-                          <h2 className="text-xl font-semibold my-4 text-center">
-                            {item.name}
-                          </h2>
-                          <ul className="flex flex-col gap-1 w-44 overflow-y-auto pr-2 mx-auto justify-center">
-                            {item.ingredients.length > 0
-                              ? item.ingredients.map((ingredient) => (
-                                  <div key={ingredient.id}>
-                                    {ingredient?.imageUrl ? (
-                                      <ClickableItem
-                                        title={ingredient.name}
-                                        description={ingredient.description!}
-                                        origin="Italiano"
-                                        lightIcon={false}
-                                      />
-                                    ) : (
-                                      <div className="flex gap-2 items-center">
-                                        <div className="size-2 rounded-full bg-white ml-[5px]" />
-                                        <span className="ml-3 text-sm">
-                                          {ingredient.name}
-                                        </span>
+                        {sauceSelectedInfo && (
+                          <div
+                            key={sauce.id}
+                            onClick={(e) => e.stopPropagation()}
+                            className="flex flex-col justify-center items-center text-center gap-2"
+                          >
+                            <h2 className="text-center uppercase text-2xl pt-6 font-bold">
+                              {sauce.title}
+                            </h2>
+                            <span className="font-light w-4/5">
+                              {sauceSelectedInfo?.description}
+                            </span>
+                            <div className="flex flex-col w-full h-full gap-3 relative p-10 pt-2 pb-2">
+                              <Image
+                                src={SauceThumbnail}
+                                alt={sauce.title}
+                                className="h-40 object-cover rounded-xl shadow-lg"
+                              />
+                              <div className="mb-auto mx-auto mt-5">
+                                {sauceSelectedInfo.filter?.ingredients.map(
+                                  (ingredient: any) => (
+                                    <>
+                                      <div key={ingredient.id}>
+                                        {ingredient?.imageUrl ? (
+                                          <ClickableItem
+                                            title={ingredient.name}
+                                            description={
+                                              ingredient.description!
+                                            }
+                                            origin="Italiano"
+                                            lightIcon={false}
+                                          />
+                                        ) : (
+                                          <div className="flex gap-2 items-center">
+                                            <div className="size-2 rounded-full bg-white ml-[5px]" />
+                                            <span className="ml-3 text-sm">
+                                              {ingredient.name}
+                                            </span>
+                                          </div>
+                                        )}
                                       </div>
-                                    )}
-                                  </div>
-                                ))
-                              : null}
-                          </ul>
-                        </div> */}
-                        <div
-                          key={sauce.id}
-                          onClick={(e) => e.stopPropagation()}
-                          className="flex flex-col justify-center text-white items-center text-center gap-4"
-                        >
-                          <h2 className="text-center uppercase text-2xl pt-10 font-bold">
-                            {sauce.title}
-                          </h2>
-                          <span className="font-light w-4/5">
-                            {sauce.description}
-                          </span>
-                          <div className="flex flex-col w-full h-full gap-3 relative p-10 pt-4">
-                            <Image
-                              src={SauceThumbnail}
-                              alt={sauce.title}
-                              className=" rounded-xl shadow-lg"
-                            />
+                                    </>
+                                  ),
+                                )}
+                              </div>
+                            </div>
                           </div>
-                        </div>
+                        )}
                       </>
                     ),
                     icon: IngredientsIcon,
@@ -189,7 +187,7 @@ const SaucesComponent = ({ sauces, selectedPasta }: SaucesComponentProps) => {
                     <div className="flex gap-2 overflow-x-scroll w-[30rem] pb-10 pt-7">
                       {pastasFormatted &&
                         sortByMatch(pastasFormatted, selectedPasta).map(
-                          (_, index) => {
+                          (_: any, index: number) => {
                             const type = _.type.split(' ')[1].toLowerCase()
                             return (
                               <div
