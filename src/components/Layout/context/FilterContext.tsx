@@ -8,6 +8,7 @@ export type FilterAvaible = {
   diets?: string[]
   ingredients?: string[]
   flavors?: string[]
+  basePasta?: string[]
 }
 
 export type Filters = {
@@ -25,6 +26,7 @@ export interface SauceT {
   name: string
   isNew: boolean
   isRecommended: boolean
+  filters?: any
 }
 
 export type PastaType = 'tradizionale' | 'ripiena'

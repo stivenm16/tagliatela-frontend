@@ -57,7 +57,6 @@ const BeveragesRenderItems = ({
   beverageType: string
 }) => {
   const isLandscape = useIsLandscape()
-  console.log('beverages', beverages)
   return (
     <>
       {beverageType === 'cocktails' ? (

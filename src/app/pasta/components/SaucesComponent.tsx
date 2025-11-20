@@ -16,7 +16,7 @@ import { Skeleton } from '@/components/ui/skeleton'
 import axiosInstance from '@/lib/axios'
 import { Sauce } from '@/types/global'
 import Image from 'next/image'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import NewDishFloatingButton from './NewDishFloatingButton'
 
 interface SaucesComponentProps {
@@ -25,12 +25,65 @@ interface SaucesComponentProps {
   selectedSauceId: number | null
   selectedPasta: string
 }
+
+const extractSauceFilters = (pasta: any) => {
+  if (!pasta || !Array.isArray(pasta.sauces)) {
+    return {
+      ingredients: [],
+      diets: [],
+      allergens: [],
+      flavors: [],
+      basePasta: [],
+    }
+  }
+
+  // Utility to dedupe by id
+  const unique = <T extends { id: number }>(items: T[]): T[] => {
+    const map = new Map<number, T>()
+    items.forEach((item) => {
+      if (!map.has(item.id)) map.set(item.id, item)
+    })
+    return Array.from(map.values())
+  }
+
+  const allIngredients: any[] = []
+  const allDiets: any[] = []
+  const allAllergens: any[] = []
+  const allFlavors: any[] = []
+  const allBase: any[] = []
+
+  pasta.sauces.forEach((sauce: any) => {
+    const f = sauce.filters
+    if (!f) return
+
+    allIngredients.push(...f.ingredients)
+    allDiets.push(...f.diets)
+    allAllergens.push(...f.allergens)
+    allFlavors.push(...f.flavors)
+    allBase.push(...f.base)
+  })
+
+  return {
+    ingredients: unique(allIngredients).map((f) => f.name) as string[],
+    diets: unique(allDiets).map((f) => f.name) as string[],
+    allergens: unique(allAllergens).map((f) => f.name) as string[],
+    flavors: unique(allFlavors).map((f) => f.name) as string[],
+    basePasta: unique(allBase).map((f) => f.name) as string[],
+  }
+}
 const SaucesComponent = ({ sauces, selectedPasta }: SaucesComponentProps) => {
   const [sauceSelectedInfo, setSauceSelectedInfo] = useState<Sauce | null>(null)
   const [saucesToRender, setSaucesToRender] = useState<Sauce[]>(sauces)
-  const { filters, updateFilter } = useFilters()
+  const { filters, updateFilter, pasta } = useFilters()
 
-  console.log('sauces', sauces)
+  console.log(filters, 'filters in sauces component')
+  useEffect(() => {
+    if (pasta) {
+      const filtersFromSauces = extractSauceFilters(pasta)
+      console.log(filtersFromSauces, 'filters from sauces')
+      updateFilter('filtersAvaible', filtersFromSauces)
+    }
+  }, [pasta])
   const getSauceData = async (id: number) => {
     const response = await axiosInstance.get(`/sauce/${id}`, {
       withCredentials: true,

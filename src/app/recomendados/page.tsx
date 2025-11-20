@@ -243,10 +243,6 @@ const Page = () => {
       const hasVertical = el.scrollHeight > el.clientHeight
       const hasHorizontal = el.scrollWidth > el.clientWidth
 
-      // log for debug
-      // console.log({ hasVertical, hasHorizontal })
-
-      // prioritize vertical if both exist
       if (hasVertical && !hasHorizontal) {
         setIsVerticalScroll(true)
       } else if (hasHorizontal && !hasVertical) {

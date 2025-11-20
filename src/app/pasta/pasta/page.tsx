@@ -165,7 +165,8 @@ const Page = () => {
                                   id: s.id,
                                   name: s.name,
                                   isNew: s.is_new,
-                                  isRecommended: s.is_recommended,
+                                  filters: s.filter,
+                                  isRecommended: s.isSuggested,
                                 }
                               }),
                               ingredients: filter.ingredients.map(
@@ -219,13 +220,16 @@ const Page = () => {
                               description,
                               name,
                               type: pastas[1].type,
-                              sauces: pairing_sauces.map((s) => {
+                              sauces: pairing_sauces.map((s: any) => {
                                 return {
                                   id: s.id,
                                   name: s.name,
                                   isNew: false,
+                                  filters: s.filter,
+                                  isRecommended: s.isSuggested,
                                 }
                               }),
+
                               ingredients: filter.ingredients.map(
                                 (i) => i.name,
                               ),

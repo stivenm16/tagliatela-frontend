@@ -9,6 +9,7 @@ import { allergensFilters, dietFilters } from './constants'
 export const PastaFilters = () => {
   const { filters } = useFilters()
 
+  console.log(filters, 'filters in pasta filters')
   const getItemName = (item: any) =>
     (item.label ?? item.name ?? item.id ?? '').toString().toLowerCase()
 
@@ -27,13 +28,17 @@ export const PastaFilters = () => {
       <CategoryFilter
         filterBy="allergen"
         triggerIcon={AlergensIcon}
-        items={allergensFilters.filter((item) => {
-          if (!filters.filtersAvaible?.allergens) return item
-          return filters.filtersAvaible.allergens?.some(
-            (available: string) =>
-              available.toLowerCase() === item.label.toLowerCase(),
-          )
-        })}
+        items={
+          (filters.filtersAvaible?.allergens &&
+            allergensFilters.filter((item) => {
+              if (!filters.filtersAvaible?.allergens) return item
+              return filters.filtersAvaible.allergens?.some(
+                (available: string) =>
+                  available.toLowerCase() === item.id.toLowerCase(),
+              )
+            })) ||
+          []
+        }
         page="pasta"
       />
       <CategoryFilter
