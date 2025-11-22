@@ -9,7 +9,6 @@ import { allergensFilters, dietFilters } from './constants'
 export const PastaFilters = () => {
   const { filters } = useFilters()
 
-  console.log(filters, 'filters in pasta filters')
   const getItemName = (item: any) =>
     (item.label ?? item.name ?? item.id ?? '').toString().toLowerCase()
 
@@ -23,6 +22,7 @@ export const PastaFilters = () => {
     const name = getItemName(item)
     return availableArr.some((av) => av.toString().toLowerCase() === name)
   }
+
   return (
     <div className="w-fit ml-auto mr-5  gap-5  flex " id="filters-container">
       <CategoryFilter

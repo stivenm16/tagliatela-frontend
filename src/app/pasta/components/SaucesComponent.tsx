@@ -16,7 +16,8 @@ import { Skeleton } from '@/components/ui/skeleton'
 import axiosInstance from '@/lib/axios'
 import { Sauce } from '@/types/global'
 import Image from 'next/image'
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
+import { matchesFilter } from '../pasta/page'
 import NewDishFloatingButton from './NewDishFloatingButton'
 
 interface SaucesComponentProps {
@@ -76,14 +77,13 @@ const SaucesComponent = ({ sauces, selectedPasta }: SaucesComponentProps) => {
   const [saucesToRender, setSaucesToRender] = useState<Sauce[]>(sauces)
   const { filters, updateFilter, pasta } = useFilters()
 
-  console.log(filters, 'filters in sauces component')
   useEffect(() => {
     if (pasta) {
       const filtersFromSauces = extractSauceFilters(pasta)
-      console.log(filtersFromSauces, 'filters from sauces')
       updateFilter('filtersAvaible', filtersFromSauces)
     }
   }, [pasta])
+
   const getSauceData = async (id: number) => {
     const response = await axiosInstance.get(`/sauce/${id}`, {
       withCredentials: true,
@@ -109,6 +109,21 @@ const SaucesComponent = ({ sauces, selectedPasta }: SaucesComponentProps) => {
       })),
     )
 
+  const saucesFitlered = useMemo(() => {
+    return (
+      saucesToRender &&
+      saucesToRender.filter((sauce) => {
+        const { filters: filterSauce } = sauce as any
+        return (
+          matchesFilter(filterSauce?.diets, filters.diet) &&
+          matchesFilter(filterSauce?.allergens, filters.allergen) &&
+          matchesFilter(filterSauce?.flavors, filters.flavour) &&
+          matchesFilter(filterSauce?.ingredients, filters.ingredients) &&
+          matchesFilter(filterSauce?.basePasta, filters.basePasta)
+        )
+      })
+    )
+  }, [saucesToRender, filters])
   function sortByMatch(list: any, match?: string) {
     if (!match) return list
     return [...list].sort((a, b) => {
@@ -117,12 +132,13 @@ const SaucesComponent = ({ sauces, selectedPasta }: SaucesComponentProps) => {
       return aMatch === bMatch ? 0 : aMatch ? -1 : 1
     })
   }
+
   const backgroundCardColor = (type: string) =>
     type !== 'ripiena' ? 'bg-[rgba(132,133,105,0.6)]' : 'bg-[#F3D1D1]'
   return (
     <div className="">
       <div className="flex gap-5 gap-y-4 flex-wrap px-6 justify-start w-fit">
-        {saucesToRender.map((sauce) => (
+        {saucesFitlered.map((sauce) => (
           <Dialog key={sauce.id}>
             <DialogContent>
               <Card

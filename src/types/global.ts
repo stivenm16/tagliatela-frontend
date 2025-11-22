@@ -16,6 +16,8 @@ export interface Sauce {
     ingredients: any[]
     diets: any[]
     allergens: any[]
+    flavors?: any[]
+    basePasta?: any[]
   }
   pastas?: RelatedPastas[]
 }

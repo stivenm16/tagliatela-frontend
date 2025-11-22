@@ -44,6 +44,17 @@ export interface FilterItem {
   id: number
   name: string
 }
+export const matchesFilter = (
+  dishValues: { name: string }[] | undefined,
+  filterValue: string | undefined | null,
+) => {
+  if (filterValue && dishValues) {
+    return dishValues.some(
+      (value) => value.name.toLowerCase() === filterValue.toLowerCase(),
+    )
+  }
+  return true
+}
 
 const Page = () => {
   const [pastas, setPastas] = useState<PastaResponse[]>()
@@ -89,17 +100,7 @@ const Page = () => {
     getContent()
   }, [])
 
-  const matchesFilter = (
-    dishValues: { name: string }[] | undefined,
-    filterValue: string | undefined | null,
-  ) => {
-    if (filterValue && dishValues) {
-      return dishValues.some(
-        (value) => value.name.toLowerCase() === filterValue.toLowerCase(),
-      )
-    }
-    return true
-  }
+ 
 
   const pastasTradizionale = useMemo(() => {
     return (

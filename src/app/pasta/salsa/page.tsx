@@ -81,10 +81,11 @@ const Page = () => {
             sauces &&
             sauces.map((sauce) => ({
               ...sauce,
+              filters: sauce.filter,
               description: sauce.description,
               title: sauce.name,
               highlightedContent: '',
-              isSuggested: sauce.isRecommended,
+              isSuggested: sauce.isSuggested,
               isNew: sauce.isNew,
             }))
           }
