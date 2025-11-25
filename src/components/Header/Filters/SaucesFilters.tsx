@@ -6,10 +6,12 @@ import DietIcon from '@/assets/svgs/filters/diet/diet-icon.svg'
 import IngredientsIcon from '@/assets/svgs/filters/ingredients/ingredients-icon.svg'
 
 //Flavours Icons
+import BasePastaIcon from '@/assets/svgs/filters/base-pasta/base-pasta-icon.svg'
 import FlavoursIcon from '@/assets/svgs/filters/flavours/flavours-icon.svg'
 import { CategoryFilter } from './CategoryFitler'
 import {
   allergensFilters,
+  basePastaFilters,
   dietFilters,
   flavoursFilters,
   ingredientsFilters,
@@ -31,6 +33,7 @@ export const SaucesFilters = () => {
     const name = getItemName(item)
     return availableArr.some((av) => av.toString().toLowerCase() === name)
   }
+
   return (
     <div className="w-fit ml-auto mr-5  gap-5  flex " id="filters-container">
       <CategoryFilter
@@ -71,13 +74,25 @@ export const SaucesFilters = () => {
         page="pasta"
       />
       <CategoryFilter
+        filterBy="basePasta"
+        triggerIcon={BasePastaIcon}
+        items={basePastaFilters.filter((item) => {
+          if (!filters.filtersAvaible?.basePasta) return item
+          return filters.filtersAvaible?.basePasta?.some(
+            (available: string) =>
+              available.toLowerCase() === item.id.toLowerCase(),
+          )
+        })}
+        page="pasta"
+      />
+      <CategoryFilter
         filterBy="flavour"
         triggerIcon={FlavoursIcon}
         items={flavoursFilters.filter((item) => {
           const name = getItemName(item)
           if (filters.family === 'le-pizze' && name === 'crujiente')
             return false
-          if (filters.family === 'postres' && name === 'dulce') return false
+          if (filters.family === 'postres' && name === 'dulce') return []
           if (!isInAvailable(filters.filtersAvaible?.flavors, item)) {
             return false
           }

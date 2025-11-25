@@ -2,20 +2,19 @@
 import WineImageRerence from '@/assets/images/vini-reference-image.png'
 import BeveragesIcon from '@/assets/svgs/beverages-card-icon.svg'
 import IngredientsIcon from '@/assets/svgs/filters/ingredients/ingredients-icon.svg'
-import Alert from '@/components/Alert'
+import CloseButton from '@/components/buttons/AlertCloseButton'
 import Card from '@/components/Cards/Card'
 import { WineDialogContent } from '@/components/Dialog/BeveragesDialog'
 import { ClickableItem } from '@/components/Dialog/ClickableItem'
 import GeneralDialogContent from '@/components/Dialog/GeneralDialog'
 import OverlayPopup from '@/components/Dialog/OverlayPopup'
-import {
-  FilterAvaible,
-  useFilters,
-} from '@/components/Layout/context/FilterContext'
+import { useFilters } from '@/components/Layout/context/FilterContext'
 import { Skeleton } from '@/components/ui/skeleton'
+import useIsLandscape from '@/hooks/useIsLandscape'
 import axiosInstance from '@/lib/axios'
 import { EntityT } from '@/types/global'
-import { JSX, useCallback, useEffect, useMemo, useState } from 'react'
+import { extractUniqueFilterData, matchesFilter } from '@/utils/functions'
+import { JSX, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import DishCard from './DishCard'
 
 export interface Ingredient extends EntityT {
@@ -68,34 +67,31 @@ export interface Dish extends EntityT {
   type: string
 }
 
-function extractUniqueFilterData(dishes: any): FilterAvaible {
-  const result = {
-    allergens: new Set<string>(),
-    diets: new Set<string>(),
-    flavors: new Set<string>(),
-    ingredients: new Set<string>(),
+const AlertSuggested = ({
+  text,
+  isClosed,
+}: {
+  text: string
+  isClosed: boolean
+}) => {
+  const [open, setOpen] = useState(true)
+  if (isClosed) setOpen(false)
+  const onCloseDialog = () => {
+    setOpen(false)
   }
-
-  for (const dish of dishes) {
-    const { filter, ingredients } = dish
-
-    filter?.allergens?.forEach((a: any) => result.allergens.add(a.name))
-    filter?.diets?.forEach((d: any) => result.diets.add(d.name))
-
-    if (filter?.flavors)
-      Object.values(filter.flavors).forEach((f: any) => {
-        if (typeof f?.name === 'string') result.flavors.add(f.name)
-      })
-
-    ingredients?.forEach((i: any) => result.ingredients.add(i.name))
-  }
-
-  return {
-    allergens: [...result.allergens],
-    diets: [...result.diets],
-    flavors: [...result.flavors],
-    ingredients: [...result.ingredients],
-  }
+  return (
+    <OverlayPopup open={open} onClose={() => {}}>
+      <div className="h-full w-full justify-center items-center flex  ">
+        <div
+          className={`p-5  bg-white/80 backdrop-blur-sm uppercase rounded-xl md:w-[26rem] w-[23rem] px-10rounded-2xl text-center shadow-lg relative`}
+        >
+          <div>
+            <span>{text}</span>
+          </div>
+        </div>
+      </div>
+    </OverlayPopup>
+  )
 }
 
 const suggestionsMessage = (
@@ -115,6 +111,11 @@ const Page = () => {
   const [open, setOpen] = useState(true)
   const [alertMessage, setAlertMessage] =
     useState<JSX.Element>(suggestionsMessage)
+  const [isClosedMainAlert, setIsClosedMainAlert] = useState(false)
+
+  const [isVerticalScroll, setIsVerticalScroll] = useState(false)
+  const gridRef = useRef<HTMLDivElement>(null)
+  const isLandscape = useIsLandscape()
 
   const { filters, updateFilter } = useFilters()
 
@@ -139,41 +140,6 @@ const Page = () => {
       setAlertMessage(supervisorMessage)
     }
   }, [filters.allergen])
-
-  useEffect(() => {
-    if (filters.family) {
-      setIsLoading(true)
-      getContent()
-        .then((data) => {
-          if (data.length === 0) {
-            setDishes([])
-          } else {
-            const filters = extractUniqueFilterData(data)
-            updateFilter('filtersAvaible', filters)
-            setDishes(data)
-          }
-        })
-        .catch((error) => {
-          console.error('Error fetching dishes:', error)
-          setDishes([])
-        })
-        .finally(() => {
-          setIsLoading(false)
-        })
-    }
-  }, [filters.family, getContent])
-
-  const matchesFilter = (
-    dishValues: { name: string }[] | undefined,
-    filterValue: string | undefined | null,
-  ) => {
-    if (filterValue && dishValues) {
-      return dishValues.some(
-        (value) => value.name.toLowerCase() === filterValue.toLowerCase(),
-      )
-    }
-    return true
-  }
 
   // This filter implementation will now work as expected
   const filteredDishes = useMemo(() => {
@@ -202,6 +168,64 @@ const Page = () => {
     }
   }, [filteredDishes])
 
+  useEffect(() => {
+    if (filters.family) {
+      setIsLoading(true)
+      getContent()
+        .then((data) => {
+          if (data.length === 0) {
+            setDishes([])
+          } else {
+            const filters = extractUniqueFilterData(data)
+            updateFilter('filtersAvaible', filters)
+            setDishes(data)
+          }
+        })
+        .catch((error) => {
+          console.error('Error fetching dishes:', error)
+          setDishes([])
+        })
+        .finally(() => {
+          setIsLoading(false)
+        })
+    }
+  }, [filters.family, getContent])
+
+  useEffect(() => {
+    const el = gridRef.current
+    if (!el) return
+
+    const updateScrollDirection = () => {
+      const hasVertical = el.scrollHeight > el.clientHeight
+      const hasHorizontal = el.scrollWidth > el.clientWidth
+
+      if (hasVertical && !hasHorizontal) {
+        setIsVerticalScroll(true)
+      } else if (hasHorizontal && !hasVertical) {
+        setIsVerticalScroll(false)
+      } else if (hasVertical && hasHorizontal) {
+        setIsVerticalScroll(true) // or false, depending on what “dominant” means in your case
+      } else {
+        setIsVerticalScroll(false)
+      }
+    }
+
+    updateScrollDirection()
+
+    const resizeObserver = new ResizeObserver(updateScrollDirection)
+    resizeObserver.observe(el)
+
+    const mutationObserver = new MutationObserver(updateScrollDirection)
+    mutationObserver.observe(el, { childList: true, subtree: true })
+
+    window.addEventListener('resize', updateScrollDirection)
+
+    return () => {
+      resizeObserver.disconnect()
+      mutationObserver.disconnect()
+      window.removeEventListener('resize', updateScrollDirection)
+    }
+  }, [filteredDishes])
   const onCloseDialog = () => {
     setOpen(false)
     setAlertMessage(suggestionsMessage)
@@ -210,13 +234,17 @@ const Page = () => {
   return (
     <div className="">
       {!filters.family ? (
-        <Alert closeButton={false} onClose={() => {}}>
-          POR FAVOR SELECCIONA LA FAMILIA DE PLATOS DESEADA
-        </Alert>
+        <AlertSuggested
+          text="POR FAVOR SELECCIONA LA FAMILIA DE PLATOS DESEADA"
+          isClosed={isClosedMainAlert}
+        />
       ) : (
         <>
           {isLoading ? (
-            <div className="grid grid-cols-3 gap-5 px-6 mt-10">
+            <div className="grid grid-cols-[repeat(auto-fill,minmax(14.5rem,1fr))] gap-x-2 px-4 gap-y-5 py-10 pt-6">
+              <Skeleton className="h-72 w-[220px] bg-white/50" />
+              <Skeleton className="h-72 w-[220px] bg-white/50" />
+              <Skeleton className="h-72 w-[220px] bg-white/50" />
               <Skeleton className="h-72 w-[220px] bg-white/50" />
               <Skeleton className="h-72 w-[220px] bg-white/50" />
               <Skeleton className="h-72 w-[220px] bg-white/50" />
@@ -230,18 +258,26 @@ const Page = () => {
           ) : (
             <>
               <OverlayPopup open={open} onClose={onCloseDialog}>
-                <div className="bg-red-200 w-full h-screen rounded shadow-lg">
-                  <Alert
-                    closeButton={true}
-                    applyBorder={true}
-                    onClose={onCloseDialog}
-                  >
-                    {alertMessage}
-                  </Alert>
+                <div
+                  className={`p-5  bg-white/80 backdrop-blur-sm uppercase  md:w-[26rem] w-[23rem] px-10 ${'border-2 border-red-600'} rounded-2xl text-center shadow-lg relative`}
+                >
+                  <span>{alertMessage}</span>
+                  <CloseButton onClick={onCloseDialog} />
                 </div>
               </OverlayPopup>
-              <div className="flex flex-col gap-3  ">
-                <div className="grid  grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-x-2 px-4 gap-y-5 py-10 pb-32 mt-2 overflow-y-auto h-[950px]">
+              <div className="flex flex-col gap-3 ">
+                <div
+                  className={`grid grid-cols-[repeat(auto-fill,minmax(14.5rem,1fr))] gap-x-2 px-4 gap-y-5 pt-4 overflow-y-auto ${
+                    filteredDishes && filteredDishes.length > 3 && !isLandscape
+                      ? 'pb-40'
+                      : ''
+                  } ${
+                    isLandscape && filteredDishes.length > 4 ? 'pb-[25rem]' : ''
+                  }
+                    h-[950px]
+                  `}
+                  ref={gridRef}
+                >
                   {filteredDishes.length > 0 &&
                     filteredDishes
                       .sort(

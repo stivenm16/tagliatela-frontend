@@ -33,7 +33,9 @@ const BeveragesDialogContent = ({
         />
       ) : null}
       <div className="flex  flex-col gap-4">
-        <span className="capitalize text-3xl font-bold ml-3">{title}</span>
+        <span className="capitalize text-3xl max-w-72 font-bold ml-3">
+          {title}
+        </span>
         {origin && showFlag && (
           <div className="flex gap-3 px-3">
             {origin.toLowerCase() === 'italiano' ? (
@@ -113,7 +115,7 @@ export const WineDialogContent = ({
                 <span className="text-beverages-main ml-3 mb-2 font-bold">
                   Maridaje:
                 </span>
-                <div className="flex flex-col h-56 bg-gray-100 px-3 py-2 rounded-lg overflow-y-scroll ">
+                <div className="flex flex-col h-56 bg-gray-100 w-full px-3 py-2 rounded-lg overflow-y-scroll ">
                   {pairing.map((ingredient, index) => (
                     <span className="" key={index}>
                       {ingredient}

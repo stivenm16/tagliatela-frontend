@@ -3,7 +3,9 @@
 import colorMatcher from '@/utils/colorMatcher'
 import { ROUTES } from '@/utils/constants'
 import { usePathname, useRouter } from 'next/navigation'
+import { useEffect } from 'react'
 import { ArrowLeft } from '../Icons/ArrowLeft'
+import { useFilters } from '../Layout/context/FilterContext'
 import { PastaFilters } from './Filters/PastaFilters'
 import { SaucesFilters } from './Filters/SaucesFilters'
 import { SuggestedFilters } from './Filters/SuggestedFilters'
@@ -34,6 +36,7 @@ export const Header = () => {
   const path = usePathname()
   const router = useRouter()
   const arrayPath = path.split('/').filter(Boolean)
+  const { updateFilter } = useFilters()
 
   const route = arrayPath[0] as ROUTES
   const handleGoBack = () => {
@@ -44,13 +47,23 @@ export const Header = () => {
     }
   }
 
+  useEffect(() => {
+    // Clear filters when navigating to a different main route
+    updateFilter('diet', null)
+    updateFilter('allergen', null)
+    updateFilter('ingredients', null)
+    updateFilter('flavour', null)
+    updateFilter('family', null)
+    updateFilter('basePasta', null)
+  }, [route])
+
   return (
     <div
       style={{
         backgroundColor: colorMatcher(route),
         color: 'white',
       }}
-      className={`relative uppercase h-20  z-1 justify-between flex gap-5  items-center bg-neutral-50`}
+      className={`fixed w-full top-0 uppercase h-20  z-10 justify-between flex gap-5  items-center bg-neutral-50`}
     >
       <div className="flex  gap-5">
         <div onClick={handleGoBack} className="cursor-pointer ml-5">

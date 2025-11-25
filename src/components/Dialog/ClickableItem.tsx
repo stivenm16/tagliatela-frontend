@@ -23,11 +23,11 @@ export const ClickableItem = ({
   customDialog,
 }: ItemProps) => {
   return (
-    <li>
+    <div>
       <Dialog>
         <DialogTrigger asChild>
           <div
-            className="flex mr-auto gap-4"
+            className="flex mr-auto gap-4 items-center"
             onClick={(e) => e.stopPropagation()}
           >
             {lightIcon ? <InfoLight /> : <InfoDark />}
@@ -53,6 +53,6 @@ export const ClickableItem = ({
           )}
         </DialogContent>
       </Dialog>
-    </li>
+    </div>
   )
 }

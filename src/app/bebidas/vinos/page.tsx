@@ -1,11 +1,6 @@
-'use client'
-import WineThumbnail from '@/assets/images/vini-reference-image.png'
-import CardBeverages from '@/components/Cards/CardBeverages'
-import { WineDialogContent } from '@/components/Dialog/BeveragesDialog'
 import Link from 'next/link'
-import { useState } from 'react'
 
-interface WineProps {
+export interface WineProps {
   thumbnail: string
   title: string
   origin: string
@@ -80,56 +75,54 @@ const fakeItalianWines: WineProps[] = [
   },
 ]
 
-const WinesWrapper = ({ wines }: { wines: WineProps[] }) => {
-  return (
-    <div className="grid grid-cols-3 gap-5">
-      {wines.map((wine, index) => (
-        <CardBeverages
-          key={index}
-          title={wine.title}
-          origin={wine.origin}
-          modalContent={
-            <WineDialogContent
-              qualities={wine.qualities}
-              pairing={wine.pairing}
-              title={wine.title}
-              origin={wine.origin}
-              img={WineThumbnail}
-              description="lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
-            />
-          }
-          img={WineThumbnail}
-        />
-      ))}
-    </div>
-  )
-}
+// const WinesWrapper = ({ wines }: { wines: WineProps[] }) => {
+//   return (
+//     <div className="grid grid-cols-3 gap-5">
+//       {wines.map((wine, index) => (
+//         <CardBeverages
+//           key={index}
+//           title={wine.title}
+//           origin={wine.origin}
+//           modalContent={
+//             <WineDialogContent
+//               qualities={wine.qualities}
+//               pairing={wine.pairing}
+//               title={wine.title}
+//               origin={wine.origin}
+//               img={WineThumbnail}
+//               description="lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+//             />
+//           }
+//           img={WineThumbnail}
+//         />
+//       ))}
+//     </div>
+//   )
+// }
 const Page = () => {
-  const [wineType, setWineType] = useState<number | null>(null)
-  const [selectedTab, setSelectedTab] = useState(0)
-  const [spanishWines, setSpanishWines] = useState(fakeSpanishWines)
-  const [italianWines, setItalianWines] = useState(fakeItalianWines)
-  const wineTypes = [
-    {
-      value: '0',
-      label: 'Vini bianchi',
-    },
-    {
-      value: '1',
-      label: 'Vini rosati',
-    },
-    {
-      value: '2',
-      label: 'Vini rossi',
-    },
-    {
-      value: '3',
-      label: 'Spumanti',
-    },
-  ]
-  const handleChange = (value: number | null) => {
-    setWineType(value)
-  }
+  // const [wineType, setWineType] = useState<number | null>(null)
+  // const [selectedTab, setSelectedTab] = useState(0)
+  // const [spanishWines, setSpanishWines] = useState(fakeSpanishWines)
+  // const [italianWines, setItalianWines] = useState(fakeItalianWines)
+  // const wineTypes = [
+  //   {
+  //     value: '0',
+  //     label: 'Vini bianchi',
+  //   },
+  //   {
+  //     value: '1',
+  //     label: 'Vini rosati',
+  //   },
+  //   {
+  //     value: '2',
+  //     label: 'Vini rossi',
+  //   },
+  //   {
+  //     value: '3',
+  //     label: 'Spumanti',
+  //   },
+  // ]
+
   return (
     <div>
       <span className="uppercase text-pasta-main font-bold text-lg mx-auto w-full flex justify-center mt-20">

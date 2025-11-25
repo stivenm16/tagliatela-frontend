@@ -2,6 +2,7 @@
 import MinusIcon from '@/assets/svgs/minus-icon.svg'
 import SaveIcon from '@/assets/svgs/SaveIcon.svg'
 import TrashIcon from '@/assets/svgs/TrashIcon.svg'
+import useIsLandscape from '@/hooks/useIsLandscape'
 import axiosInstance from '@/lib/axios'
 import { FamilyType } from '@/types/global'
 import { getDishImage } from '@/utils/getImage'
@@ -107,7 +108,7 @@ const SelectedDishCard = ({
         </div>
       ) : (
         <>
-          <div className="relative">
+          <div className="relative my-1">
             <CloseButton
               onClick={() => removeDish(id, category)}
               variant={variant}
@@ -123,7 +124,7 @@ const SelectedDishCard = ({
           </div>
 
           <h2
-            className="text-center text-md uppercase font-semibold"
+            className="text-center text-md uppercase font-semibold mb-2"
             style={{
               color:
                 variant === 'check-meeting'
@@ -176,6 +177,10 @@ const initialState: SelectedDishes[] = [
     name: FamilyType.CUORE_FELICE,
     dishes: [],
   },
+  {
+    name: FamilyType.VINAGRETAS,
+    dishes: [],
+  },
 ]
 
 const Skeletons = ({ variant }: { variant: CMAndNDLayoutProps['variant'] }) => {
@@ -200,6 +205,7 @@ const CMAndNDLayout = ({ title, variant }: CMAndNDLayoutProps) => {
       ? 'checkmeeting/recommended'
       : 'unavailable/disable'
 
+  const isLandscape = useIsLandscape()
   const getContent = async () => {
     const response = await axiosInstance.get(
       `checkmeeting?is_checkmeeting=${variant === 'check-meeting'}`,
@@ -349,7 +355,11 @@ const CMAndNDLayout = ({ title, variant }: CMAndNDLayoutProps) => {
               <SaveIcon />
             </div>
           </div>
-          <div className="flex flex-col mt-2 h-[45rem] pb-20 overflow-y-auto  w-full mb-2">
+          <div
+            className={`flex flex-col mt-2 ${
+              isLandscape ? 'h-[30rem]' : 'h-[45rem]'
+            } pb-20 overflow-y-auto  w-full mb-2`}
+          >
             {isLoading ? (
               <div className="h-full">
                 {Array.from({ length: 4 }).map((_, i) => (
@@ -366,7 +376,7 @@ const CMAndNDLayout = ({ title, variant }: CMAndNDLayoutProps) => {
                 <div key={i} className="flex flex-col items-center gap-3 px-2">
                   {s.dishes.length > 0 && (
                     <h2
-                      className={`text-center uppercase mt-8 font-bold  text-lg ${
+                      className={`text-center uppercase font-bold  text-lg ${
                         variant === 'check-meeting'
                           ? 'text-checkmeeting-main'
                           : 'text-not-available-main'
@@ -408,8 +418,16 @@ const CMAndNDLayout = ({ title, variant }: CMAndNDLayoutProps) => {
             })}
           </div>
         </div>
-        <div className="border-r border-checkmeeting-main  h-[45rem]" />
-        <div className="w-full flex flex-col gap-6 items-center">
+        <div
+          className={`border-r border-checkmeeting-main  ${
+            isLandscape ? 'h-[30rem]' : 'h-[45rem]'
+          }`}
+        />
+        <div
+          className={`w-full flex flex-col ${
+            isLandscape ? 'gap-3' : 'gap-6'
+          } items-center`}
+        >
           {fields.length > 0 ? (
             fields.map((field, i) => (
               <CustomMultiSelect

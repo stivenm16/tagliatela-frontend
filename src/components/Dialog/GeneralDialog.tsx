@@ -1,4 +1,5 @@
 import ItalianImg from '@/assets/images/italian-flag.png'
+import useIsLandscape from '@/hooks/useIsLandscape'
 import { getDishImage } from '@/utils/getImage'
 import { StaticImport } from 'next/dist/shared/lib/get-img-props'
 import Image from 'next/image'
@@ -20,6 +21,7 @@ const GeneralDialogContent = ({
   origin,
 }: GeneralDialogProps) => {
   const [imgSrc, setImgSrc] = useState<StaticImport | string>('')
+  const isLandscape = useIsLandscape()
   useEffect(() => {
     let isMounted = true
     getDishImage(img.name, img.type, '424x400').then((src) => {
@@ -35,7 +37,7 @@ const GeneralDialogContent = ({
         <Image
           src={imgSrc}
           alt={title}
-          width={420}
+          width={isLandscape ? 330 : 420}
           height={200}
           className="rounded-lg mb-4 overflow-hidden self-center shadow-md"
         />
@@ -51,7 +53,13 @@ const GeneralDialogContent = ({
         </div>
       )}
 
-      <p className=" text-xl mt-2 max-w-[27rem] text-center">{description}</p>
+      <p
+        className={` text-xl mt-2 ${
+          isLandscape ? 'max-w-[20rem]' : 'max-w-[27rem]'
+        } text-center`}
+      >
+        {description}
+      </p>
     </div>
   )
 }

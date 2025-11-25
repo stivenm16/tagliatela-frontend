@@ -40,6 +40,17 @@ export const CustomMultiSelect: React.FC<CustomMultiSelectProps> = ({
     return () => document.removeEventListener('mousedown', handleClickOutside)
   }, [])
 
+  const [openUpwards, setOpenUpwards] = useState(false)
+
+  useEffect(() => {
+    if (!open || !wrapperRef.current) return
+
+    const rect = wrapperRef.current.getBoundingClientRect()
+    const spaceBelow = window.innerHeight - rect.bottom
+    const dropdownHeight = 200 // same as your max-h-96 (approx 384px)
+
+    setOpenUpwards(spaceBelow < dropdownHeight)
+  }, [open])
   const toggleSelection = (index: number) => {
     if (selectedIndices.includes(index)) {
       onChange(selectedIndices.filter((i) => i !== index))
@@ -82,11 +93,20 @@ export const CustomMultiSelect: React.FC<CustomMultiSelectProps> = ({
       </button>
 
       <div
-        className={`absolute z-10 mt-2 w-full rounded-md bg-white border border-gray-200 shadow-xl overflow-hidden transform transition-all duration-300 origin-top ${
-          open
-            ? 'opacity-100 scale-y-100 max-h-96 overflow-y-scroll'
-            : 'opacity-0 scale-y-95 max-h-0 pointer-events-none'
-        }`}
+        className={`
+          absolute z-10 w-full rounded-md bg-white border border-gray-200 shadow-xl 
+          overflow-hidden transform transition-all duration-300 
+          ${
+            openUpwards
+              ? 'bottom-full mb-2 origin-bottom'
+              : 'mt-2 top-full origin-top'
+          }
+          ${
+            open
+              ? 'opacity-100 scale-y-100 max-h-56 overflow-y-scroll'
+              : 'opacity-0 scale-y-95 max-h-0 pointer-events-none'
+          }
+        `}
       >
         <ul className="p-4 space-y-3">
           {options.map((option, idx) => (

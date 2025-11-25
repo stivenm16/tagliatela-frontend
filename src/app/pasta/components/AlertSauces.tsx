@@ -4,7 +4,7 @@ import GlutenRestrictionIcon from '@/assets/svgs/sauces/gluten-restriction-icon.
 import MilkRestrictionIcon from '@/assets/svgs/sauces/milk-restriction-icon.svg'
 import SojaRestrictionIcon from '@/assets/svgs/sauces/soja-restriction-icon.svg'
 import SulphiteRestrictionIcon from '@/assets/svgs/sauces/sulphite-restriction-icon.svg'
-import Alert from '@/components/Alert'
+import CloseButton from '@/components/buttons/AlertCloseButton'
 import OverlayPopup from '@/components/Dialog/OverlayPopup'
 import { useState } from 'react'
 
@@ -24,8 +24,10 @@ const AlertSauces = () => {
   }
   return (
     <OverlayPopup open={open} onClose={onCloseDialog}>
-      <div className="bg-red-200 w-full h-screen rounded shadow-lg">
-        <Alert closeButton={true} applyBorder={true} onClose={onCloseDialog}>
+      <div className="h-full w-full justify-center items-center flex  ">
+        <div
+          className={`p-5  bg-white/80 backdrop-blur-sm uppercase  md:w-[26rem] w-[23rem] px-10 ${'border-2 border-red-600'} rounded-2xl text-center shadow-lg relative`}
+        >
           <div>
             <span>
               No se recomienda consumir pasta si el cliente tiene alergia a:
@@ -39,7 +41,9 @@ const AlertSauces = () => {
               Por favor pregunta si existe alguna restriccion alimentaria.
             </span>
           </div>
-        </Alert>
+
+          <CloseButton onClick={onCloseDialog} />
+        </div>
       </div>
     </OverlayPopup>
   )

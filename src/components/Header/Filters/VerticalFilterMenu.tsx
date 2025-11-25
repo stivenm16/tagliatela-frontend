@@ -79,8 +79,6 @@ const VerticalFilterItem = ({
     }
   }, [hovered, id])
 
-  console.log(id, '<=====')
-
   return (
     <div
       className="relative flex items-center "

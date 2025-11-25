@@ -19,7 +19,7 @@ import MustardIcon from '@/assets/svgs/filters/alergens/mustard-icon.svg'
 import NutsIcon from '@/assets/svgs/filters/alergens/nuts-icon.svg'
 import SesameIcon from '@/assets/svgs/filters/alergens/sesame-icon.svg'
 import SulphitesIcon from '@/assets/svgs/filters/alergens/sulphite-icon.svg'
-
+import SojaIcon from '@/assets/svgs/sauces/soja-restriction-icon.svg'
 // Diet Icons
 import PregnantIcon from '@/assets/svgs/filters/diet/pregnant-icon.svg'
 import VegetarianIcon from '@/assets/svgs/filters/diet/vegetarian-icon.svg'
@@ -163,6 +163,12 @@ export const allergensFilters: FilterItem[] = [
       id: 'lacteos',
       label: 'Lácteos',
       icon: MilkIcon,
+      selectedColorIcon: '#93CBDC',
+    },
+    {
+      id: 'soja',
+      label: 'Soja',
+      icon: SojaIcon,
       selectedColorIcon: '#93CBDC',
     },
     {

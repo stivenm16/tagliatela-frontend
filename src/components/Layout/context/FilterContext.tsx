@@ -1,13 +1,15 @@
 // context/FilterContext.tsx
 'use client'
 
-import React, { createContext, useContext, useState } from 'react'
+import { usePathname } from 'next/navigation'
+import React, { createContext, useContext, useEffect, useState } from 'react'
 
 export type FilterAvaible = {
   allergens?: string[]
   diets?: string[]
   ingredients?: string[]
   flavors?: string[]
+  basePasta?: string[]
 }
 
 export type Filters = {
@@ -20,6 +22,24 @@ export type Filters = {
   filtersAvaible?: FilterAvaible | null
 }
 
+export interface SauceT {
+  id: number
+  name: string
+  isNew: boolean
+  isRecommended: boolean
+  filters?: any
+}
+
+export type PastaType = 'tradizionale' | 'ripiena'
+export interface PastaT {
+  id: number
+  name: string
+  type: PastaType
+  description: string
+  sauces: SauceT[]
+  ingredients: string[]
+}
+
 type FilterContextType = {
   filters: Filters
   setFilters: React.Dispatch<React.SetStateAction<Filters>>
@@ -29,28 +49,40 @@ type FilterContextType = {
   ) => void
   focusedFilter: keyof Filters | null
   setFocusedFilter: React.Dispatch<React.SetStateAction<keyof Filters | null>>
+  pasta: PastaT | null
+  setPasta: React.Dispatch<React.SetStateAction<PastaT | null>>
+}
+
+const initialFilters: Filters = {
+  diet: null,
+  allergen: null,
+  ingredients: null,
+  flavour: null,
+  family: null,
+  basePasta: null,
+  filtersAvaible: null,
 }
 
 const FilterContext = createContext<FilterContextType | undefined>(undefined)
 
 export const FilterProvider = ({ children }: { children: React.ReactNode }) => {
-  const [filters, setFilters] = useState<Filters>({
-    diet: null,
-    allergen: null,
-    ingredients: null,
-    flavour: null,
-    family: null,
-    basePasta: null,
-    filtersAvaible: null,
-  })
+  const [filters, setFilters] = useState<Filters>(initialFilters)
   const [focusedFilter, setFocusedFilter] = useState<keyof Filters | null>(null)
+  const [pasta, setPasta] = useState<PastaT | null>(null)
+  const pathname = usePathname()
 
   const updateFilter = (
     key: keyof Filters,
     value: string | FilterAvaible | null,
   ) => {
+
     setFilters((prev) => ({ ...prev, [key]: value }))
   }
+
+  useEffect(() => {
+    setFilters(initialFilters)
+    setFocusedFilter(null)
+  }, [pathname])
 
   return (
     <FilterContext.Provider
@@ -60,6 +92,8 @@ export const FilterProvider = ({ children }: { children: React.ReactNode }) => {
         updateFilter,
         focusedFilter,
         setFocusedFilter,
+        pasta,
+        setPasta,
       }}
     >
       {children}

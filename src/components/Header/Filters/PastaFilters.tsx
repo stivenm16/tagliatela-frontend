@@ -22,18 +22,23 @@ export const PastaFilters = () => {
     const name = getItemName(item)
     return availableArr.some((av) => av.toString().toLowerCase() === name)
   }
+
   return (
     <div className="w-fit ml-auto mr-5  gap-5  flex " id="filters-container">
       <CategoryFilter
         filterBy="allergen"
         triggerIcon={AlergensIcon}
-        items={allergensFilters.filter((item) => {
-          if (!filters.filtersAvaible?.allergens) return item
-          return filters.filtersAvaible.allergens?.some(
-            (available: string) =>
-              available.toLowerCase() === item.label.toLowerCase(),
-          )
-        })}
+        items={
+          (filters.filtersAvaible?.allergens &&
+            allergensFilters.filter((item) => {
+              if (!filters.filtersAvaible?.allergens) return item
+              return filters.filtersAvaible.allergens?.some(
+                (available: string) =>
+                  available.toLowerCase() === item.id.toLowerCase(),
+              )
+            })) ||
+          []
+        }
         page="pasta"
       />
       <CategoryFilter
