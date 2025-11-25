@@ -77,13 +77,6 @@ const SaucesComponent = ({ sauces, selectedPasta }: SaucesComponentProps) => {
   const [saucesToRender, setSaucesToRender] = useState<Sauce[]>(sauces)
   const { filters, updateFilter, pasta } = useFilters()
 
-  useEffect(() => {
-    if (pasta) {
-      const filtersFromSauces = extractSauceFilters(pasta)
-      updateFilter('filtersAvaible', filtersFromSauces)
-    }
-  }, [pasta])
-
   const getSauceData = async (id: number) => {
     const response = await axiosInstance.get(`/sauce/${id}`, {
       withCredentials: true,
@@ -133,6 +126,19 @@ const SaucesComponent = ({ sauces, selectedPasta }: SaucesComponentProps) => {
     })
   }
 
+  useEffect(() => {
+    if (!saucesFitlered || saucesFitlered.length === 0) return
+
+    const newFilters = extractSauceFilters({ sauces: saucesFitlered })
+    const oldFilters = filters.filtersAvaible ?? {}
+
+    const isDifferent =
+      JSON.stringify(newFilters) !== JSON.stringify(oldFilters)
+
+    if (isDifferent) {
+      updateFilter('filtersAvaible', newFilters)
+    }
+  }, [saucesFitlered])
   const backgroundCardColor = (type: string) =>
     type !== 'ripiena' ? 'bg-[rgba(132,133,105,0.6)]' : 'bg-[#F3D1D1]'
   return (

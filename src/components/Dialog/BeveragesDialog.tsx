@@ -115,7 +115,7 @@ export const WineDialogContent = ({
                 <span className="text-beverages-main ml-3 mb-2 font-bold">
                   Maridaje:
                 </span>
-                <div className="flex flex-col h-56 bg-gray-100 px-3 py-2 rounded-lg overflow-y-scroll ">
+                <div className="flex flex-col h-56 bg-gray-100 w-full px-3 py-2 rounded-lg overflow-y-scroll ">
                   {pairing.map((ingredient, index) => (
                     <span className="" key={index}>
                       {ingredient}
