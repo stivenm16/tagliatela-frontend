@@ -89,7 +89,7 @@ const Page = () => {
       <div className="flex flex-wrap gap-x-3 px-10 gap-y-28 mt-5">
         {dataToRender && !!dataToRender.length ? (
           <>
-            {dataToRender.map((item) => (
+            {dataToRender.map((item: any) => (
               <div key={item.id}>
                 <Card
                   isFlippable={false}

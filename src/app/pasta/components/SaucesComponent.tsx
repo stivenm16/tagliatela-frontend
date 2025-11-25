@@ -17,8 +17,8 @@ import axiosInstance from '@/lib/axios'
 import { Sauce } from '@/types/global'
 import Image from 'next/image'
 import { useEffect, useMemo, useState } from 'react'
-import { matchesFilter } from '../pasta/page'
 import NewDishFloatingButton from './NewDishFloatingButton'
+import { matchesFilter } from '@/utils/functions'
 
 interface SaucesComponentProps {
   sauces: Sauce[]

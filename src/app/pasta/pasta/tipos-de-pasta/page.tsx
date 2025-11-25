@@ -28,14 +28,18 @@ const Page = () => {
           <SaucesComponent
             toggleSauceSelection={toggleSauceSelection}
             selectedPasta={pasta?.name.toLowerCase() || ''}
-            sauces={(pasta?.sauces as SauceT[]).map((sauce: SauceT) => ({
-              ...sauce,
-              description: 'lorem',
-              title: sauce.name,
-              highlightedContent: '',
-              isSuggested: sauce.isRecommended,
-              isNew: sauce.isNew,
-            }))}
+            sauces={
+              pasta?.sauces
+                ? (pasta.sauces as SauceT[]).map((sauce: SauceT) => ({
+                    ...sauce,
+                    description: 'lorem',
+                    title: sauce.name,
+                    highlightedContent: '',
+                    isSuggested: sauce.isRecommended,
+                    isNew: sauce.isNew,
+                  }))
+                : []
+            }
             selectedSauceId={selectedSauceId}
           />
         </div>

@@ -12,6 +12,7 @@ import { useRouter } from 'next/navigation'
 import { useEffect, useMemo, useState } from 'react'
 import AlertSauces from '../components/AlertSauces'
 import NewDishFloatingButton from '../components/NewDishFloatingButton'
+import { matchesFilter } from '@/utils/functions'
 
 export interface PastaResponse {
   type: PastaType
@@ -43,17 +44,6 @@ export interface PastaFilter {
 export interface FilterItem {
   id: number
   name: string
-}
-export const matchesFilter = (
-  dishValues: { name: string }[] | undefined,
-  filterValue: string | undefined | null,
-) => {
-  if (filterValue && dishValues) {
-    return dishValues.some(
-      (value) => value.name.toLowerCase() === filterValue.toLowerCase(),
-    )
-  }
-  return true
 }
 
 const Page = () => {
@@ -99,8 +89,6 @@ const Page = () => {
   useEffect(() => {
     getContent()
   }, [])
-
- 
 
   const pastasTradizionale = useMemo(() => {
     return (

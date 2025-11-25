@@ -179,7 +179,7 @@ const Page = () => {
             img={WineImageRerence}
             origin={arrayPath}
             description={foundWine().description}
-            pairing={foundWine().dishes.map((d) => d.name)}
+            pairing={foundWine().dishes.map((d: any) => d.name)}
           />
         </div>
       )}

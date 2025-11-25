@@ -78,16 +78,17 @@ const Page = () => {
       ) : (
         <SaucesComponent
           sauces={
-            sauces &&
-            sauces.map((sauce) => ({
-              ...sauce,
-              filters: sauce.filter,
-              description: sauce.description,
-              title: sauce.name,
-              highlightedContent: '',
-              isSuggested: sauce.isSuggested,
-              isNew: sauce.isNew,
-            }))
+            sauces
+              ? sauces.map((sauce) => ({
+                  ...sauce,
+                  filters: sauce.filter,
+                  description: sauce.description,
+                  title: sauce.name,
+                  highlightedContent: '',
+                  isSuggested: sauce.isSuggested,
+                  isNew: sauce.isNew,
+                }))
+              : []
           }
           toggleSauceSelection={toggleSauceSelection}
           selectedSauceId={selectedSauceId}
