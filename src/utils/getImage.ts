@@ -24,7 +24,6 @@ export const getDishImage = async ({
   
     try {
       // Try to import dynamically (only if exists)
-      console.log( `@/assets/images/${family}/${category.toLowerCase()}/${dishName}/${category.toUpperCase()}_${normalized}_${variant}.png`)
       const image = await import(
         /* @vite-ignore */
         `@/assets/images/${family}/${category.toLowerCase()}/${dishName}/${category.toUpperCase()}_${normalized}_${variant}.png`

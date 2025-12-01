@@ -386,9 +386,7 @@ const SaucesComponent = ({ sauces, selectedPasta }: SaucesComponentProps) => {
             sauce={sauce}
             pastasFormatted={pastasFormatted}
             handleSauceSelection={handleSauceSelection}
-            backgroundCardColor={backgroundCardColor(
-              sauce.type?.toLowerCase() ?? '',
-            )}
+            backgroundCardColor={backgroundCardColor}
             sauceSelectedInfo={sauceSelectedInfo}
             selectedPasta={selectedPasta}
           />
