@@ -127,7 +127,11 @@ const DishCard = ({
 
   useEffect(() => {
     let isMounted = true
-    getDishImage(item.name, item.type).then((src) => {
+    getDishImage({
+      dishName: item.name,
+      category: item.type,
+      family: 'dishes',
+    }).then((src) => {
       if (isMounted) setImgSrc(src as any)
     })
     return () => {

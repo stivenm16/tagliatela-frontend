@@ -7,12 +7,14 @@ import {
 } from '@/components/Layout/context/FilterContext'
 import { Skeleton } from '@/components/ui/skeleton'
 import axiosInstance from '@/lib/axios'
+import { matchesFilter } from '@/utils/functions'
+import { getDishImage } from '@/utils/getImage'
+import { StaticImport } from 'next/dist/shared/lib/get-img-props'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { useEffect, useMemo, useState } from 'react'
 import AlertSauces from '../components/AlertSauces'
 import NewDishFloatingButton from '../components/NewDishFloatingButton'
-import { matchesFilter } from '@/utils/functions'
 
 export interface PastaResponse {
   type: PastaType
@@ -46,15 +48,85 @@ export interface FilterItem {
   name: string
 }
 
-const Page = () => {
-  const [pastas, setPastas] = useState<PastaResponse[]>()
+const CardPasta = ({
+  id,
+  description,
+  name,
+  isNew,
+  pairing_sauces,
+  filter,
+  type,
+}: Pasta & { type: 'ripiena' | 'tradizionale' }) => {
+  const [imgSrc, setImgSrc] = useState<StaticImport | string>('')
   const router = useRouter()
-  const { filters, updateFilter, setPasta } = useFilters()
+  const { setPasta } = useFilters()
 
   const navigateToDetails = (pasta: PastaT) => {
     setPasta(pasta)
     router.push('/pasta/pasta/tipos-de-pasta')
   }
+
+  useEffect(() => {
+    let isMounted = true
+    getDishImage({
+      dishName: name,
+      category: type.split(' ')[1],
+      family: 'pastas',
+    }).then((src) => {
+      if (isMounted) setImgSrc(src as any)
+    })
+    return () => {
+      isMounted = false
+    }
+  }, [name])
+
+  return (
+    <div
+      onClick={() => {
+        navigateToDetails({
+          id,
+          description,
+          name,
+          type,
+          sauces: pairing_sauces.map((s: any) => {
+            return {
+              id: s.id,
+              name: s.name,
+              isNew: false,
+              filters: s.filter,
+              isRecommended: s.isSuggested,
+            }
+          }),
+
+          ingredients: filter.ingredients.map((i) => i.name),
+        })
+      }}
+      key={id}
+    >
+      <div className="flex flex-col w-full h-full gap-3 relative">
+        {isNew && <NewDishFloatingButton />}
+        {imgSrc ? (
+          <Image
+            src={imgSrc}
+            alt={description}
+            className="w-full h-40 rounded-xl shadow-lg"
+          />
+        ) : (
+          <Image
+            src={PastaImg}
+            alt={description}
+            className="w-full h-40 rounded-xl shadow-lg"
+          />
+        )}
+        <h2 className="text-center uppercase max-w-40">{name}</h2>
+      </div>
+    </div>
+  )
+}
+const Page = () => {
+  const [pastas, setPastas] = useState<PastaResponse[]>()
+  const { filters, updateFilter } = useFilters()
+
   const getContent = async () => {
     try {
       const response = await axiosInstance.get(`/pasta`, {
@@ -141,42 +213,20 @@ const Page = () => {
                         isNew,
                         pairing_sauces,
                         filter,
+                        imageUrl,
                       }) => (
-                        <div
-                          onClick={() => {
-                            navigateToDetails({
-                              id,
-                              description,
-                              name,
-                              type: pastas[0].type,
-                              sauces: pairing_sauces.map((s: any) => {
-                                return {
-                                  id: s.id,
-                                  name: s.name,
-                                  isNew: s.is_new,
-                                  filters: s.filter,
-                                  isRecommended: s.isSuggested,
-                                }
-                              }),
-                              ingredients: filter.ingredients.map(
-                                (i) => i.name,
-                              ),
-                            })
-                          }}
+                        <CardPasta
                           key={id}
-                        >
-                          <div className="flex flex-col w-full h-full gap-3 relative">
-                            {isNew && <NewDishFloatingButton />}
-                            <Image
-                              src={PastaImg}
-                              alt={description}
-                              className="w-full h-40 rounded-xl shadow-lg"
-                            />
-                            <h2 className="text-center uppercase max-w-40">
-                              {name}
-                            </h2>
-                          </div>
-                        </div>
+                          id={id}
+                          description={description}
+                          name={name}
+                          isNew={isNew}
+                          pairing_sauces={pairing_sauces}
+                          filter={filter}
+                          imageUrl={imageUrl}
+                          thumbnailUrl={imageUrl}
+                          type={pastas[0].type}
+                        />
                       ),
                     )}
                 </div>
@@ -201,43 +251,20 @@ const Page = () => {
                         isNew,
                         pairing_sauces,
                         filter,
+                        imageUrl,
                       }) => (
-                        <div
-                          onClick={() => {
-                            navigateToDetails({
-                              id,
-                              description,
-                              name,
-                              type: pastas[1].type,
-                              sauces: pairing_sauces.map((s: any) => {
-                                return {
-                                  id: s.id,
-                                  name: s.name,
-                                  isNew: false,
-                                  filters: s.filter,
-                                  isRecommended: s.isSuggested,
-                                }
-                              }),
-
-                              ingredients: filter.ingredients.map(
-                                (i) => i.name,
-                              ),
-                            })
-                          }}
+                        <CardPasta
                           key={id}
-                        >
-                          <div className="flex flex-col w-full h-full gap-3 relative">
-                            {isNew && <NewDishFloatingButton />}
-                            <Image
-                              src={PastaImg}
-                              alt={description}
-                              className="w-full h-40 rounded-xl shadow-lg"
-                            />
-                            <h2 className="text-center uppercase max-w-40">
-                              {name}
-                            </h2>
-                          </div>
-                        </div>
+                          id={id}
+                          description={description}
+                          name={name}
+                          imageUrl={imageUrl}
+                          isNew={isNew}
+                          thumbnailUrl={imageUrl}
+                          pairing_sauces={pairing_sauces}
+                          filter={filter}
+                          type={pastas[1].type}
+                        />
                       ),
                     )}
                 </div>

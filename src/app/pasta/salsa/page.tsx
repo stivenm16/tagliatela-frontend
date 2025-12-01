@@ -7,28 +7,12 @@ import { fakeFilters } from '@/utils/data/fakeFilters'
 import { useEffect, useState } from 'react'
 import AlertSauces from '../components/AlertSauces'
 import SaucesComponent from '../components/SaucesComponent'
+import { getDishImage } from '@/utils/getImage'
 
 const Page = () => {
-  const [filters, setFilters] = useState<FilterSaucesOption[]>(fakeFilters)
   const [isLoading, setIsLoading] = useState(true)
   const [sauces, setSauces] = useState<Sauce[] | null>(null)
   const [selectedSauceId, setSelectedSauceId] = useState<number | null>(null)
-  const isLandscape = useIsLandscape()
-  const handleSelectChange = (
-    selectedIndex: number | null,
-    placeHolder: string,
-  ) => {
-    setFilters((prev) =>
-      prev.map((filter) =>
-        filter.placeHolder === placeHolder
-          ? {
-              ...filter,
-              selectedValue: selectedIndex !== null ? [selectedIndex] : [],
-            }
-          : filter,
-      ),
-    )
-  }
 
   const getSauces = async () => {
     const response = await axiosInstance.get(`/sauce`, {

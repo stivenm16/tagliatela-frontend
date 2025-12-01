@@ -24,7 +24,12 @@ const GeneralDialogContent = ({
   const isLandscape = useIsLandscape()
   useEffect(() => {
     let isMounted = true
-    getDishImage(img.name, img.type, '424x400').then((src) => {
+    getDishImage({
+      dishName: img.name,
+      category: img.type,
+      variant: '424x400',
+      family: 'dishes',
+    }).then((src) => {
       if (isMounted) setImgSrc(src as any)
     })
     return () => {
