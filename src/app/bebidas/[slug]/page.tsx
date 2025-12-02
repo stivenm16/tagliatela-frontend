@@ -1,54 +1,61 @@
 'use client'
 
 import CocktailImg from '@/assets/images/cocktail-reference.png'
-import SangriaImg from '@/assets/images/sangria-reference.png'
 
 import CardBeverages from '@/components/Cards/CardBeverages'
 import BeveragesDialogContent from '@/components/Dialog/BeveragesDialog'
 import { Skeleton } from '@/components/ui/skeleton'
 import useIsLandscape from '@/hooks/useIsLandscape'
 import axiosInstance from '@/lib/axios'
+import { getDishImage } from '@/utils/getImage'
 import { usePathname } from 'next/navigation'
 import { useEffect, useState } from 'react'
 
-const DummySangria = () => {
-  return (
-    <CardBeverages
-      title="Sangría di lambrusco"
-      origin="Italiano"
-      classNameModal="w-[20rem]"
-      modalContent={
-        <BeveragesDialogContent
-          title="Sangría di lambrusco"
-          origin="Italiano"
-          img={SangriaImg}
-          description="lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
-          showFlag
-        />
-      }
-      showFlag
-      img={SangriaImg}
-    />
-  )
-}
-const DummyCocktail = () => {
-  return (
-    <CardBeverages
-      title="Aperol Spritz"
-      origin="Italiano"
-      modalContent={
-        <BeveragesDialogContent
-          title="Aperol Spritz"
-          origin="Italiano"
-          img={CocktailImg}
-          description="lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
-        />
-      }
-      img={CocktailImg}
-    />
-  )
-}
+const CardBeverageItem = ({ beverage, category, showFlag }: any) => {
+  const [imgSrc, setImgSrc] = useState<string>('')
+  const [fullImgSrc, setFullImgSrc] = useState<string>('')
+  useEffect(() => {
+    let isMounted = true
+    getDishImage({
+      dishName: beverage.name,
+      category,
+      family: 'beverages',
+      variant: '200x320',
+    }).then((src) => {
+      if (isMounted) setImgSrc(src as any)
+    })
 
+    getDishImage({
+      dishName: beverage.name,
+      category,
+      family: 'beverages',
+      variant: '240x440',
+    }).then((src) => {
+      if (isMounted) setFullImgSrc(src as any)
+    })
+    return () => {
+      isMounted = false
+    }
+  }, [beverage.name])
+  return (
+    <CardBeverages
+      key={beverage.id}
+      title={beverage.name}
+      origin={beverage.origin ?? 'Italiano'}
+      modalContent={
+        <BeveragesDialogContent
+          title={beverage.name}
+          origin={beverage.origin ?? 'Italiano'}
+          description={beverage.description}
+          img={fullImgSrc || CocktailImg}
+          showFlag={showFlag}
+        />
+      }
+      showFlag={showFlag}
+      img={imgSrc || CocktailImg}
+    />
+  )
+}
 const BeveragesRenderItems = ({
   beverages,
   beverageType,
@@ -66,19 +73,11 @@ const BeveragesRenderItems = ({
           } gap-8`}
         >
           {beverages.map((beverage) => (
-            <CardBeverages
+            <CardBeverageItem
               key={beverage.id}
-              title={beverage.name}
-              origin={beverage.origin ?? 'Italiano'}
-              modalContent={
-                <BeveragesDialogContent
-                  title={beverage.name}
-                  origin={beverage.origin ?? 'Italiano'}
-                  description={beverage.description}
-                  img={CocktailImg}
-                />
-              }
-              img={CocktailImg}
+              beverage={beverage}
+              category="cocteles"
+              showFlag={false}
             />
           ))}
         </div>
@@ -89,22 +88,11 @@ const BeveragesRenderItems = ({
           } gap-8`}
         >
           {beverages.map((beverage) => (
-            <CardBeverages
+            <CardBeverageItem
               key={beverage.id}
-              title={beverage.name}
-              origin={beverage.origin ?? 'Italiano'}
-              classNameModal="w-[20rem]"
-              modalContent={
-                <BeveragesDialogContent
-                  title={beverage.name}
-                  origin={beverage.origin ?? 'Italiano'}
-                  description={beverage.description}
-                  img={SangriaImg}
-                  showFlag
-                />
-              }
-              showFlag
-              img={SangriaImg}
+              beverage={beverage}
+              category="sangrias"
+              showFlag={true}
             />
           ))}
         </div>
