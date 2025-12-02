@@ -20,7 +20,6 @@ const Page = () => {
 
   useEffect(() => {
     let isMounted = true
-    console.log()
     getDishImage({
       dishName: pasta?.name as string,
       category: pasta?.type.split(' ')[1].toLowerCase() as string,

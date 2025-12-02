@@ -8,10 +8,13 @@ import { useEffect, useState } from 'react'
 interface GeneralDialogProps {
   title: string
   description: string
-  img: {
-    name: string
-    type: string
-  }
+  img:
+    | {
+        name: string
+        type: string
+        category?: string
+      }
+    | any
   origin?: string
 }
 const GeneralDialogContent = ({
@@ -28,7 +31,7 @@ const GeneralDialogContent = ({
       dishName: img.name,
       category: img.type,
       variant: '424x400',
-      family: 'dishes',
+      family: img.category || 'dishes',
     }).then((src) => {
       if (isMounted) setImgSrc(src as any)
     })
@@ -40,7 +43,7 @@ const GeneralDialogContent = ({
     <div className="p-6 w-full rounded-3xl mx-auto flex flex-col justify-center bg-white">
       {!!imgSrc ? (
         <Image
-          src={imgSrc}
+          src={!img.name ? img : imgSrc}
           alt={title}
           width={isLandscape ? 330 : 420}
           height={200}

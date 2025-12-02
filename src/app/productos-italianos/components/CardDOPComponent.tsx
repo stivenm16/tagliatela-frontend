@@ -4,7 +4,7 @@ const CardDOPComponent = ({
   img,
   title,
 }: {
-  img: StaticImageData
+  img: StaticImageData | string
   title: string
 }) => {
   return (

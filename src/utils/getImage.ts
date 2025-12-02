@@ -1,7 +1,7 @@
 import CardReferenceImage from '@/assets/images/card-reference-image.png'
 import { StaticImageData } from 'next/image'
 
-type Variant = '148,5x148,5' | '200x200' | '424x400' | '200x320' | '240x440'
+type Variant = '148,5x148,5' | '200x200' | '424x400' | '200x320' | '240x440' | '188x188'
 
 interface GetDishImageParams { 
   dishName: string 

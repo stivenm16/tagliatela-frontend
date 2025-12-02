@@ -16,7 +16,6 @@ const CardBeverageItem = ({ beverage, category, showFlag }: any) => {
   const [fullImgSrc, setFullImgSrc] = useState<string>('')
   useEffect(() => {
     let isMounted = true
-    console.log()
     getDishImage({
       dishName: beverage.name,
       category,

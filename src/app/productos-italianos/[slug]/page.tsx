@@ -5,65 +5,65 @@ import GeneralDialogContent from '@/components/Dialog/GeneralDialog'
 import { Skeleton } from '@/components/ui/skeleton'
 import useIsLandscape from '@/hooks/useIsLandscape'
 import axiosInstance from '@/lib/axios'
+import { getDishImage } from '@/utils/getImage'
 import { usePathname } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import CardDOPComponent from '../components/CardDOPComponent'
-
-const fakeCheeseData = [
-  {
-    id: 1,
-    title: 'Dolce Parmesano',
-    description: 'Dolce italiano',
-    isNew: true,
-    highlightedContent: 'Excelente para ensaladas y pastas.',
-    isSuggested: true,
-  },
-  {
-    id: 2,
-    title: 'Dolce Cheddar',
-    description: 'Dolce italiano',
-    isNew: true,
-    highlightedContent: 'Excelente para ensaladas y pastas.',
-    isSuggested: true,
-  },
-  {
-    id: 3,
-    title: 'Dolce Azul',
-    description: 'Dolce italiano',
-    isNew: true,
-    highlightedContent: 'Excelente para ensaladas y pastas.',
-    isSuggested: true,
-  },
-  {
-    id: 4,
-    title: 'Dolce Azul',
-    description: 'Dolce italiano',
-    isNew: true,
-    highlightedContent: 'Excelente para ensaladas y pastas.',
-    isSuggested: true,
-  },
-  {
-    id: 5,
-    title: 'Dolce Azul',
-    description: 'Dolce italiano',
-    isNew: true,
-    highlightedContent: 'Excelente para ensaladas y pastas.',
-    isSuggested: true,
-  },
-  {
-    id: 6,
-    title: 'Dolce Azul',
-    description: 'Dolce italiano',
-    isNew: true,
-    highlightedContent: 'Excelente para ensaladas y pastas.',
-    isSuggested: true,
-  },
-]
 
 const mapToFetch: any = {
   ['gusto-secreto']: 'other',
   embutidos: 'sausage',
   quesos: 'cheese',
+}
+
+const ProductToRender = ({ item }: any) => {
+  const [imgSrc, setImgSrc] = useState<string>('')
+  const [fullImgSrc, setFullImgSrc] = useState<string>('')
+
+  useEffect(() => {
+    let isMounted = true
+    getDishImage({
+      dishName: item.name,
+      category: item.type === 'gusto-secreto' ? 'otros' : item.type,
+      family: 'DOP',
+      variant: '188x188',
+    }).then((src) => {
+      if (isMounted) setImgSrc(src as any)
+    })
+
+    getDishImage({
+      dishName: item.name,
+      category: item.type === 'gusto-secreto' ? 'otros' : item.type,
+      family: 'DOP',
+      variant: '424x400',
+    }).then((src) => {
+      if (isMounted) setFullImgSrc(src as any)
+    })
+    return () => {
+      isMounted = false
+    }
+  }, [item.name])
+  return (
+    <div>
+      <Card
+        isFlippable={false}
+        backgroundCard=""
+        height="10rem"
+        width="13.5rem"
+        isModalAvailable={true}
+        modalContent={
+          <GeneralDialogContent
+            title={item.name}
+            description={item.description}
+            img={fullImgSrc || SecretTaste}
+            origin="Italiano"
+          />
+        }
+      >
+        <CardDOPComponent img={imgSrc || SecretTaste} title={item.name} />
+      </Card>
+    </div>
+  )
 }
 const Page = () => {
   const [dataToRender, setDataToRender] = useState<any>([])
@@ -77,7 +77,6 @@ const Page = () => {
         withCredentials: true,
       },
     )
-    console.log(response.data, 'response.data')
     setDataToRender(response.data)
   }
 
@@ -85,33 +84,18 @@ const Page = () => {
     getContent()
   }, [])
   return (
-    <div className="w-full h-screen overflow-y-auto pb-[18rem]">
-      <div className="flex flex-wrap gap-x-3 px-10 gap-y-28 mt-5">
+    <div className="w-full h-screen overflow-y-auto pb-[20rem]">
+      <div className="flex flex-wrap gap-x-2 px-10 gap-y-28 mt-5">
         {dataToRender && !!dataToRender.length ? (
           <>
             {dataToRender.map((item: any) => (
-              <div key={item.id}>
-                <Card
-                  isFlippable={false}
-                  backgroundCard=""
-                  height="10rem"
-                  width="13.5rem"
-                  isModalAvailable={true}
-                  modalContent={
-                    <GeneralDialogContent
-                      title={item.name}
-                      description={item.description}
-                      img={{
-                        name: 'SecretTaste',
-                        type: 'png',
-                      }}
-                      origin="Italiano"
-                    />
-                  }
-                >
-                  <CardDOPComponent img={SecretTaste} title={item.name} />
-                </Card>
-              </div>
+              <ProductToRender
+                key={item.id}
+                item={{
+                  ...item,
+                  type: arrayPath,
+                }}
+              />
             ))}
           </>
         ) : (
