@@ -34,5 +34,3 @@ export const getDishImage = async ({
       return CardReferenceImage
     }
   }
-
-  //@/assets/images/dishes/insalate/Insalata rullo di capra/INSALATE_InsalataRulloDiCapra_148,5x148,5.png
