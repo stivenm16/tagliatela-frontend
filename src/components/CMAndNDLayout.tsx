@@ -88,7 +88,8 @@ const SelectedDishCard = ({
 
   useEffect(() => {
     let isMounted = true
-    getDishImage(name, category).then((src) => {
+
+    getDishImage({ dishName: name, category, family: 'dishes' }).then((src) => {
       if (isMounted) setImgSrc(src as any)
     })
     return () => {
