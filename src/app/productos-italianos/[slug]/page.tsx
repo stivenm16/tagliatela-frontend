@@ -85,7 +85,11 @@ const Page = () => {
   }, [])
   return (
     <div className="w-full h-screen overflow-y-auto pb-[20rem]">
-      <div className="flex flex-wrap gap-x-2 px-10 gap-y-28 mt-5">
+      <div
+        className={`flex flex-wrap gap-x-2 ${
+          isLandscape ? 'px-12' : 'px-10'
+        } gap-y-28 mt-5`}
+      >
         {dataToRender && !!dataToRender.length ? (
           <>
             {dataToRender.map((item: any) => (

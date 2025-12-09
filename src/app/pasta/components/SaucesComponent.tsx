@@ -13,6 +13,7 @@ import {
 } from '@/components/Dialog/Dialog'
 import { useFilters } from '@/components/Layout/context/FilterContext'
 import { Skeleton } from '@/components/ui/skeleton'
+import useIsLandscape from '@/hooks/useIsLandscape'
 import axiosInstance from '@/lib/axios'
 import { Sauce } from '@/types/global'
 import { matchesFilter } from '@/utils/functions'
@@ -320,6 +321,7 @@ const SaucesComponent = ({ sauces, selectedPasta }: SaucesComponentProps) => {
   const [sauceSelectedInfo, setSauceSelectedInfo] = useState<Sauce | null>(null)
   const [saucesToRender, setSaucesToRender] = useState<Sauce[]>(sauces)
   const { filters, updateFilter, pasta } = useFilters()
+  const isLandscape = useIsLandscape()
 
   const getSauceData = async (id: number) => {
     const response = await axiosInstance.get(`/sauce/${id}`, {
@@ -379,7 +381,11 @@ const SaucesComponent = ({ sauces, selectedPasta }: SaucesComponentProps) => {
     type !== 'ripiena' ? 'bg-[rgba(132,133,105,0.6)]' : 'bg-[#F3D1D1]'
   return (
     <div className="">
-      <div className="flex gap-5 gap-y-4 flex-wrap px-6 justify-start w-fit">
+      <div
+        className={`flex gap-5 gap-y-4 flex-wrap ${
+          isLandscape ? 'px-16' : 'px-8'
+        } justify-start w-fit`}
+      >
         {saucesFitlered.map((sauce) => (
           <SauceComponent
             key={sauce.id}
