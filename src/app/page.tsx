@@ -54,7 +54,9 @@ const fakeData2 = [
 ]
 
 export default function Home() {
-  const [suggestedDishes, setSuggestedDishes] = useState<number>(0)
+  const [suggestedDishes, setSuggestedDishes] = useState<number | null>(null)
+  const [isLoadingSuggestedDishes, setIsLoadingSuggestedDishes] =
+    useState<boolean>(true)
   const getContent = async () => {
     const response = await axiosInstance.get(`checkmeeting/recommended`, {
       withCredentials: true,
@@ -81,7 +83,13 @@ export default function Home() {
       .catch((error) => {
         console.error('Error fetching checkmeeting data:', error)
       })
+      .finally(() => {
+        setIsLoadingSuggestedDishes(false)
+      })
   }, [])
+
+  const shouldShowBubble =
+    isLoadingSuggestedDishes || (suggestedDishes ?? 0) > 0
   return (
     <div className="flex flex-col bg-surface-2 items-center justify-center h-screen gap-10 text-white">
       <Logo />
@@ -106,11 +114,37 @@ export default function Home() {
             href={'/check-meeting'}
             className={`flex shadow-xl  size-32 mt-8 justify-center text-wrap font-bold flex-row items-center uppercase rounded-full bg-checkmeeting-main relative`}
           >
-            {!!suggestedDishes && (
-              <span className="mr-2 size-12 -right-4 -top-4 rounded-full bg-checkmeeting-main text-white drop-shadow-2xl text-center font-bold text-xl flex justify-center items-center absolute">
-                {suggestedDishes}
-              </span>
-            )}
+            <span
+              className="mr-2 size-12 -right-4 -top-4 rounded-full bg-checkmeeting-main text-white drop-shadow-2xl text-center font-bold text-xl flex justify-center items-center absolute"
+              style={{
+                display: shouldShowBubble ? 'flex' : 'none',
+              }}
+            >
+              {isLoadingSuggestedDishes ? (
+                <div
+                  role="status"
+                  aria-live="polite"
+                  aria-busy="true"
+                  className="flex items-center gap-2"
+                >
+                  <svg
+                    className={`animate-spin size-6`}
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    aria-hidden="true"
+                  >
+                    <path
+                      className="opacity-75"
+                      fill="currentColor"
+                      d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
+                    />
+                  </svg>
+                </div>
+              ) : (
+                suggestedDishes
+              )}
+            </span>
+
             <Checckmeeting />
           </Link>
           <Link

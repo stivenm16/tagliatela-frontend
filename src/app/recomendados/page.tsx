@@ -76,9 +76,7 @@ const AlertSuggested = ({
 }) => {
   const [open, setOpen] = useState(true)
   if (isClosed) setOpen(false)
-  const onCloseDialog = () => {
-    setOpen(false)
-  }
+
   return (
     <OverlayPopup open={open} onClose={() => {}}>
       <div className="h-full w-full justify-center items-center flex  ">
@@ -177,6 +175,7 @@ const Page = () => {
             setDishes([])
           } else {
             const filters = extractUniqueFilterData(data)
+            console.log(filters, '<======== filters after extract')
             updateFilter('filtersAvaible', filters)
             setDishes(data)
           }

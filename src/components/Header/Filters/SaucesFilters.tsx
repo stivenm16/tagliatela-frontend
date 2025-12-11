@@ -34,6 +34,7 @@ export const SaucesFilters = () => {
     return availableArr.some((av) => av.toString().toLowerCase() === name)
   }
 
+  console.log(filters.filtersAvaible?.basePasta, '<========= filters.basePasta')
   return (
     <div className="w-fit ml-auto mr-5  gap-5  flex " id="filters-container">
       <CategoryFilter
