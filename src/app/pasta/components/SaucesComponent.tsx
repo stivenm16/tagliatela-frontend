@@ -339,6 +339,7 @@ const SaucesComponent = ({ sauces, selectedPasta }: SaucesComponentProps) => {
     }, 500)
   }
 
+  // console.log(filters, '<===== filters in sauces component')
   const pastasFormatted =
     sauceSelectedInfo &&
     sauceSelectedInfo.pastas?.flatMap(({ type, pastas }: any) =>
@@ -348,6 +349,7 @@ const SaucesComponent = ({ sauces, selectedPasta }: SaucesComponentProps) => {
       })),
     )
 
+  // console.log(saucesToRender, '<===== saucesToRender')
   const saucesFitlered = useMemo(() => {
     return (
       saucesToRender &&
@@ -364,6 +366,7 @@ const SaucesComponent = ({ sauces, selectedPasta }: SaucesComponentProps) => {
     )
   }, [saucesToRender, filters])
 
+  // console.log(saucesFitlered, '<===== saucesFitlered')
   useEffect(() => {
     if (!saucesFitlered || saucesFitlered.length === 0) return
 

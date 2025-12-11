@@ -62,7 +62,7 @@ export const ingredientsFilters: FilterItem[] = [
       selectedColorIcon: '#E7A5AD',
     },
     {
-      id: 'stiff',
+      id: 'fiambre',
       label: 'Fiambre',
       icon: StiffIcon,
       selectedColorIcon: '#734A84',
@@ -82,7 +82,10 @@ export const ingredientsFilters: FilterItem[] = [
     },
   ]
   
- export const basePastaFilters: FilterItem[] = [
+export const meats = ['Carne picada','Salami picante', 'Bacon', 'Longaniza']
+
+export const fiambre = ['Salame', 'Nduja']
+export const basePastaFilters: FilterItem[] = [
     {
       id: 'crema',
       label: 'Crema',

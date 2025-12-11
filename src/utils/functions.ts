@@ -1,3 +1,4 @@
+import { fiambre, meats } from "@/components/Header/Filters/constants"
 import { FilterAvaible } from "@/components/Layout/context/FilterContext"
 
 export const matchesFilter = (
@@ -6,7 +7,10 @@ export const matchesFilter = (
 ) => {
   if (filterValue && dishValues) {
     return dishValues.some(
-      (value) => value.name.toLowerCase() === filterValue.toLowerCase(),
+      (value) => value.name.toLowerCase() === filterValue.toLowerCase() || 
+      (filterValue.toLowerCase() === 'carne' && meats.includes(value.name) 
+    ) || 
+    (filterValue.toLowerCase() === 'fiambre' && fiambre.includes(value.name)),
     )
   }
   return true
