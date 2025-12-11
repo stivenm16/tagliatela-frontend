@@ -13,8 +13,10 @@ import {
   allergensFilters,
   basePastaFilters,
   dietFilters,
+  fiambre,
   flavoursFilters,
   ingredientsFilters,
+  meats,
 } from './constants'
 
 export const SaucesFilters = () => {
@@ -66,6 +68,22 @@ export const SaucesFilters = () => {
         items={ingredientsFilters.filter((item) => {
           const name = getItemName(item)
           if (filters.family === 'le-pizze' && name === 'mass') return false
+
+          if (
+            item.id.toLowerCase() === 'carne' &&
+            meats.some((filtersAvailable) =>
+              filters.filtersAvaible?.ingredients?.includes(filtersAvailable),
+            )
+          )
+            return true
+
+          if (
+            item.id.toLowerCase() === 'fiambre' &&
+            fiambre.some((filtersAvailable) =>
+              filters.filtersAvaible?.ingredients?.includes(filtersAvailable),
+            )
+          )
+            return true
           if (!isInAvailable(filters.filtersAvaible?.ingredients, item))
             return false
 

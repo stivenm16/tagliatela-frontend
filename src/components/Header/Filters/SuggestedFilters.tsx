@@ -55,6 +55,11 @@ export const SuggestedFilters = () => {
         triggerIcon={AlergensIcon}
         items={allergensFilters.filter((item) => {
           if (!filters.filtersAvaible?.allergens) return item
+          console.log(
+            filters.filtersAvaible?.allergens,
+            '<========= filters.allergens',
+          )
+          console.log(item.label, '<========= item')
           return filters.filtersAvaible.allergens?.some(
             (available: string) =>
               available.toLowerCase() === item.label.toLowerCase(),

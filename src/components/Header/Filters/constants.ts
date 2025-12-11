@@ -56,18 +56,18 @@ export const ingredientsFilters: FilterItem[] = [
     },
     { id: 'carne', label: 'Carne', icon: MeatIcon, selectedColorIcon: '#E59A61' },
     {
-      id: 'seafood',
+      id: 'productos del mar',
       label: 'Productos del mar',
       icon: SeafoodIcon,
       selectedColorIcon: '#E7A5AD',
     },
     {
-      id: 'stiff',
+      id: 'fiambre',
       label: 'Fiambre',
       icon: StiffIcon,
       selectedColorIcon: '#734A84',
     },
-    { id: 'masa', label: 'Masa', icon: MassIcon, selectedColorIcon: '#C5A468' },
+    { id: 'masa de pizza', label: 'Masa de pizza', icon: MassIcon, selectedColorIcon: '#C5A468' },
     {
       id: 'vegetales',
       label: 'Vegetales',
@@ -82,9 +82,12 @@ export const ingredientsFilters: FilterItem[] = [
     },
   ]
   
- export const basePastaFilters: FilterItem[] = [
+export const meats = ['Carne picada','Salami picante', 'Bacon', 'Longaniza']
+
+export const fiambre = ['Salame', 'Nduja']
+export const basePastaFilters: FilterItem[] = [
     {
-      id: 'creamy',
+      id: 'crema',
       label: 'Crema',
       icon: CreamyIcon,
       selectedColorIcon: '#93CBDC',
@@ -161,7 +164,7 @@ export const allergensFilters: FilterItem[] = [
     },
     {
       id: 'lacteos',
-      label: 'Lácteos',
+      label: 'Lacteos',
       icon: MilkIcon,
       selectedColorIcon: '#93CBDC',
     },
@@ -173,7 +176,7 @@ export const allergensFilters: FilterItem[] = [
     },
     {
       id: 'frutos con cascara',
-      label: 'Frutos con cáscara',
+      label: 'Frutos con cascara',
       icon: NutsIcon,
       selectedColorIcon: '#81582F',
     },
@@ -203,7 +206,7 @@ export const allergensFilters: FilterItem[] = [
       selectedColorIcon: '#162847',
     },
     {
-      id: 'custaceos',
+      id: 'crustaceos',
       label: 'Crustaceos',
       icon: CrustaceansIcon,
       selectedColorIcon: '#E1664F',
@@ -242,16 +245,16 @@ export const allergensFilters: FilterItem[] = [
       selectedColorIcon: '#9E9E26',
     },
     {
+      id: 'cuore-felice',
+      label: 'Cuore Felici',
+      icon: HeartIcon,
+      selectedColorIcon: '#960313',
+    },
+    {
       id: 'piatti-principali',
       label: 'Platos Principales',
       icon: MainDishesIcon,
       selectedColorIcon: '#8D3984',
-    },
-    {
-      id: 'postres',
-      label: 'Postres',
-      icon: DessertsIcon,
-      selectedColorIcon: '#E75E83',
     },
     {
       id: 'le-pizze',
@@ -260,9 +263,9 @@ export const allergensFilters: FilterItem[] = [
       selectedColorIcon: '#E7B864',
     },
     {
-      id: 'cuore-felice',
-      label: 'Cuore Felici',
-      icon: HeartIcon,
-      selectedColorIcon: '#960313',
+      id: 'postres',
+      label: 'Postres',
+      icon: DessertsIcon,
+      selectedColorIcon: '#E75E83',
     },
   ]
