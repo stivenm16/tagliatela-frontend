@@ -55,9 +55,26 @@ const fakeData2 = [
 
 export default function Home() {
   const [suggestedDishes, setSuggestedDishes] = useState<number | null>(null)
+  const [notAvailableDishes, setNotAvailableDishes] = useState<number | null>(
+    null,
+  )
   const [isLoadingSuggestedDishes, setIsLoadingSuggestedDishes] =
     useState<boolean>(true)
-  const getContent = async () => {
+  const [isLoadingNotAvailableDishes, setIsLoadingNotAvailableDishes] =
+    useState<boolean>(true)
+
+  const getNotAvailableDishes = async () => {
+    const response = await axiosInstance.get(`unavailable`, {
+      withCredentials: true,
+    })
+
+    if (response.status !== 200) {
+      throw new Error('Error fetching dishes')
+    }
+
+    return response.data
+  }
+  const getSuggestedDishes = async () => {
     const response = await axiosInstance.get(`checkmeeting/recommended`, {
       withCredentials: true,
     })
@@ -70,26 +87,44 @@ export default function Home() {
   }
 
   useEffect(() => {
-    getContent()
-      .then((data) => {
-        const recommendedDishesCount = data.reduce(
+    const fetchData = async () => {
+      try {
+        const [notAvailable, suggested] = await Promise.all([
+          getNotAvailableDishes(),
+          getSuggestedDishes(),
+        ])
+
+        // Count dishes in "not available"
+        const notAvailableCount = notAvailable.reduce(
           (count: number, dish: { name: string; dishes: any[] }) =>
             count + dish.dishes.length,
           0,
-        ) as number
-        setSuggestedDishes(recommendedDishesCount)
-      })
+        )
 
-      .catch((error) => {
-        console.error('Error fetching checkmeeting data:', error)
-      })
-      .finally(() => {
+        // Count dishes in "suggested"
+        const suggestedCount = suggested.reduce(
+          (count: number, dish: { name: string; dishes: any[] }) =>
+            count + dish.dishes.length,
+          0,
+        )
+
+        setNotAvailableDishes(notAvailableCount)
+        setSuggestedDishes(suggestedCount)
+      } catch (error) {
+        console.error('Error fetching dishes:', error)
+      } finally {
         setIsLoadingSuggestedDishes(false)
-      })
+        setIsLoadingNotAvailableDishes(false)
+      }
+    }
+
+    fetchData()
   }, [])
 
-  const shouldShowBubble =
+  const shouldShowSuggestedBubble =
     isLoadingSuggestedDishes || (suggestedDishes ?? 0) > 0
+  const shouldShowNotAvailableBubble =
+    isLoadingSuggestedDishes || (notAvailableDishes ?? 0) > 0
   return (
     <div className="flex flex-col bg-surface-2 items-center justify-center h-screen gap-10 text-white">
       <Logo />
@@ -117,7 +152,7 @@ export default function Home() {
             <span
               className="mr-2 size-12 -right-4 -top-4 rounded-full bg-checkmeeting-main text-white drop-shadow-2xl text-center font-bold text-xl flex justify-center items-center absolute"
               style={{
-                display: shouldShowBubble ? 'flex' : 'none',
+                display: shouldShowSuggestedBubble ? 'flex' : 'none',
               }}
             >
               {isLoadingSuggestedDishes ? (
@@ -149,8 +184,38 @@ export default function Home() {
           </Link>
           <Link
             href={'/platos-no-disponibles'}
-            className={`flex shadow-xl size-32 mt-8 justify-center text-wrap font-bold flex-row items-center uppercase rounded-full bg-not-available-main`}
+            className={`flex shadow-xl size-32 mt-8 justify-center text-wrap font-bold flex-row items-center uppercase rounded-full bg-not-available-main relative`}
           >
+            <span
+              className="mr-2 size-12 -right-4 -top-4 rounded-full bg-not-available-main text-white drop-shadow-2xl text-center font-bold text-xl flex justify-center items-center absolute"
+              style={{
+                display: shouldShowNotAvailableBubble ? 'flex' : 'none',
+              }}
+            >
+              {isLoadingNotAvailableDishes ? (
+                <div
+                  role="status"
+                  aria-live="polite"
+                  aria-busy="true"
+                  className="flex items-center gap-2"
+                >
+                  <svg
+                    className={`animate-spin size-6`}
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    aria-hidden="true"
+                  >
+                    <path
+                      className="opacity-75"
+                      fill="currentColor"
+                      d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
+                    />
+                  </svg>
+                </div>
+              ) : (
+                notAvailableDishes
+              )}
+            </span>
             <NotAvailable />
           </Link>
         </div>
