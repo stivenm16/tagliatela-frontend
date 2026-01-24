@@ -1,22 +1,35 @@
 'use client'
 import PastaImgMedium from '@/assets/images/pasta-image-reference-medium.png'
-import { SauceT, useFilters } from '@/components/Layout/context/FilterContext'
+import { useFilters } from '@/components/Layout/context/FilterContext'
 import useIsLandscape from '@/hooks/useIsLandscape'
+import { excludesAllergen, matchesFilter } from '@/utils/functions'
 import { getDishImage } from '@/utils/getImage'
 import Image from 'next/image'
-import { useEffect, useState } from 'react'
-import SaucesComponent from '../../components/SaucesComponent'
-import { Sauce } from '@/types/global'
+import { useEffect, useMemo, useState } from 'react'
+import SaucesComponent, {
+  constraintsForPasta,
+} from '../../components/SaucesComponent'
 
 const Page = () => {
   const [selectedSauceId, setSelectedSauceId] = useState<number | null>(null)
-  const { pasta } = useFilters()
+  const { pasta, filters } = useFilters()
   const isLandscape = useIsLandscape()
   const [imgSrc, setImgSrc] = useState<string>('')
 
   const toggleSauceSelection = (id: number) => {
     setSelectedSauceId(id)
   }
+
+  const allergen = filters.allergen ?? ''
+  const hasContraints = useMemo(() => {
+    if (typeof allergen !== 'string') return false
+
+    const normalized = allergen.toLowerCase()
+
+    return constraintsForPasta.some(
+      (constraint) => constraint.toLowerCase() === normalized,
+    )
+  }, [allergen])
 
   useEffect(() => {
     let isMounted = true
@@ -33,10 +46,28 @@ const Page = () => {
       isMounted = false
     }
   }, [pasta?.name])
+  const saucesFitlered = useMemo(() => {
+    return (
+      pasta?.sauces &&
+      pasta?.sauces.filter((sauce) => {
+        const { filters: filterSauce } = sauce as any
+        return (
+          matchesFilter(filterSauce?.diets, filters.diet) &&
+          excludesAllergen(filterSauce?.allergens, filters.allergen) &&
+          matchesFilter(filterSauce?.flavors, filters.flavour) &&
+          matchesFilter(filterSauce?.ingredients, filters.ingredients) &&
+          matchesFilter(filterSauce?.basePasta, filters.basePasta)
+        )
+      })
+    )
+  }, [pasta?.sauces, filters])
   return (
     <div
       className={` pb-24 flex flex-col  justify-center gap-28 overflow-y-scroll ring-0 border-0 pt-5 ${
-        pasta?.sauces && pasta?.sauces.length > 5 && isLandscape
+        saucesFitlered &&
+        saucesFitlered.length > 5 &&
+        isLandscape &&
+        !hasContraints
           ? 'h-screen pt-72'
           : ''
       } `}
