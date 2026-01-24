@@ -167,10 +167,7 @@ const Page = () => {
       pastas &&
       pastas[0].pastas.filter((pasta) => {
         const { filter } = pasta
-        return (
-          matchesFilter(filter.diets, filters.diet) &&
-          matchesFilter(filter.allergens, filters.allergen)
-        )
+        return matchesFilter(filter.diets, filters.diet)
       })
     )
   }, [pastas, filters])
@@ -179,10 +176,7 @@ const Page = () => {
       pastas &&
       pastas[1].pastas.filter((pasta) => {
         const { filter } = pasta
-        return (
-          matchesFilter(filter.diets, filters.diet) &&
-          matchesFilter(filter.allergens, filters.allergen)
-        )
+        return matchesFilter(filter.diets, filters.diet)
       })
     )
   }, [pastas, filters])

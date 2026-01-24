@@ -20,6 +20,7 @@ import { matchesFilter } from '@/utils/functions'
 import { getDishImage } from '@/utils/getImage'
 import Image from 'next/image'
 import { useEffect, useMemo, useState } from 'react'
+import AlertSauces from './AlertSauces'
 import NewDishFloatingButton from './NewDishFloatingButton'
 
 interface SaucesComponentProps {
@@ -272,6 +273,14 @@ const SauceComponent = ({
   )
 }
 
+export const constraintsForPasta = [
+  'Huevo',
+  'Lacteos',
+  'Gluten',
+  'Soja',
+  'Apio',
+  'Sulfitos',
+]
 const extractSauceFilters = (pasta: any) => {
   if (!pasta || !Array.isArray(pasta.sauces)) {
     return {
@@ -320,8 +329,9 @@ const extractSauceFilters = (pasta: any) => {
 const SaucesComponent = ({ sauces, selectedPasta }: SaucesComponentProps) => {
   const [sauceSelectedInfo, setSauceSelectedInfo] = useState<Sauce | null>(null)
   const [saucesToRender, setSaucesToRender] = useState<Sauce[]>(sauces)
-  const { filters, updateFilter, pasta } = useFilters()
+  const { filters, updateFilter } = useFilters()
   const isLandscape = useIsLandscape()
+  const [showAllergenPopup, setShowAllergenPopup] = useState(false)
 
   const getSauceData = async (id: number) => {
     const response = await axiosInstance.get(`/sauce/${id}`, {
@@ -339,7 +349,6 @@ const SaucesComponent = ({ sauces, selectedPasta }: SaucesComponentProps) => {
     }, 500)
   }
 
-  // console.log(filters, '<===== filters in sauces component')
   const pastasFormatted =
     sauceSelectedInfo &&
     sauceSelectedInfo.pastas?.flatMap(({ type, pastas }: any) =>
@@ -348,8 +357,24 @@ const SaucesComponent = ({ sauces, selectedPasta }: SaucesComponentProps) => {
         type,
       })),
     )
+  const allergen = filters.allergen ?? ''
 
-  // console.log(saucesToRender, '<===== saucesToRender')
+  const hasContraints = useMemo(() => {
+    if (typeof allergen !== 'string') return false
+
+    const normalized = allergen.toLowerCase()
+
+    return constraintsForPasta.some(
+      (constraint) => constraint.toLowerCase() === normalized,
+    )
+  }, [allergen])
+
+  useEffect(() => {
+    if (hasContraints) {
+      setShowAllergenPopup(true)
+    }
+  }, [allergen, hasContraints])
+
   const saucesFitlered = useMemo(() => {
     return (
       saucesToRender &&
@@ -366,7 +391,6 @@ const SaucesComponent = ({ sauces, selectedPasta }: SaucesComponentProps) => {
     )
   }, [saucesToRender, filters])
 
-  // console.log(saucesFitlered, '<===== saucesFitlered')
   useEffect(() => {
     if (!saucesFitlered || saucesFitlered.length === 0) return
 
@@ -384,22 +408,26 @@ const SaucesComponent = ({ sauces, selectedPasta }: SaucesComponentProps) => {
     type !== 'ripiena' ? 'bg-[rgba(132,133,105,0.6)]' : 'bg-[#F3D1D1]'
   return (
     <div className="">
+      {showAllergenPopup && (
+        <AlertSauces onClose={() => setShowAllergenPopup(false)} />
+      )}
       <div
         className={`flex gap-5 gap-y-4 flex-wrap ${
           isLandscape ? 'px-16' : 'px-8'
         } justify-start w-fit`}
       >
-        {saucesFitlered.map((sauce) => (
-          <SauceComponent
-            key={sauce.id}
-            sauce={sauce}
-            pastasFormatted={pastasFormatted}
-            handleSauceSelection={handleSauceSelection}
-            backgroundCardColor={backgroundCardColor}
-            sauceSelectedInfo={sauceSelectedInfo}
-            selectedPasta={selectedPasta}
-          />
-        ))}
+        {!hasContraints &&
+          saucesFitlered.map((sauce) => (
+            <SauceComponent
+              key={sauce.id}
+              sauce={sauce}
+              pastasFormatted={pastasFormatted}
+              handleSauceSelection={handleSauceSelection}
+              backgroundCardColor={backgroundCardColor}
+              sauceSelectedInfo={sauceSelectedInfo}
+              selectedPasta={selectedPasta}
+            />
+          ))}
       </div>
     </div>
   )

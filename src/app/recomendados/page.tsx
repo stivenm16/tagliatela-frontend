@@ -13,7 +13,11 @@ import { Skeleton } from '@/components/ui/skeleton'
 import useIsLandscape from '@/hooks/useIsLandscape'
 import axiosInstance from '@/lib/axios'
 import { EntityT } from '@/types/global'
-import { extractUniqueFilterData, matchesFilter } from '@/utils/functions'
+import {
+  excludesAllergen,
+  extractUniqueFilterData,
+  matchesFilter,
+} from '@/utils/functions'
 import { JSX, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import DishCard from './DishCard'
 
@@ -139,13 +143,12 @@ const Page = () => {
     }
   }, [filters.allergen])
 
-  // This filter implementation will now work as expected
   const filteredDishes = useMemo(() => {
     return dishes.filter((dish) => {
       const { filter, ingredients } = dish
       return (
         matchesFilter(filter.diets, filters.diet) &&
-        matchesFilter(filter.allergens, filters.allergen) &&
+        excludesAllergen(filter.allergens, filters.allergen) &&
         matchesFilter(filter.flavors, filters.flavour) &&
         matchesFilter(ingredients, filters.ingredients) &&
         matchesFilter(filter.basePastas, filters.basePasta) &&
@@ -156,6 +159,16 @@ const Page = () => {
 
   useEffect(() => {
     const newFiltersAvailable = extractUniqueFilterData(filteredDishes)
+
+    if (
+      filters.allergen &&
+      !newFiltersAvailable.allergens?.includes(filters.allergen)
+    ) {
+      newFiltersAvailable.allergens = [
+        ...(newFiltersAvailable.allergens ?? []),
+        filters.allergen,
+      ]
+    }
     const oldFilters = filters.filtersAvaible ?? {}
 
     const isDifferent =
@@ -175,7 +188,6 @@ const Page = () => {
             setDishes([])
           } else {
             const filters = extractUniqueFilterData(data)
-            console.log(filters, '<======== filters after extract')
             updateFilter('filtersAvaible', filters)
             setDishes(data)
           }

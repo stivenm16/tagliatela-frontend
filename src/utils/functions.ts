@@ -1,5 +1,4 @@
 import { fiambre, meats } from "@/components/Header/Filters/constants"
-import { FilterAvaible } from "@/components/Layout/context/FilterContext"
 
 export const matchesFilter = (
   dishValues: { name: string }[] | undefined,
@@ -16,7 +15,21 @@ export const matchesFilter = (
   return true
 }
 
-export function extractUniqueFilterData(dishes: any): FilterAvaible {
+export const excludesAllergen = (
+  dishAllergens?: { name: string }[] | undefined,
+  selectedAllergen?: string | null,
+) => {
+  if (!selectedAllergen) return true
+  if (!Array.isArray(dishAllergens)) return true
+
+  const normalized = selectedAllergen.toLowerCase()
+
+  return !dishAllergens.some(
+    (a) => a.name.toLowerCase() === normalized,
+  )
+}
+
+export function extractUniqueFilterData(dishes: any): any {
     const result = {
       allergens: new Set<string>(),
       diets: new Set<string>(),

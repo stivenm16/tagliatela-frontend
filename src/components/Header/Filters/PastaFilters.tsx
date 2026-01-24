@@ -1,10 +1,9 @@
 import { useFilters } from '@/components/Layout/context/FilterContext'
 
-import AlergensIcon from '@/assets/svgs/filters/alergens/alergens-icon.svg'
 import DietIcon from '@/assets/svgs/filters/diet/diet-icon.svg'
 
 import { CategoryFilter } from './CategoryFitler'
-import { allergensFilters, dietFilters } from './constants'
+import { dietFilters } from './constants'
 
 export const PastaFilters = () => {
   const { filters } = useFilters()
@@ -25,22 +24,6 @@ export const PastaFilters = () => {
 
   return (
     <div className="w-fit ml-auto mr-5  gap-5  flex " id="filters-container">
-      <CategoryFilter
-        filterBy="allergen"
-        triggerIcon={AlergensIcon}
-        items={
-          (filters.filtersAvaible?.allergens &&
-            allergensFilters.filter((item) => {
-              if (!filters.filtersAvaible?.allergens) return item
-              return filters.filtersAvaible.allergens?.some(
-                (available: string) =>
-                  available.toLowerCase() === item.id.toLowerCase(),
-              )
-            })) ||
-          []
-        }
-        page="pasta"
-      />
       <CategoryFilter
         filterBy="diet"
         triggerIcon={DietIcon}

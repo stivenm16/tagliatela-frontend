@@ -39,7 +39,6 @@ export const CategoryFilter = ({
   items,
   filterBy,
   page,
-  disableIcon = false,
 }: {
   triggerIcon: any
   filterBy: keyof Filters
@@ -83,8 +82,8 @@ export const CategoryFilter = ({
 
   const SelectedIcon =
     filters[filterBy] && filterMap[filterBy]
-      ? filterMap[filterBy].find((item) => item.id === filters[filterBy])
-          ?.icon ?? TriggerIcon
+      ? (filterMap[filterBy].find((item) => item.id === filters[filterBy])
+          ?.icon ?? TriggerIcon)
       : TriggerIcon
 
   const selectedColorIcon =

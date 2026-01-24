@@ -17,10 +17,14 @@ const iconsToMap = [
   { Icon: SulphiteRestrictionIcon, alt: 'Sulphite Restriction Icon' },
 ]
 
-const AlertSauces = () => {
+interface AlertSaucesProps {
+  onClose?: () => void
+}
+const AlertSauces = ({ onClose }: AlertSaucesProps) => {
   const [open, setOpen] = useState(true)
   const onCloseDialog = () => {
     setOpen(false)
+    onClose?.()
   }
   return (
     <OverlayPopup open={open} onClose={onCloseDialog}>
