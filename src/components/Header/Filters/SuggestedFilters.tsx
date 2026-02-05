@@ -53,13 +53,7 @@ export const SuggestedFilters = () => {
       <CategoryFilter
         filterBy="allergen"
         triggerIcon={AlergensIcon}
-        items={allergensFilters.filter((item) => {
-          if (!filters.filtersAvaible?.allergens) return item
-          return filters.filtersAvaible.allergens?.some(
-            (available: string) =>
-              available.toLowerCase() === item.label.toLowerCase(),
-          )
-        })}
+        items={allergensFilters}
         page="recomendados"
       />
       <CategoryFilter

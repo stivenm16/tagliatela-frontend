@@ -42,10 +42,10 @@ export const SaucesFilters = () => {
         filterBy="allergen"
         triggerIcon={AlergensIcon}
         items={allergensFilters.filter((item) => {
-          if (!filters.filtersAvaible?.allergens) return item
-          return filters.filtersAvaible.allergens?.some(
+          if (!filters.filtersAvaible?.allergens) return true
+          return filters.filtersAvaible.allergens.some(
             (available: string) =>
-              available.toLowerCase() === item.label.toLowerCase(),
+              available.toLowerCase() === item.id.toLowerCase(),
           )
         })}
         page="pasta"
