@@ -16,7 +16,7 @@ import { Skeleton } from '@/components/ui/skeleton'
 import useIsLandscape from '@/hooks/useIsLandscape'
 import axiosInstance from '@/lib/axios'
 import { Sauce } from '@/types/global'
-import { matchesFilter } from '@/utils/functions'
+import { excludesAllergen, matchesFilter } from '@/utils/functions'
 import { getDishImage } from '@/utils/getImage'
 import Image from 'next/image'
 import { useEffect, useMemo, useState } from 'react'
@@ -382,10 +382,10 @@ const SaucesComponent = ({ sauces, selectedPasta }: SaucesComponentProps) => {
         const { filters: filterSauce } = sauce as any
         return (
           matchesFilter(filterSauce?.diets, filters.diet) &&
-          matchesFilter(filterSauce?.allergens, filters.allergen) &&
+          excludesAllergen(filterSauce?.allergens, filters.allergen) &&
           matchesFilter(filterSauce?.flavors, filters.flavour) &&
           matchesFilter(filterSauce?.ingredients, filters.ingredients) &&
-          matchesFilter(filterSauce?.basePasta, filters.basePasta)
+          matchesFilter(filterSauce?.base, filters.basePasta)
         )
       })
     )
@@ -394,7 +394,10 @@ const SaucesComponent = ({ sauces, selectedPasta }: SaucesComponentProps) => {
   useEffect(() => {
     if (!saucesFitlered || saucesFitlered.length === 0) return
 
-    const newFilters = extractSauceFilters({ sauces: saucesFitlered })
+    const newFilters = {
+      ...extractSauceFilters({ sauces: saucesFitlered }),
+      allergens: extractSauceFilters({ sauces }).allergens,
+    }
     const oldFilters = filters.filtersAvaible ?? {}
 
     const isDifferent =
