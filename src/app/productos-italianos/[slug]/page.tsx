@@ -72,7 +72,7 @@ const Page = () => {
   const isLandscape = useIsLandscape()
   const getContent = async () => {
     const response = await axiosInstance.get(
-      `/productDrop/${mapToFetch[arrayPath]}`,
+      `/productDop/${mapToFetch[arrayPath]}`,
       {
         withCredentials: true,
       },
