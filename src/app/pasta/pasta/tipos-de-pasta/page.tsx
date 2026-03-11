@@ -73,7 +73,7 @@ const Page = () => {
       } `}
     >
       <>
-        <div className="flex justify-start">
+        <div className="flex justify-center">
           <SaucesComponent
             toggleSauceSelection={toggleSauceSelection}
             selectedPasta={pasta?.name.toLowerCase() || ''}

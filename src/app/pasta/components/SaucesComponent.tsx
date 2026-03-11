@@ -415,14 +415,14 @@ const SaucesComponent = ({ sauces, selectedPasta }: SaucesComponentProps) => {
   const backgroundCardColor = (type: string) =>
     type !== 'ripiena' ? 'bg-[rgba(132,133,105,0.6)]' : 'bg-[#F3D1D1]'
   return (
-    <div className="">
+    <>
       {showAllergenPopup && (
         <AlertSauces onClose={() => setShowAllergenPopup(false)} />
       )}
       <div
-        className={`flex gap-5 gap-y-4 flex-wrap ${
-          isLandscape ? 'px-16' : 'px-8'
-        } justify-start w-fit`}
+        className={`grid mx-auto ${
+          isLandscape ? 'grid-cols-5' : 'grid-cols-4'
+        } gap-x-8 px-4 gap-y-5 py-5`}
       >
         {!hasContraints &&
           saucesFitlered.map((sauce) => (
@@ -437,7 +437,7 @@ const SaucesComponent = ({ sauces, selectedPasta }: SaucesComponentProps) => {
             />
           ))}
       </div>
-    </div>
+    </>
   )
 }
 
