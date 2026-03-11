@@ -86,12 +86,16 @@ const Page = () => {
   return (
     <div className="w-full h-screen overflow-y-auto pb-[20rem]">
       <div
-        className={`flex flex-wrap gap-x-2 ${
+        className={`flex justify-center flex-wrap gap-x-2 ${
           isLandscape ? 'px-12' : 'px-10'
         } gap-y-28 mt-5`}
       >
         {dataToRender && !!dataToRender.length ? (
-          <>
+          <div
+            className={`grid mx-auto ${
+              isLandscape ? 'grid-cols-4' : 'grid-cols-3'
+            } gap-x-4 px-4 gap-y-30 py-5`}
+          >
             {dataToRender.map((item: any) => (
               <ProductToRender
                 key={item.id}
@@ -101,10 +105,10 @@ const Page = () => {
                 }}
               />
             ))}
-          </>
+          </div>
         ) : (
           <div
-            className={`grid ${
+            className={`grid mx-auto ${
               isLandscape ? 'grid-cols-4' : 'grid-cols-3'
             } gap-x-4 px-4 gap-y-2 py-5`}
           >

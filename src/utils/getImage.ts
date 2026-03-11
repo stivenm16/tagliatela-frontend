@@ -31,6 +31,9 @@ export const getDishImage = async ({
       return image.default
     } catch {
       // fallback to default
+      console.error(`Image not found for ` , {
+        url : `@/assets/images/${family}/${category.toLowerCase()}/${dishName}/${category.toUpperCase()}_${normalized}_${variant}.png`
+      })
       return CardReferenceImage
     }
   }

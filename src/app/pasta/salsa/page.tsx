@@ -1,13 +1,10 @@
 'use client'
 import { Skeleton } from '@/components/ui/skeleton'
-import useIsLandscape from '@/hooks/useIsLandscape'
 import axiosInstance from '@/lib/axios'
-import { FilterSaucesOption, Sauce } from '@/types/global'
-import { fakeFilters } from '@/utils/data/fakeFilters'
+import { Sauce } from '@/types/global'
 import { useEffect, useState } from 'react'
 import AlertSauces from '../components/AlertSauces'
 import SaucesComponent from '../components/SaucesComponent'
-import { getDishImage } from '@/utils/getImage'
 
 const Page = () => {
   const [isLoading, setIsLoading] = useState(true)
@@ -60,24 +57,26 @@ const Page = () => {
           <Skeleton className="h-72 w-[220px] bg-white/50" />
         </div>
       ) : (
-        <SaucesComponent
-          sauces={
-            sauces
-              ? sauces.map((sauce) => ({
-                  ...sauce,
-                  filters: sauce.filter,
-                  description: sauce.description,
-                  title: sauce.name,
-                  highlightedContent: '',
-                  isSuggested: sauce.isSuggested,
-                  isNew: sauce.isNew,
-                }))
-              : []
-          }
-          toggleSauceSelection={toggleSauceSelection}
-          selectedSauceId={selectedSauceId}
-          selectedPasta=""
-        />
+        <div className="justify-center mx-auto flex w-fit">
+          <SaucesComponent
+            sauces={
+              sauces
+                ? sauces.map((sauce) => ({
+                    ...sauce,
+                    filters: sauce.filter,
+                    description: sauce.description,
+                    title: sauce.name,
+                    highlightedContent: '',
+                    isSuggested: sauce.isSuggested,
+                    isNew: sauce.isNew,
+                  }))
+                : []
+            }
+            toggleSauceSelection={toggleSauceSelection}
+            selectedSauceId={selectedSauceId}
+            selectedPasta=""
+          />
+        </div>
       )}
     </div>
   )

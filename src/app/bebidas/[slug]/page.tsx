@@ -123,7 +123,9 @@ const GenericBeveragesPage = () => {
 
   return (
     <>
-      <div className="pt-10  px-8 h-[55rem] overflow-y-scroll pb-20">
+      <div
+        className={`pt-10  px-8 h-screen overflow-y-auto ${endpoint === 'cocktails' ? 'pb-60' : 'pb-20'}`}
+      >
         {beverages && beverages.length > 0 ? (
           <BeveragesRenderItems beverages={beverages} beverageType={endpoint} />
         ) : (
