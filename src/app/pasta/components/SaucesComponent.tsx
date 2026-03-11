@@ -58,14 +58,19 @@ const SauceComponent = ({
 
   useEffect(() => {
     let isMounted = true
+
     getDishImage({
       dishName: sauce.title,
       category: 'salsas',
       family: 'sauces',
       variant: '200x200',
-    }).then((src) => {
-      if (isMounted) setImgSrc(src as any)
     })
+      .then((src) => {
+        if (isMounted) setImgSrc(src as any)
+      })
+      .catch((e) => {
+        console.error('Error fetching sauce image:', e)
+      })
 
     getDishImage({
       dishName: sauce.title,
