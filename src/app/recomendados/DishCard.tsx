@@ -156,7 +156,8 @@ const DishCard = ({
         ) : (
           <div className="w-[210px] h-[150px] bg-gray-200 animate-pulse rounded-2xl" />
         )}
-        {item.type.toLowerCase() === 'insalate' ? (
+        {item.type.toLowerCase() === 'insalate' &&
+        item.vinaigrettes.length > 0 ? (
           <div
             className="bg-suggested-main  rounded-tl-full text-center h-8 flex items-center text-[13px] justify-start pl-4 text-white uppercase absolute w-full bottom-0"
             onClick={(e) => {

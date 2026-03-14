@@ -51,7 +51,11 @@ const GeneralDialogContent = ({
         />
       ) : null}
 
-      <p className="capitalize text-3xl mx-auto text-center font-bold">
+      <p
+        className={`capitalize text-3xl mx-auto text-center font-bold ${
+          isLandscape ? 'max-w-[20rem]' : 'max-w-[27rem]'
+        } text-center`}
+      >
         {title}
       </p>
       {origin && (
