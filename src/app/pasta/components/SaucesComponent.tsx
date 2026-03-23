@@ -197,7 +197,7 @@ const SauceComponent = ({
                   className="h-40 object-cover rounded-xl shadow-lg"
                 />
               </div>
-              <div className="flex gap-2 overflow-x-scroll w-[30rem] pb-10 pt-7">
+              <div className="flex gap-2 overflow-x-scroll w-[30rem] pt-7">
                 {pastasFormatted &&
                   sortByMatch(pastasFormatted, selectedPasta).map(
                     (_: any, index: number) => {

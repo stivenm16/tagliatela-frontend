@@ -28,8 +28,8 @@ const Page = () => {
           img={SausagesImg}
         />
         <LinkImgContainer
-          title="Gusto Secreto"
-          href="/productos-italianos/gusto-secreto"
+          title="Otros"
+          href="/productos-italianos/otros"
           img={SecretTasteImg}
         />
       </div>

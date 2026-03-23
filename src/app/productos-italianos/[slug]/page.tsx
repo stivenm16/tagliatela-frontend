@@ -11,7 +11,7 @@ import { useEffect, useState } from 'react'
 import CardDOPComponent from '../components/CardDOPComponent'
 
 const mapToFetch: any = {
-  ['gusto-secreto']: 'other',
+  otros: 'other',
   embutidos: 'sausage',
   quesos: 'cheese',
 }
