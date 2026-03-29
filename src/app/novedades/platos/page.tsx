@@ -56,6 +56,7 @@ const Page = () => {
                         key={ingrediente.id}
                         title={ingrediente.name}
                         description={ingrediente.description}
+                        ingredient={ingrediente}
                         isFlipped={true}
                       />
                     ))}
@@ -83,6 +84,7 @@ const Page = () => {
                       key={ingrediente.id}
                       title={ingrediente.name}
                       description={ingrediente.description}
+                      ingredient={ingrediente}
                       isFlipped={false}
                     />
                   ))}
