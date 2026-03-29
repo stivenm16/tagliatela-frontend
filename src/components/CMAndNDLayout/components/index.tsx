@@ -63,7 +63,11 @@ export const SelectedDishCard = ({
   useEffect(() => {
     let isMounted = true
     if (category === FamilyType.VINAGRETAS) return
-    getDishImage({ dishName: name, category, family: 'dishes' }).then((src) => {
+    getDishImage({
+      dishName: name,
+      category,
+      family: category === FamilyType.SALSAS ? 'sauces' : 'dishes',
+    }).then((src) => {
       if (isMounted) setImgSrc(src as any)
     })
     return () => {
