@@ -14,6 +14,7 @@ interface ItemProps {
   origin?: string
   lightIcon?: boolean
   customDialog?: JSX.Element
+  ingredient?: any
 }
 export const ClickableItem = ({
   title,
@@ -21,7 +22,17 @@ export const ClickableItem = ({
   lightIcon,
   origin,
   customDialog,
+  ingredient,
 }: ItemProps) => {
+  console.log(ingredient)
+  const DOPFamily = ['cheese', 'others', 'sausage'].includes(
+    ingredient?.typeIngredient?.toLowerCase(),
+  )
+  const DOPToSpanish = {
+    cheese: 'quesos',
+    others: 'otros',
+    sausage: 'embutidos',
+  }
   return (
     <div>
       <Dialog>
@@ -45,8 +56,11 @@ export const ClickableItem = ({
               title={title}
               description={description}
               img={{
-                name: 'CardReferenceImage',
-                type: 'png',
+                name: ingredient?.name || title,
+                type: DOPFamily
+                  ? DOPToSpanish[ingredient.typeIngredient.toLowerCase()]
+                  : 'dishes',
+                category: DOPFamily ? 'DOP' : 'dishes',
               }}
               origin={origin}
             />

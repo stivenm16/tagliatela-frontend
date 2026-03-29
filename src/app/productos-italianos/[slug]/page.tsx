@@ -19,6 +19,8 @@ const mapToFetch: any = {
 const ProductToRender = ({ item }: any) => {
   const [imgSrc, setImgSrc] = useState<string>('')
   const [fullImgSrc, setFullImgSrc] = useState<string>('')
+  const path = usePathname()
+  const arrayPath = path.split('/').filter(Boolean)[1]
 
   useEffect(() => {
     let isMounted = true
@@ -56,7 +58,7 @@ const ProductToRender = ({ item }: any) => {
             title={item.name}
             description={item.description}
             img={fullImgSrc || SecretTaste}
-            origin="Italiano"
+            origin={mapToFetch[arrayPath] === 'other' ? undefined : 'Italiano'}
           />
         }
       >

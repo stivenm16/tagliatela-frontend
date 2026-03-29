@@ -394,6 +394,7 @@ const Page = () => {
                                                 description={
                                                   ingredient.description!
                                                 }
+                                                ingredient={ingredient}
                                                 origin="Italiano"
                                                 lightIcon={false}
                                               />
