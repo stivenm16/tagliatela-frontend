@@ -220,6 +220,7 @@ const SauceComponent = ({
                                     <ClickableItem
                                       title={ingredient.name}
                                       description={ingredient.description!}
+                                      ingredient={ingredient}
                                       origin="Italiano"
                                       lightIcon={false}
                                     />

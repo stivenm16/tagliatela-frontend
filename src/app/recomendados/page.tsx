@@ -335,6 +335,7 @@ const Page = () => {
                                                 description={
                                                   ingredient.description!
                                                 }
+                                                ingredient={ingredient}
                                                 origin={ingredient.origin}
                                                 lightIcon={false}
                                                 customDialog={

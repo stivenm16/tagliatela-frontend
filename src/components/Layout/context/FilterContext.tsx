@@ -75,7 +75,6 @@ export const FilterProvider = ({ children }: { children: React.ReactNode }) => {
     key: keyof Filters,
     value: string | FilterAvaible | null,
   ) => {
-
     setFilters((prev) => ({ ...prev, [key]: value }))
   }
 
@@ -105,4 +104,16 @@ export const useFilters = () => {
   const ctx = useContext(FilterContext)
   if (!ctx) throw new Error('useFilters must be used inside FilterProvider')
   return ctx
+}
+
+export const useClearFilters = () => {
+  const ctx = useContext(FilterContext)
+  if (!ctx)
+    throw new Error('useClearFilters must be used inside FilterProvider')
+
+  return () => {
+    ctx.setFilters(initialFilters)
+    ctx.setFocusedFilter(null)
+    ctx.setPasta(null)
+  }
 }

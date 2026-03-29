@@ -5,7 +5,7 @@ import { ROUTES } from '@/utils/constants'
 import { usePathname, useRouter } from 'next/navigation'
 import { useEffect } from 'react'
 import { ArrowLeft } from '../Icons/ArrowLeft'
-import { useFilters } from '../Layout/context/FilterContext'
+import { useClearFilters, useFilters } from '../Layout/context/FilterContext'
 import { PastaFilters } from './Filters/PastaFilters'
 import { SaucesFilters } from './Filters/SaucesFilters'
 import { SuggestedFilters } from './Filters/SuggestedFilters'
@@ -19,6 +19,27 @@ const levelOfDepthPerCategory: Record<string, number> = {
   'check-meeting': 1,
 }
 
+const FiltersWrapper = ({
+  filterComponent,
+}: {
+  filterComponent: React.ReactNode
+}) => {
+  const clearFilters = useClearFilters()
+
+  const handleClear = () => {
+    clearFilters()
+  }
+
+  return (
+    <div className="flex gap-5">
+      <button onClick={handleClear} className="text-white font-bold text-lg">
+        Limpiar filtros
+      </button>
+      {filterComponent}
+    </div>
+  )
+}
+
 const FiltersToDisplay = () => {
   const path = usePathname()
   const arrayPath = path.split('/').filter(Boolean)
@@ -27,9 +48,12 @@ const FiltersToDisplay = () => {
   if (arrayPath[arrayPath.length - 1] === 'tipos-de-pasta')
     return <SaucesFilters />
   if (levelOfDepthPerCategory[route] < arrayPath.length) return null
-  if (ROUTES.RECOMENDADOS == `/${route}`) return <SuggestedFilters />
-  if (ROUTES.PASTA == `/${arrayPath[1]}`) return <PastaFilters />
-  if ('salsa' == `${arrayPath[1]}`) return <SaucesFilters />
+  if (ROUTES.RECOMENDADOS == `/${route}`)
+    return <FiltersWrapper filterComponent={<SuggestedFilters />} />
+  if (ROUTES.PASTA == `/${arrayPath[1]}`)
+    return <FiltersWrapper filterComponent={<PastaFilters />} />
+  if ('salsa' == `${arrayPath[1]}`)
+    return <FiltersWrapper filterComponent={<SaucesFilters />} />
 }
 
 export const Header = () => {
