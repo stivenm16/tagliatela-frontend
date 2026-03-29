@@ -14,10 +14,13 @@ import {
   OptionGroup,
   SelectedDishes,
 } from './types'
+import {
+  buildFields,
+  mapSelectedFromDB,
+  normalizeForSubmit,
+} from './utils/adapters'
 import { initialState } from './utils/constants'
 import { findDishById } from './utils/funcs'
-import { buildFields, mapSelectedFromDB, normalizeForSubmit } from './utils/adapters'
-
 
 const CMAndNDLayout = ({ title, variant }: CMAndNDLayoutProps) => {
   const [selectedDishes, setSelectedDishes] =
