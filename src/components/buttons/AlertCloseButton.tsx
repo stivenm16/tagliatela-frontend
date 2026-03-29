@@ -1,4 +1,4 @@
-import { CMAndNDLayoutProps } from '../CMAndNDLayout'
+import { CMAndNDLayoutProps } from '../CMAndNDLayout/CMAndNDLayout'
 
 const CloseButton = ({
   onClick,

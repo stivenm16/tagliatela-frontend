@@ -4,15 +4,28 @@ import { FamilyType } from '@/types/global'
 import { ChevronDown } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
 
+type Option = {
+  id: number
+  name: string
+}
+
+type OptionGroup = {
+  label: string
+  options: Option[]
+}
+
 interface CustomMultiSelectProps {
   label: string | FamilyType
-  options: {
-    id: number
-    name: string
-  }[]
+  options: Option[] | OptionGroup[]
   selectedIndices?: number[]
   onChange: (newSelected: number[]) => void
   variant?: 'check-meeting' | 'no-disponibles'
+}
+
+const isGrouped = (
+  options: Option[] | OptionGroup[],
+): options is OptionGroup[] => {
+  return (options as OptionGroup[])[0]?.options !== undefined
 }
 
 export const CustomMultiSelect: React.FC<CustomMultiSelectProps> = ({
@@ -51,6 +64,7 @@ export const CustomMultiSelect: React.FC<CustomMultiSelectProps> = ({
 
     setOpenUpwards(spaceBelow < dropdownHeight)
   }, [open])
+
   const toggleSelection = (index: number) => {
     if (selectedIndices.includes(index)) {
       onChange(selectedIndices.filter((i) => i !== index))
@@ -77,6 +91,22 @@ export const CustomMultiSelect: React.FC<CustomMultiSelectProps> = ({
     return label
   }
 
+  const renderOption = (option: Option) => (
+    <li
+      key={option.id}
+      className="flex items-center cursor-pointer"
+      onClick={() => toggleSelection(option.id)}
+    >
+      <span
+        className={`inline-block h-4 w-4 rounded-sm border-2 mr-3 transition-all duration-200 ${
+          selectedIndices.includes(option.id)
+            ? 'bg-[#5B0D31] border-[#5B0D31]'
+            : 'border-[#5B0D31]'
+        }`}
+      />
+      <span className="text-[#5B0D31] uppercase">{option.name}</span>
+    </li>
+  )
   return (
     <div ref={wrapperRef} className="relative w-64 text-sm font-medium">
       <button
@@ -109,24 +139,23 @@ export const CustomMultiSelect: React.FC<CustomMultiSelectProps> = ({
         `}
       >
         <ul className="p-4 space-y-3">
-          {options.map((option, idx) => (
-            <li
-              key={idx}
-              className="flex items-center cursor-pointer"
-              onClick={() => {
-                toggleSelection(option.id)
-              }}
-            >
-              <span
-                className={`inline-block h-4 w-4 rounded-sm border-2 mr-3 transition-all duration-200 ${
-                  selectedIndices.includes(option.id)
-                    ? 'bg-[#5B0D31] border-[#5B0D31]'
-                    : 'border-[#5B0D31]'
-                }`}
-              />
-              <span className="text-[#5B0D31] uppercase">{option.name}</span>
-            </li>
-          ))}
+          <ul className="p-4 space-y-4">
+            {isGrouped(options)
+              ? options.map((group, groupIdx) => (
+                  <div key={groupIdx}>
+                    {/* Section label */}
+                    <div className="text-xs font-bold text-gray-400 uppercase mb-2 px-1">
+                      {group.label}
+                    </div>
+
+                    {/* Section options */}
+                    <ul className="space-y-3">
+                      {group.options.map(renderOption)}
+                    </ul>
+                  </div>
+                ))
+              : options.map(renderOption)}
+          </ul>
         </ul>
       </div>
     </div>

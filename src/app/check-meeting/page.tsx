@@ -1,4 +1,4 @@
-import CMAndNDLayout from '@/components/CMAndNDLayout'
+import CMAndNDLayout from '@/components/CMAndNDLayout/CMAndNDLayout'
 import Layout from '@/components/Layout/Layout'
 
 const Page = () => {

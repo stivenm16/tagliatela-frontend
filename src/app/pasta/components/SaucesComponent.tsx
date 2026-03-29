@@ -1,5 +1,4 @@
 'use client'
-import PastaImgMedium from '@/assets/images/pasta-image-reference-medium.png'
 import SauceThumbnail from '@/assets/images/sauce-thumbnail.png'
 import BeveragesIcon from '@/assets/svgs/beverages-card-icon.svg'
 import IngredientsIcon from '@/assets/svgs/filters/ingredients/ingredients-icon.svg'
@@ -38,6 +37,77 @@ function sortByMatch(list: any, match?: string) {
     return aMatch === bMatch ? 0 : aMatch ? -1 : 1
   })
 }
+
+const PastaSauceComponent = ({
+  type,
+  selectedPasta,
+  backgroundCardColor,
+  currentPasta,
+}: {
+  type: string | undefined
+  selectedPasta: string
+  backgroundCardColor: any
+  currentPasta: any
+}) => {
+  const [fullImgSrc, setFullImgSrc] = useState<string>('')
+
+  useEffect(() => {
+    let isMounted = true
+
+    getDishImage({
+      dishName: currentPasta?.name as string,
+      category: currentPasta?.type.split(' ')[1].toLowerCase() as string,
+      family: 'pastas',
+      variant: '148,5x148,5',
+    })
+      .then((src) => {
+        if (isMounted) setFullImgSrc(src as any)
+      })
+      .catch((e) => {
+        console.error('Error fetching pasta image:', e)
+      })
+    return () => {
+      isMounted = false
+    }
+  }, [currentPasta.name, currentPasta.type])
+  return (
+    <div className="inline-flex flex-col items-center w-28">
+      <div className="relative w-full mt-6">
+        <div className="absolute inset-0 flex justify-center  -top-[50px] z-[-1] overflow-hidden h-[50px]">
+          <div
+            className={`size-28 rounded-full ${
+              currentPasta.name.toLowerCase() == selectedPasta &&
+              backgroundCardColor(type)
+            }`}
+          />
+        </div>
+        <div
+          className={`pt-1  ${
+            currentPasta.name.toLowerCase() == selectedPasta &&
+            backgroundCardColor(type) + ' shadow-xl'
+          }  rounded-b-xl flex flex-col items-center p-3 `}
+        >
+          <div
+            className={`-mt-10 size-24 rounded-full border-4 ${
+              type === 'ripiena' ? 'border-[#CC7C7A]' : 'border-suggested-main'
+            } overflow-hidden shadow-xl  z-1`}
+          >
+            <Image
+              src={fullImgSrc || SauceThumbnail}
+              alt="pasta"
+              className="object-cover w-full h-full "
+            />
+          </div>
+
+          <span className="text-sm my-3 font-semibold text-pasta-main">
+            {currentPasta.name}
+          </span>
+        </div>
+      </div>
+    </div>
+  )
+}
+
 const SauceComponent = ({
   sauce,
   handleSauceSelection,
@@ -150,6 +220,7 @@ const SauceComponent = ({
                                     <ClickableItem
                                       title={ingredient.name}
                                       description={ingredient.description!}
+                                      ingredient={ingredient}
                                       origin="Italiano"
                                       lightIcon={false}
                                     />
@@ -197,51 +268,19 @@ const SauceComponent = ({
                   className="h-40 object-cover rounded-xl shadow-lg"
                 />
               </div>
-              <div className="flex gap-2 overflow-x-scroll w-[30rem] pb-10 pt-7">
+              <div className="flex gap-2 overflow-x-scroll w-[30rem] pt-7">
                 {pastasFormatted &&
                   sortByMatch(pastasFormatted, selectedPasta).map(
-                    (_: any, index: number) => {
-                      const type = _.type.split(' ')[1].toLowerCase()
+                    (currentPasta: any, index: number) => {
+                      const type = currentPasta.type.split(' ')[1].toLowerCase()
                       return (
-                        <div
+                        <PastaSauceComponent
                           key={index}
-                          className="inline-flex flex-col items-center w-28"
-                        >
-                          <div className="relative w-full mt-6">
-                            <div className="absolute inset-0 flex justify-center  -top-[50px] z-[-1] overflow-hidden h-[50px]">
-                              <div
-                                className={`size-28 rounded-full ${
-                                  _.name.toLowerCase() == selectedPasta &&
-                                  backgroundCardColor(type)
-                                }`}
-                              />
-                            </div>
-                            <div
-                              className={`pt-1  ${
-                                _.name.toLowerCase() == selectedPasta &&
-                                backgroundCardColor(type) + ' shadow-xl'
-                              }  rounded-b-xl flex flex-col items-center p-3 `}
-                            >
-                              <div
-                                className={`-mt-10 size-24 rounded-full border-4 ${
-                                  type === 'ripiena'
-                                    ? 'border-[#CC7C7A]'
-                                    : 'border-suggested-main'
-                                } overflow-hidden shadow-xl  z-1`}
-                              >
-                                <Image
-                                  src={PastaImgMedium}
-                                  alt="pasta"
-                                  className="object-cover w-full h-full "
-                                />
-                              </div>
-
-                              <span className="text-sm my-3 font-semibold text-pasta-main">
-                                {_.name}
-                              </span>
-                            </div>
-                          </div>
-                        </div>
+                          type={type}
+                          backgroundCardColor={backgroundCardColor}
+                          selectedPasta={selectedPasta}
+                          currentPasta={currentPasta}
+                        />
                       )
                     },
                   )}

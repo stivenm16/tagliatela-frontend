@@ -36,11 +36,11 @@ const CardBeverages = ({
         }
       >
         <DialogTrigger>
-          <div className=" w-fit" onClick={() => setIsOpenModal(true)}>
+          <div className="w-50" onClick={() => setIsOpenModal(true)}>
             <Image src={img} alt={title} className="rounded-3xl shadow-lg" />
             <div className="flex mt-3 ">
               <div className="flex flex-col gap-1 w-full mt-auto justify-center text-center">
-                <span className="uppercase w-full text-center leading-6 font-bold text-wrap">
+                <span className="uppercase w-full text-center content-center font-bold text-wrap">
                   {title}
                 </span>
                 {showFlag && (

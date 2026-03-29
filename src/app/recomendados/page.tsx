@@ -335,6 +335,7 @@ const Page = () => {
                                                 description={
                                                   ingredient.description!
                                                 }
+                                                ingredient={ingredient}
                                                 origin={ingredient.origin}
                                                 lightIcon={false}
                                                 customDialog={
@@ -384,7 +385,7 @@ const Page = () => {
                                   <h2 className="text-xl font-semibold my-4 text-center">
                                     {item.name}
                                   </h2>
-                                  <ul className="flex flex-col gap-1 w-44 overflow-y-auto pr-2 mx-auto justify-center">
+                                  <ul className="flex flex-col gap-1 w-44 overflow-y-auto pr-2 mx-auto max-h-74">
                                     {item.ingredients.length > 0
                                       ? item.ingredients.map((ingredient) => (
                                           <div key={ingredient.id}>
@@ -394,6 +395,7 @@ const Page = () => {
                                                 description={
                                                   ingredient.description!
                                                 }
+                                                ingredient={ingredient}
                                                 origin="Italiano"
                                                 lightIcon={false}
                                               />
