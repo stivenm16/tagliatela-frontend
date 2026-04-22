@@ -1,5 +1,4 @@
 'use client'
-// import SecretTaste from '@/../../public/images/secret-taste.png'
 import Card from '@/components/Cards/Card'
 import GeneralDialogContent from '@/components/Dialog/GeneralDialog'
 import { Skeleton } from '@/components/ui/skeleton'
@@ -17,8 +16,6 @@ const mapToFetch: any = {
 }
 
 const ProductToRender = ({ item }: any) => {
-  // const [imgSrc, setImgSrc] = useState<string>('')
-  // const [fullImgSrc, setFullImgSrc] = useState<string>('')
   const path = usePathname()
   const arrayPath = path.split('/').filter(Boolean)[1]
 

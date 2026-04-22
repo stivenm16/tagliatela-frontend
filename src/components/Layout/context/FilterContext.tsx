@@ -1,4 +1,3 @@
-// context/FilterContext.tsx
 'use client'
 
 import { usePathname } from 'next/navigation'

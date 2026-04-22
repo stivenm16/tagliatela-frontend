@@ -153,7 +153,6 @@ export const DialogContent = React.forwardRef<
             backgroundColor: 'rgba(0,0,0,0.0)', // dim the page a bit
             backdropFilter: 'blur(6px)', // fallback if you can't set tailwind class
             WebkitBackdropFilter: 'blur(6px)',
-            // zIndex: 50,
           }}
         />
         {context.open && (
