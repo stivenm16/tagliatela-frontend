@@ -1,5 +1,3 @@
-// import ItalianImg from '@/assets/images/italian-flag.png'
-// import SpanishFlag from '@/assets/images/spanish-flag.png'
 import BottleIcon from '@/assets/svgs/bottle.svg'
 import { ImageComponent } from '../ImageComponent'
 

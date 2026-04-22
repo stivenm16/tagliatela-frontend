@@ -17,6 +17,7 @@ import axiosInstance from '@/lib/axios'
 import { Sauce } from '@/types/global'
 import { excludesAllergen, matchesFilter } from '@/utils/functions'
 import { getDishImage } from '@/utils/getImage'
+import Image from 'next/image'
 import { useEffect, useMemo, useState } from 'react'
 import AlertSauces from './AlertSauces'
 import NewDishFloatingButton from './NewDishFloatingButton'
@@ -80,7 +81,7 @@ const PastaSauceComponent = ({
             <ImageComponent
               src={fullImgSrc}
               alt="pasta"
-              className="object-cover w-full h-full "
+              className="object-cover"
             />
           </div>
 
@@ -162,7 +163,7 @@ const SauceComponent = ({
                     <div
                       key={sauce.id}
                       onClick={(e) => e.stopPropagation()}
-                      className="flex flex-col justify-center items-center text-center gap-2"
+                      className="flex flex-col justify-center items-center text-center gap-2 w-full"
                     >
                       <h2 className="text-center uppercase text-2xl pt-6 font-bold">
                         {sauce.title}
@@ -170,12 +171,13 @@ const SauceComponent = ({
                       <span className="font-light w-4/5">
                         {sauceSelectedInfo?.description}
                       </span>
-                      <div className="flex flex-col w-full h-full gap-3 relative p-10 pt-2 pb-2">
-                        <div className="flex flex-col w-full items-center">
-                          <ImageComponent
-                            src={fullImgSrc || '/images/pasta-placeholder.png'}
+                      <div className="flex flex-col w-full h-full relative gap-3 p-10 pt-2 pb-2">
+                        <div className="h-40 relative">
+                          <Image
+                            fill
+                            src={fullImgSrc}
                             alt={sauce.title}
-                            className="h-40 object-cover rounded-xl shadow-lg"
+                            className="object-cover rounded-xl shadow-lg"
                           />
                         </div>
                         <div className="mb-auto mx-auto mt-5">
@@ -228,11 +230,12 @@ const SauceComponent = ({
               <span className="font-light w-4/5">
                 {sauceSelectedInfo.description}
               </span>
-              <div className="flex flex-col w-full h-full gap-3 relative p-10 pt-2 pb-2 items-center">
-                <ImageComponent
-                  src={fullImgSrc || '/images/pasta-placeholder.pn'}
+              <div className="flex flex-col w-[90%] h-40 gap-3 relative p-10 pt-2 pb-2 items-center">
+                <Image
+                  fill
+                  src={fullImgSrc}
                   alt={sauce.title}
-                  className="h-40 object-cover rounded-xl shadow-lg"
+                  className="object-cover rounded-xl shadow-lg"
                 />
               </div>
               <div className="flex gap-2 overflow-x-scroll w-[30rem] pt-7">
