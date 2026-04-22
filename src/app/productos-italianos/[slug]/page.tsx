@@ -1,5 +1,5 @@
 'use client'
-import SecretTaste from '@/assets/images/secret-taste.png'
+// import SecretTaste from '@/assets/images/secret-taste.png'
 import Card from '@/components/Cards/Card'
 import GeneralDialogContent from '@/components/Dialog/GeneralDialog'
 import { Skeleton } from '@/components/ui/skeleton'
@@ -17,34 +17,25 @@ const mapToFetch: any = {
 }
 
 const ProductToRender = ({ item }: any) => {
-  const [imgSrc, setImgSrc] = useState<string>('')
-  const [fullImgSrc, setFullImgSrc] = useState<string>('')
+  // const [imgSrc, setImgSrc] = useState<string>('')
+  // const [fullImgSrc, setFullImgSrc] = useState<string>('')
   const path = usePathname()
   const arrayPath = path.split('/').filter(Boolean)[1]
 
-  useEffect(() => {
-    let isMounted = true
-    getDishImage({
-      dishName: item.name,
-      category: item.type === 'gusto-secreto' ? 'otros' : item.type,
-      family: 'DOP',
-      variant: '188x188',
-    }).then((src) => {
-      if (isMounted) setImgSrc(src as any)
-    })
+  const imgSrc = getDishImage({
+    dishName: item.name,
+    category: item.type === 'gusto-secreto' ? 'otros' : item.type,
+    family: 'DOP',
+    variant: '188x188',
+  })
 
-    getDishImage({
-      dishName: item.name,
-      category: item.type === 'gusto-secreto' ? 'otros' : item.type,
-      family: 'DOP',
-      variant: '424x400',
-    }).then((src) => {
-      if (isMounted) setFullImgSrc(src as any)
-    })
-    return () => {
-      isMounted = false
-    }
-  }, [item.name])
+  const fullImgSrc = getDishImage({
+    dishName: item.name,
+    category: item.type === 'gusto-secreto' ? 'otros' : item.type,
+    family: 'DOP',
+    variant: '424x400',
+  })
+
   return (
     <div>
       <Card
@@ -57,12 +48,15 @@ const ProductToRender = ({ item }: any) => {
           <GeneralDialogContent
             title={item.name}
             description={item.description}
-            img={fullImgSrc || SecretTaste}
+            img={fullImgSrc || '/images/cocktail-reference.png'}
             origin={mapToFetch[arrayPath] === 'other' ? undefined : 'Italiano'}
           />
         }
       >
-        <CardDOPComponent img={imgSrc || SecretTaste} title={item.name} />
+        <CardDOPComponent
+          img={imgSrc || '/images/cocktail-reference.png'}
+          title={item.name}
+        />
       </Card>
     </div>
   )

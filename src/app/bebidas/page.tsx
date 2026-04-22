@@ -1,7 +1,4 @@
 'use client'
-import CocktailsImg from '@/assets/images/cocktails-background.png'
-import SangriaImg from '@/assets/images/sangria-background.png'
-import ViniImg from '@/assets/images/vini-italia-background.png'
 import { LinkImgContainer } from '@/components/LinkImgContainer'
 import useIsLandscape from '@/hooks/useIsLandscape'
 
@@ -20,19 +17,19 @@ const Page = () => {
         <LinkImgContainer
           title="VINI D´ ITALIA"
           href="/bebidas/vinos"
-          img={ViniImg}
+          img={'/images/cocktails-background.png'}
           style={{ width: '16rem', height: '20rem', borderRadius: '14px' }}
         />
         <LinkImgContainer
           title="Cocktails"
           href="/bebidas/cocktails"
-          img={CocktailsImg}
+          img={'/images/sangria-background.png'}
           style={{ width: '16rem', height: '20rem', borderRadius: '14px' }}
         />
         <LinkImgContainer
           title="Sangría"
           href="/bebidas/sangria"
-          img={SangriaImg}
+          img={'/images/vini-italia-background.png'}
           style={{ width: '16rem', height: '20rem', borderRadius: '14px' }}
         />
       </div>

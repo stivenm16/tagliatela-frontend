@@ -1,5 +1,4 @@
 'use client'
-import WineImageRerence from '@/assets/images/vini-reference-image.png'
 import BeveragesIcon from '@/assets/svgs/beverages-card-icon.svg'
 import IngredientsIcon from '@/assets/svgs/filters/ingredients/ingredients-icon.svg'
 import CloseButton from '@/components/buttons/AlertCloseButton'
@@ -342,7 +341,9 @@ const Page = () => {
                                                   <div className="bg-white w-full p-5 h-full flex justify-center items-center rounded-xl">
                                                     <WineDialogContent
                                                       title={ingredient.name}
-                                                      img={WineImageRerence}
+                                                      img={
+                                                        '/images/vini-reference-image.png'
+                                                      }
                                                       origin={ingredient.origin}
                                                       description={
                                                         ingredient.description

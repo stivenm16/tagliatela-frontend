@@ -1,16 +1,10 @@
-import Image, { StaticImageData } from 'next/image'
+import { ImageComponent } from '@/components/ImageComponent'
 
-const CardDOPComponent = ({
-  img,
-  title,
-}: {
-  img: StaticImageData | string
-  title: string
-}) => {
+const CardDOPComponent = ({ img, title }: { img: string; title: string }) => {
   return (
     <div className="flex flex-col w-full h-full gap-3 relative">
       {/* {item.isNew && <NewDishFloatingButton />} */}
-      <Image
+      <ImageComponent
         src={img}
         alt={'tem.title'}
         className="w-full  rounded-3xl shadow-xl"

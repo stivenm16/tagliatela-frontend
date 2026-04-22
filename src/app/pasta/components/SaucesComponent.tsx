@@ -1,5 +1,4 @@
 'use client'
-import SauceThumbnail from '@/assets/images/sauce-thumbnail.png'
 import BeveragesIcon from '@/assets/svgs/beverages-card-icon.svg'
 import IngredientsIcon from '@/assets/svgs/filters/ingredients/ingredients-icon.svg'
 import StarIcon from '@/assets/svgs/star.svg'
@@ -10,6 +9,7 @@ import {
   DialogContent,
   DialogTrigger,
 } from '@/components/Dialog/Dialog'
+import { ImageComponent } from '@/components/ImageComponent'
 import { useFilters } from '@/components/Layout/context/FilterContext'
 import { Skeleton } from '@/components/ui/skeleton'
 import useIsLandscape from '@/hooks/useIsLandscape'
@@ -17,7 +17,6 @@ import axiosInstance from '@/lib/axios'
 import { Sauce } from '@/types/global'
 import { excludesAllergen, matchesFilter } from '@/utils/functions'
 import { getDishImage } from '@/utils/getImage'
-import Image from 'next/image'
 import { useEffect, useMemo, useState } from 'react'
 import AlertSauces from './AlertSauces'
 import NewDishFloatingButton from './NewDishFloatingButton'
@@ -49,27 +48,13 @@ const PastaSauceComponent = ({
   backgroundCardColor: any
   currentPasta: any
 }) => {
-  const [fullImgSrc, setFullImgSrc] = useState<string>('')
+  const fullImgSrc = getDishImage({
+    dishName: currentPasta?.name as string,
+    category: currentPasta?.type.split(' ')[1].toLowerCase() as string,
+    family: 'pastas',
+    variant: '148,5x148,5',
+  })
 
-  useEffect(() => {
-    let isMounted = true
-
-    getDishImage({
-      dishName: currentPasta?.name as string,
-      category: currentPasta?.type.split(' ')[1].toLowerCase() as string,
-      family: 'pastas',
-      variant: '148,5x148,5',
-    })
-      .then((src) => {
-        if (isMounted) setFullImgSrc(src as any)
-      })
-      .catch((e) => {
-        console.error('Error fetching pasta image:', e)
-      })
-    return () => {
-      isMounted = false
-    }
-  }, [currentPasta.name, currentPasta.type])
   return (
     <div className="inline-flex flex-col items-center w-28">
       <div className="relative w-full mt-6">
@@ -92,8 +77,8 @@ const PastaSauceComponent = ({
               type === 'ripiena' ? 'border-[#CC7C7A]' : 'border-suggested-main'
             } overflow-hidden shadow-xl  z-1`}
           >
-            <Image
-              src={fullImgSrc || SauceThumbnail}
+            <ImageComponent
+              src={fullImgSrc}
               alt="pasta"
               className="object-cover w-full h-full "
             />
@@ -123,37 +108,19 @@ const SauceComponent = ({
   sauceSelectedInfo: Sauce | null
   selectedPasta: string
 }) => {
-  const [imgSrc, setImgSrc] = useState<string>('')
-  const [fullImgSrc, setFullImgSrc] = useState<string>('')
+  const imgSrc = getDishImage({
+    dishName: sauce.title,
+    category: 'salsas',
+    family: 'sauces',
+    variant: '200x200',
+  })
 
-  useEffect(() => {
-    let isMounted = true
-
-    getDishImage({
-      dishName: sauce.title,
-      category: 'salsas',
-      family: 'sauces',
-      variant: '200x200',
-    })
-      .then((src) => {
-        if (isMounted) setImgSrc(src as any)
-      })
-      .catch((e) => {
-        console.error('Error fetching sauce image:', e)
-      })
-
-    getDishImage({
-      dishName: sauce.title,
-      category: 'salsas',
-      family: 'sauces',
-      variant: '424x400',
-    }).then((src) => {
-      if (isMounted) setFullImgSrc(src as any)
-    })
-    return () => {
-      isMounted = false
-    }
-  }, [sauce.title])
+  const fullImgSrc = getDishImage({
+    dishName: sauce.title,
+    category: 'salsas',
+    family: 'sauces',
+    variant: '424x400',
+  })
   return (
     <Dialog key={sauce.id}>
       <DialogContent>
@@ -175,8 +142,8 @@ const SauceComponent = ({
                   </h2>
                   <span className="font-light w-4/5">{sauce.description}</span>
                   <div className="flex flex-col w-full h-full gap-3 relative p-10 pt-4">
-                    <Image
-                      src={fullImgSrc || SauceThumbnail}
+                    <ImageComponent
+                      src={fullImgSrc}
                       alt={sauce.title}
                       className=" rounded-xl shadow-lg"
                     />
@@ -205,8 +172,8 @@ const SauceComponent = ({
                       </span>
                       <div className="flex flex-col w-full h-full gap-3 relative p-10 pt-2 pb-2">
                         <div className="flex flex-col w-full items-center">
-                          <Image
-                            src={fullImgSrc || SauceThumbnail}
+                          <ImageComponent
+                            src={fullImgSrc || '/images/pasta-placeholder.png'}
                             alt={sauce.title}
                             className="h-40 object-cover rounded-xl shadow-lg"
                           />
@@ -262,8 +229,8 @@ const SauceComponent = ({
                 {sauceSelectedInfo.description}
               </span>
               <div className="flex flex-col w-full h-full gap-3 relative p-10 pt-2 pb-2 items-center">
-                <Image
-                  src={fullImgSrc || SauceThumbnail}
+                <ImageComponent
+                  src={fullImgSrc || '/images/pasta-placeholder.pn'}
                   alt={sauce.title}
                   className="h-40 object-cover rounded-xl shadow-lg"
                 />
@@ -302,8 +269,8 @@ const SauceComponent = ({
               <StarIcon className="absolute -top-3 -left-3" />
             )}
             {sauce.isNew && <NewDishFloatingButton />}
-            <Image
-              src={imgSrc || SauceThumbnail}
+            <ImageComponent
+              src={imgSrc || '/images/pasta-placeholder.png'}
               alt={sauce.title}
               className={`size-40 rounded-xl  shadow-lg ${
                 sauce.isSuggested ? 'bg-checkmeeting-main p-1' : ''

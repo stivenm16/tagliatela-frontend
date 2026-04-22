@@ -1,12 +1,11 @@
-import ItalianImg from '@/assets/images/italian-flag.png'
-import SpanishFlag from '@/assets/images/spanish-flag.png'
+// import ItalianImg from '@/assets/images/italian-flag.png'
+// import SpanishFlag from '@/assets/images/spanish-flag.png'
 import BottleIcon from '@/assets/svgs/bottle.svg'
-import { StaticImport } from 'next/dist/shared/lib/get-img-props'
-import Image from 'next/image'
+import { ImageComponent } from '../ImageComponent'
 
 interface BeveragesDialogProps {
   title: string
-  img: string | StaticImport
+  img: string
   origin?: string
   ingredients?: string[]
   description?: string
@@ -24,7 +23,7 @@ const BeveragesDialogContent = ({
   return (
     <div className="flex h-[25rem] gap-8 w-full">
       {img ? (
-        <Image
+        <ImageComponent
           src={img}
           alt={title}
           className="rounded-2xl shadow-xl object-cover"
@@ -39,15 +38,15 @@ const BeveragesDialogContent = ({
         {origin && showFlag && (
           <div className="flex gap-3 px-3">
             {origin.toLowerCase() === 'italiano' ? (
-              <Image
-                src={ItalianImg}
+              <ImageComponent
+                src={'/images/italian-flag.png'}
                 alt="Italian flag"
                 width={50}
                 height={50}
               />
             ) : (
-              <Image
-                src={SpanishFlag}
+              <ImageComponent
+                src={'/images/spanish-flag.png'}
                 alt="Spanish flag"
                 width={50}
                 height={50}
@@ -83,15 +82,15 @@ export const WineDialogContent = ({
           {origin && (
             <div className="flex gap-3 px-3">
               {origin.toLowerCase() === 'italia' ? (
-                <Image
-                  src={ItalianImg}
+                <ImageComponent
+                  src={'/images/italian-flag.png'}
                   alt="Italian flag"
                   width={50}
                   height={50}
                 />
               ) : (
-                <Image
-                  src={SpanishFlag}
+                <ImageComponent
+                  src={'/images/spanish-flag.png'}
                   alt="Spanish flag"
                   width={50}
                   height={50}

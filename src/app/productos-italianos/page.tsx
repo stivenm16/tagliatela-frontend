@@ -1,7 +1,4 @@
 'use client'
-import CheeseImg from '@/assets/images/cheese-background.png'
-import SausagesImg from '@/assets/images/sausages-background.png'
-import SecretTasteImg from '@/assets/images/secret-taste-background.png'
 import { LinkImgContainer } from '@/components/LinkImgContainer'
 import useIsLandscape from '@/hooks/useIsLandscape'
 
@@ -20,17 +17,17 @@ const Page = () => {
         <LinkImgContainer
           title="Quesos"
           href="/productos-italianos/quesos"
-          img={CheeseImg}
+          img={'/images/cheese-background.png'}
         />
         <LinkImgContainer
           title="Embutidos"
           href="/productos-italianos/embutidos"
-          img={SausagesImg}
+          img={'/images/sausages-background.png'}
         />
         <LinkImgContainer
           title="Otros"
           href="/productos-italianos/otros"
-          img={SecretTasteImg}
+          img={'/images/secret-taste-background.png'}
         />
       </div>
     </div>
