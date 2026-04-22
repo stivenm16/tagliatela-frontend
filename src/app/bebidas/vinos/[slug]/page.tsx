@@ -1,5 +1,4 @@
 'use client'
-// import WineImageRerence from '@/assets/images/vini-reference-image.png'
 import { WineDialogContent } from '@/components/Dialog/BeveragesDialog'
 import { Dropdown } from '@/components/Selects/Dropdown'
 import { Skeleton } from '@/components/ui/skeleton'
