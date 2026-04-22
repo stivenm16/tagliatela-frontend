@@ -26,13 +26,6 @@ const Page = () => {
           {fakeData.map((item, i) => (
             <Card
               key={item.id}
-              // modalContent={
-              //   <GeneralDialogContent
-              //     title={item.title}
-              //     description={item.description}
-              //     img={CardReferenceImage}
-              //   />
-              // }
               height="33rem"
               width="18rem"
               backgroundCard="bg-neutral-50"
