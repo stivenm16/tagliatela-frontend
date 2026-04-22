@@ -12,13 +12,7 @@ export const CardDialog = ({ children, contentModal }: DialogProps) => {
   return (
     <Dialog>
       {children}
-      <DialogContent
-        style={
-          {
-            // width: '30rem',
-          }
-        }
-      >
+      <DialogContent>
         {contentModal ?? (
           <div className="z-[6000]">
             <div className="absolute -top-2 -right-4">

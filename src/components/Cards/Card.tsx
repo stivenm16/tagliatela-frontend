@@ -188,12 +188,6 @@ const Card = ({
                             ) : (
                               <FlipIcon />
                             )}
-                            {/* <Image
-                              src={activeBack?.icon ?? FlipIcon}
-                              alt={activeBack?.label ?? 'back'}
-                              width={activeBack?.iconWidth ?? 15}
-                              height={24}
-                            /> */}
                           </button>
                         </div>
                       )}
