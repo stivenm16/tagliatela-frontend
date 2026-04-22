@@ -1,13 +1,13 @@
 import { useFilters } from '@/components/Layout/context/FilterContext'
 
-import AlergensIcon from '@/assets/svgs/filters/alergens/alergens-icon.svg'
-import DietIcon from '@/assets/svgs/filters/diet/diet-icon.svg'
+import AlergensIcon from '@/../../public/svgs/filters/alergens/alergens-icon.svg'
+import DietIcon from '@/../../public/svgs/filters/diet/diet-icon.svg'
 // Ingredients Icons
-import IngredientsIcon from '@/assets/svgs/filters/ingredients/ingredients-icon.svg'
+import IngredientsIcon from '@/../../public/svgs/filters/ingredients/ingredients-icon.svg'
 
 //Flavours Icons
-import BasePastaIcon from '@/assets/svgs/filters/base-pasta/base-pasta-icon.svg'
-import FlavoursIcon from '@/assets/svgs/filters/flavours/flavours-icon.svg'
+import BasePastaIcon from '@/../../public/svgs/filters/base-pasta/base-pasta-icon.svg'
+import FlavoursIcon from '@/../../public/svgs/filters/flavours/flavours-icon.svg'
 import { CategoryFilter } from './CategoryFitler'
 import {
   allergensFilters,

@@ -1,4 +1,4 @@
-import BottleIcon from '@/assets/svgs/bottle.svg'
+import BottleIcon from '@/../../public/svgs/bottle.svg'
 import { ImageComponent } from '../ImageComponent'
 
 interface BeveragesDialogProps {

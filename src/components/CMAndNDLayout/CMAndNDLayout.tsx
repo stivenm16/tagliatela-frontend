@@ -1,6 +1,6 @@
 'use client'
-import SaveIcon from '@/assets/svgs/SaveIcon.svg'
-import TrashIcon from '@/assets/svgs/TrashIcon.svg'
+import SaveIcon from '@/../../public/svgs/SaveIcon.svg'
+import TrashIcon from '@/../../public/svgs/TrashIcon.svg'
 import useIsLandscape from '@/hooks/useIsLandscape'
 import { FamilyType } from '@/types/global'
 import { useEffect, useState } from 'react'

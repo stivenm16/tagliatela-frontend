@@ -1,5 +1,5 @@
 'use client'
-import CardReferenceImage from '@/assets/images/card-reference-image.png'
+import CardReferenceImage from '@/../../public/images/card-reference-image.png'
 import Card from '@/components/Cards/Card'
 import { ClickableItem } from '@/components/Dialog/ClickableItem'
 import Layout from '@/components/Layout/Layout'

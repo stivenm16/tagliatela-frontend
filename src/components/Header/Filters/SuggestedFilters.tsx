@@ -1,18 +1,18 @@
 'use client'
 // Family Icons
-import FamilyIcon from '@/assets/svgs/filters/family/family-icon.svg'
+import FamilyIcon from '@/../../public/svgs/filters/family/family-icon.svg'
 
 // Alergens Icons
-import AlergensIcon from '@/assets/svgs/filters/alergens/alergens-icon.svg'
+import AlergensIcon from '@/../../public/svgs/filters/alergens/alergens-icon.svg'
 
 // Diet Icons
-import DietIcon from '@/assets/svgs/filters/diet/diet-icon.svg'
+import DietIcon from '@/../../public/svgs/filters/diet/diet-icon.svg'
 
 // Ingredients Icons
-import IngredientsIcon from '@/assets/svgs/filters/ingredients/ingredients-icon.svg'
+import IngredientsIcon from '@/../../public/svgs/filters/ingredients/ingredients-icon.svg'
 
 //Flavours Icons
-import FlavoursIcon from '@/assets/svgs/filters/flavours/flavours-icon.svg'
+import FlavoursIcon from '@/../../public/svgs/filters/flavours/flavours-icon.svg'
 
 // Base pasta Icons
 

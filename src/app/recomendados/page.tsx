@@ -1,6 +1,6 @@
 'use client'
-import BeveragesIcon from '@/assets/svgs/beverages-card-icon.svg'
-import IngredientsIcon from '@/assets/svgs/filters/ingredients/ingredients-icon.svg'
+import BeveragesIcon from '@/../../public/svgs/beverages-card-icon.svg'
+import IngredientsIcon from '@/../../public/svgs/filters/ingredients/ingredients-icon.svg'
 import CloseButton from '@/components/buttons/AlertCloseButton'
 import Card from '@/components/Cards/Card'
 import { WineDialogContent } from '@/components/Dialog/BeveragesDialog'

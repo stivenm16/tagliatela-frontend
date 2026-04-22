@@ -1,7 +1,7 @@
 'use client'
 
-import InfoDark from '@/assets/svgs/help-circle-dark.svg'
-import InfoLight from '@/assets/svgs/help-circle-light.svg'
+import InfoDark from '@/../../public/svgs/help-circle-dark.svg'
+import InfoLight from '@/../../public/svgs/help-circle-light.svg'
 import GeneralDialogContent from '@/components/Dialog/GeneralDialog'
 import { JSX } from 'react'
 import { Dialog, DialogClose, DialogContent, DialogTrigger } from './Dialog'
