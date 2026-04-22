@@ -1,10 +1,8 @@
 import CloseButton from '@/components/buttons/AlertCloseButton'
+import { ImageComponent } from '@/components/ImageComponent'
 import { FamilyType } from '@/types/global'
 import { getDishImage } from '@/utils/getImage'
 import { MinusIcon } from 'lucide-react'
-import { StaticImport } from 'next/dist/shared/lib/get-img-props'
-import Image from 'next/image'
-import { useEffect, useState } from 'react'
 import { CMAndNDLayoutProps } from '../types'
 
 const SideDishesCard = ({
@@ -58,22 +56,11 @@ export const SelectedDishCard = ({
   id: number
   removeDish: (dishId: number, category: FamilyType) => void
 }) => {
-  const [imgSrc, setImgSrc] = useState<StaticImport | string>('')
-
-  useEffect(() => {
-    let isMounted = true
-    if (category === FamilyType.VINAGRETAS) return
-    getDishImage({
-      dishName: name,
-      category,
-      family: category === FamilyType.SALSAS ? 'sauces' : 'dishes',
-    }).then((src) => {
-      if (isMounted) setImgSrc(src as any)
-    })
-    return () => {
-      isMounted = false
-    }
-  }, [name, category])
+  const imgSrc = getDishImage({
+    dishName: name,
+    category,
+    family: category === FamilyType.SALSAS ? 'sauces' : 'dishes',
+  })
 
   return (
     <div className="flex flex-col w-full h-full relative  justify-center items-center gap-2">
@@ -95,7 +82,7 @@ export const SelectedDishCard = ({
               icon={<MinusIcon />}
             />
             {!!imgSrc ? (
-              <Image
+              <ImageComponent
                 src={imgSrc}
                 alt={name}
                 className="object-cover size-40 rounded-xl shadow-lg"

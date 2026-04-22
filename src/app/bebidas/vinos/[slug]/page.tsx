@@ -1,5 +1,5 @@
 'use client'
-import WineImageRerence from '@/assets/images/vini-reference-image.png'
+// import WineImageRerence from '@/assets/images/vini-reference-image.png'
 import { WineDialogContent } from '@/components/Dialog/BeveragesDialog'
 import { Dropdown } from '@/components/Selects/Dropdown'
 import { Skeleton } from '@/components/ui/skeleton'
@@ -176,7 +176,7 @@ const Page = () => {
         <div className="mt-5 bg-white rounded-lg p-4 w-fit flex flex-col self-center mx-auto">
           <WineDialogContent
             title={foundWine().name}
-            img={WineImageRerence}
+            img={'/images/vini-reference-image.png'}
             origin={arrayPath}
             description={foundWine().description}
             pairing={foundWine().dishes.map((d: any) => d.name)}

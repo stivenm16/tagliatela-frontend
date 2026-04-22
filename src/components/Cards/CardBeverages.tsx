@@ -1,14 +1,11 @@
-import ItalianImg from '@/assets/images/italian-flag.png'
-import SpanishFlag from '@/assets/images/spanish-flag.png'
 import { DialogTrigger } from '@/components/Dialog/Dialog'
-import { StaticImport } from 'next/dist/shared/lib/get-img-props'
-import Image from 'next/image'
 import { useState } from 'react'
 import { CardDialog } from '../Dialog/CardDialog'
+import { ImageComponent } from '../ImageComponent'
 
 interface CardBeveragesProps {
   title: string
-  img: string | StaticImport
+  img: string
   origin: 'italino' | string
   modalContent?: React.ReactNode
   classNameModal?: string
@@ -37,7 +34,11 @@ const CardBeverages = ({
       >
         <DialogTrigger>
           <div className="w-50" onClick={() => setIsOpenModal(true)}>
-            <Image src={img} alt={title} className="rounded-3xl shadow-lg" />
+            <ImageComponent
+              src={img}
+              alt={title}
+              className="rounded-3xl shadow-lg"
+            />
             <div className="flex mt-3 ">
               <div className="flex flex-col gap-1 w-full mt-auto justify-center text-center">
                 <span className="uppercase w-full text-center content-center font-bold text-wrap">
@@ -46,12 +47,18 @@ const CardBeverages = ({
                 {showFlag && (
                   <div className="flex w-full gap-3 justify-center">
                     {origin.toLowerCase() === 'italiano' ? (
-                      <Image src={ItalianImg} alt="Italian flag" className="" />
-                    ) : (
-                      <Image
-                        src={SpanishFlag}
+                      <ImageComponent
+                        src={'/images/italian-flag.png'}
                         alt="Italian flag"
-                        className=""
+                        width={30}
+                        height={20}
+                      />
+                    ) : (
+                      <ImageComponent
+                        src={'/images/spanish-flag.png'}
+                        alt="Italian flag"
+                        width={30}
+                        height={20}
                       />
                     )}
                   </div>

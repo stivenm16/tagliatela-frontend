@@ -1,7 +1,5 @@
 'use client'
 
-import CocktailImg from '@/assets/images/cocktail-reference.png'
-
 import CardBeverages from '@/components/Cards/CardBeverages'
 import BeveragesDialogContent from '@/components/Dialog/BeveragesDialog'
 import { Skeleton } from '@/components/ui/skeleton'
@@ -12,31 +10,18 @@ import { usePathname } from 'next/navigation'
 import { useEffect, useState } from 'react'
 
 const CardBeverageItem = ({ beverage, category, showFlag }: any) => {
-  const [imgSrc, setImgSrc] = useState<string>('')
-  const [fullImgSrc, setFullImgSrc] = useState<string>('')
-  useEffect(() => {
-    let isMounted = true
-    getDishImage({
-      dishName: beverage.name,
-      category,
-      family: 'beverages',
-      variant: '200x320',
-    }).then((src) => {
-      if (isMounted) setImgSrc(src as any)
-    })
-
-    getDishImage({
-      dishName: beverage.name,
-      category,
-      family: 'beverages',
-      variant: '240x440',
-    }).then((src) => {
-      if (isMounted) setFullImgSrc(src as any)
-    })
-    return () => {
-      isMounted = false
-    }
-  }, [beverage.name])
+  const imgSrc = getDishImage({
+    dishName: beverage.name,
+    category,
+    family: 'beverages',
+    variant: '200x320',
+  })
+  const fullImgSrc = getDishImage({
+    dishName: beverage.name,
+    category,
+    family: 'beverages',
+    variant: '240x440',
+  })
   return (
     <CardBeverages
       key={beverage.id}
@@ -47,12 +32,12 @@ const CardBeverageItem = ({ beverage, category, showFlag }: any) => {
           title={beverage.name}
           origin={beverage.origin ?? 'Italiano'}
           description={beverage.description}
-          img={fullImgSrc || CocktailImg}
+          img={fullImgSrc || '/images/cocktail-reference.png'}
           showFlag={showFlag}
         />
       }
       showFlag={showFlag}
-      img={imgSrc || CocktailImg}
+      img={imgSrc || '/images/cocktail-reference.png'}
     />
   )
 }

@@ -1,5 +1,5 @@
 'use client'
-import PastaImg from '@/assets/images/pasta-image-reference.png'
+import { ImageComponent } from '@/components/ImageComponent'
 import {
   PastaT,
   PastaType,
@@ -9,8 +9,6 @@ import { Skeleton } from '@/components/ui/skeleton'
 import axiosInstance from '@/lib/axios'
 import { matchesFilter } from '@/utils/functions'
 import { getDishImage } from '@/utils/getImage'
-import { StaticImport } from 'next/dist/shared/lib/get-img-props'
-import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { useEffect, useMemo, useState } from 'react'
 import AlertSauces from '../components/AlertSauces'
@@ -57,7 +55,6 @@ const CardPasta = ({
   filter,
   type,
 }: Pasta & { type: 'ripiena' | 'tradizionale' }) => {
-  const [imgSrc, setImgSrc] = useState<StaticImport | string>('')
   const router = useRouter()
   const { setPasta } = useFilters()
 
@@ -66,19 +63,11 @@ const CardPasta = ({
     router.push('/pasta/pasta/tipos-de-pasta')
   }
 
-  useEffect(() => {
-    let isMounted = true
-    getDishImage({
-      dishName: name,
-      category: type.split(' ')[1],
-      family: 'pastas',
-    }).then((src) => {
-      if (isMounted) setImgSrc(src as any)
-    })
-    return () => {
-      isMounted = false
-    }
-  }, [name])
+  const imgSrc = getDishImage({
+    dishName: name,
+    category: type.split(' ')[1],
+    family: 'pastas',
+  })
 
   return (
     <div
@@ -106,14 +95,14 @@ const CardPasta = ({
       <div className="flex flex-col w-full h-full gap-3 relative">
         {isNew && <NewDishFloatingButton />}
         {imgSrc ? (
-          <Image
+          <ImageComponent
             src={imgSrc}
             alt={description}
             className="w-full h-40 rounded-xl shadow-lg"
           />
         ) : (
-          <Image
-            src={PastaImg}
+          <ImageComponent
+            src={'/pasta-image-reference.png'}
             alt={description}
             className="w-full h-40 rounded-xl shadow-lg"
           />

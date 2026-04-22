@@ -1,11 +1,10 @@
 'use client'
-import PastaImgMedium from '@/assets/images/pasta-image-reference-medium.png'
+import { ImageComponent } from '@/components/ImageComponent'
 import { useFilters } from '@/components/Layout/context/FilterContext'
 import useIsLandscape from '@/hooks/useIsLandscape'
 import { excludesAllergen, matchesFilter } from '@/utils/functions'
 import { getDishImage } from '@/utils/getImage'
-import Image from 'next/image'
-import { useEffect, useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 import SaucesComponent, {
   constraintsForPasta,
 } from '../../components/SaucesComponent'
@@ -14,7 +13,6 @@ const Page = () => {
   const [selectedSauceId, setSelectedSauceId] = useState<number | null>(null)
   const { pasta, filters } = useFilters()
   const isLandscape = useIsLandscape()
-  const [imgSrc, setImgSrc] = useState<string>('')
 
   const toggleSauceSelection = (id: number) => {
     setSelectedSauceId(id)
@@ -31,21 +29,12 @@ const Page = () => {
     )
   }, [allergen])
 
-  useEffect(() => {
-    let isMounted = true
-    getDishImage({
-      dishName: pasta?.name as string,
-      category: pasta?.type.split(' ')[1].toLowerCase() as string,
-      family: 'pastas',
-      variant: '148,5x148,5',
-    }).then((src) => {
-      if (isMounted) setImgSrc(src as any)
-    })
-
-    return () => {
-      isMounted = false
-    }
-  }, [pasta?.name])
+  const imgSrc = getDishImage({
+    dishName: pasta?.name as string,
+    category: pasta?.type.split(' ')[1].toLowerCase() as string,
+    family: 'pastas',
+    variant: '148,5x148,5',
+  })
   const saucesFitlered = useMemo(() => {
     return (
       pasta?.sauces &&
@@ -101,8 +90,8 @@ const Page = () => {
         } w-fit mx-auto mb-40`}
       >
         <div className="flex gap-4 items-start">
-          <Image
-            src={imgSrc || PastaImgMedium}
+          <ImageComponent
+            src={imgSrc}
             alt="Pasta"
             width={160}
             className="object-cover rounded-xl"

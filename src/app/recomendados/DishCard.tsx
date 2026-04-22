@@ -1,7 +1,6 @@
 import InfoIcon from '@/assets/svgs/info-icon.svg'
+import { ImageComponent } from '@/components/ImageComponent'
 import { getDishImage } from '@/utils/getImage'
-import { StaticImport } from 'next/dist/shared/lib/get-img-props'
-import Image from 'next/image'
 import React, { JSX, useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { Dish } from './page'
@@ -123,21 +122,11 @@ const DishCard = ({
   openTooltipId: string | null
   setOpenTooltipId: (id: string | null) => void
 }) => {
-  const [imgSrc, setImgSrc] = useState<StaticImport | string>('')
-
-  useEffect(() => {
-    let isMounted = true
-    getDishImage({
-      dishName: item.name,
-      category: item.type,
-      family: 'dishes',
-    }).then((src) => {
-      if (isMounted) setImgSrc(src as any)
-    })
-    return () => {
-      isMounted = false
-    }
-  }, [item.name])
+  const imgSrc = getDishImage({
+    dishName: item.name,
+    category: item.type,
+    family: 'dishes',
+  })
 
   return (
     <div className="flex flex-col items-center gap-2 p-4 h-full w-full ">
@@ -146,7 +135,7 @@ const DishCard = ({
       </h2>
       <div className="relative overflow-visible">
         {!!imgSrc ? (
-          <Image
+          <ImageComponent
             src={imgSrc}
             alt={item.name}
             width={210}
