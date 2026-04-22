@@ -1,4 +1,4 @@
-// import CardReferenceImage from '@/assets/images/card-reference-image.png'
+// import CardReferenceImage from '@/../../public/images/card-reference-image.png'
 // import { StaticImageData } from 'next/image'
 
 // type Variant = '148,5x148,5' | '200x200' | '424x400' | '200x320' | '240x440' | '188x188'
@@ -26,13 +26,13 @@
 //       // Try to import dynamically (only if exists)
 //       const image = await import(
 //         /* @vite-ignore */
-//         `@/assets/images/${family}/${category.toLowerCase()}/${dishName}/${category.toUpperCase()}_${normalized}_${variant}.png`
+//         `@/../../public/images/${family}/${category.toLowerCase()}/${dishName}/${category.toUpperCase()}_${normalized}_${variant}.png`
 //       )
 //       return image.default
 //     } catch {
 //       // fallback to default
 //       console.error(`Image not found for ` , {
-//         url : `@/assets/images/${family}/${category.toLowerCase()}/${dishName}/${category.toUpperCase()}_${normalized}_${variant}.png`
+//         url : `@/../../public/images/${family}/${category.toLowerCase()}/${dishName}/${category.toUpperCase()}_${normalized}_${variant}.png`
 //       })
 //       return CardReferenceImage
 //     }

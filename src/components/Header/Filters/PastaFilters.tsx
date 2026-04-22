@@ -1,6 +1,6 @@
 import { useFilters } from '@/components/Layout/context/FilterContext'
 
-import DietIcon from '@/assets/svgs/filters/diet/diet-icon.svg'
+import DietIcon from '@/../../public/svgs/filters/diet/diet-icon.svg'
 
 import { CategoryFilter } from './CategoryFitler'
 import { dietFilters } from './constants'

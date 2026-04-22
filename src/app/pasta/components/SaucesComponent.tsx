@@ -1,7 +1,7 @@
 'use client'
-import BeveragesIcon from '@/assets/svgs/beverages-card-icon.svg'
-import IngredientsIcon from '@/assets/svgs/filters/ingredients/ingredients-icon.svg'
-import StarIcon from '@/assets/svgs/star.svg'
+import BeveragesIcon from '@/../../public/svgs/beverages-card-icon.svg'
+import IngredientsIcon from '@/../../public/svgs/filters/ingredients/ingredients-icon.svg'
+import StarIcon from '@/../../public/svgs/star.svg'
 import Card from '@/components/Cards/Card'
 import { ClickableItem } from '@/components/Dialog/ClickableItem'
 import {

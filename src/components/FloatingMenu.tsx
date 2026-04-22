@@ -1,11 +1,11 @@
 'use client'
 
-import BeveragesIcon from '@/assets/svgs/beverages-navbar-icon.svg'
-import CheckmeetingIcon from '@/assets/svgs/checkmeeting-navbar-icon.svg'
-import ItalianIcon from '@/assets/svgs/italian-navbar-icon.svg'
-import NotAvailable from '@/assets/svgs/not-available-navbar-icon.svg'
-import PastaIcon from '@/assets/svgs/pasta-navbar-icon.svg'
-import SuggestedIcon from '@/assets/svgs/suggested-navbar-icon.svg'
+import BeveragesIcon from '@/../../public/svgs/beverages-navbar-icon.svg'
+import CheckmeetingIcon from '@/../../public/svgs/checkmeeting-navbar-icon.svg'
+import ItalianIcon from '@/../../public/svgs/italian-navbar-icon.svg'
+import NotAvailable from '@/../../public/svgs/not-available-navbar-icon.svg'
+import PastaIcon from '@/../../public/svgs/pasta-navbar-icon.svg'
+import SuggestedIcon from '@/../../public/svgs/suggested-navbar-icon.svg'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 

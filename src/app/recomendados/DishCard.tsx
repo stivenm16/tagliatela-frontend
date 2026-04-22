@@ -1,4 +1,4 @@
-import InfoIcon from '@/assets/svgs/info-icon.svg'
+import InfoIcon from '@/../../public/svgs/info-icon.svg'
 import { ImageComponent } from '@/components/ImageComponent'
 import { getDishImage } from '@/utils/getImage'
 import React, { JSX, useEffect, useLayoutEffect, useRef, useState } from 'react'

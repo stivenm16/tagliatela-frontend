@@ -1,5 +1,5 @@
-import FlipIcon from '@/assets/svgs/flip-icon.svg'
-import StarIcon from '@/assets/svgs/star.svg'
+import FlipIcon from '@/../../public/svgs/flip-icon.svg'
+import StarIcon from '@/../../public/svgs/star.svg'
 import React, { useState } from 'react'
 import { CardDialog } from '../Dialog/CardDialog'
 import { DialogTrigger } from '../Dialog/Dialog'
