@@ -48,6 +48,21 @@ const CMAndNDLayout = ({ title, variant }: CMAndNDLayoutProps) => {
       .finally(() => setIsLoading(false))
   }, [])
 
+  const syncQuantities = (
+    prev: SelectedDishes,
+    newIds: number[],
+  ): SelectedDishes => {
+    const quantities = { ...prev.quantities }
+    // Initialize quantity=1 for new selections, clean up removed ones
+    newIds.forEach((id) => {
+      if (!(id in quantities)) quantities[id] = 1
+    })
+    Object.keys(quantities).forEach((key) => {
+      if (!newIds.includes(Number(key))) delete quantities[Number(key)]
+    })
+    return { ...prev, dishes: newIds, quantities }
+  }
+
   const handleOnChange = (field: Field, selectedIds: number[]) => {
     if (field.isGrouped) {
       const updated = [...selectedDishes]
@@ -62,10 +77,7 @@ const CMAndNDLayout = ({ title, variant }: CMAndNDLayoutProps) => {
         const index = updated.findIndex((s) => s.name === group.label)
 
         if (index !== -1) {
-          updated[index] = {
-            ...updated[index],
-            dishes: selectedForGroup,
-          }
+          updated[index] = syncQuantities(updated[index], selectedForGroup)
         }
       })
 
@@ -76,15 +88,37 @@ const CMAndNDLayout = ({ title, variant }: CMAndNDLayoutProps) => {
     // ✅ normal behavior
     const updatedSelectedDishes = selectedDishes.map((s) => {
       if (s.name === field.name) {
-        return {
-          ...s,
-          dishes: [...selectedIds],
-        }
+        return syncQuantities(s, selectedIds)
       }
       return s
     })
 
     setSelectedDishes(updatedSelectedDishes)
+  }
+
+  const handleQuantityChange = (
+    category: FamilyType,
+    dishId: number,
+    delta: number,
+  ) => {
+    setSelectedDishes((prev) =>
+      prev.map((s) => {
+        if (s.name !== category) return s
+        const current = s.quantities[dishId] ?? 1
+        const newQty = Math.max(0, current + delta)
+        if (newQty === 0) {
+          // Remove dish if quantity reaches 0
+          const newDishes = s.dishes.filter((id) => id !== dishId)
+          const newQuantities = { ...s.quantities }
+          delete newQuantities[dishId]
+          return { ...s, dishes: newDishes, quantities: newQuantities }
+        }
+        return {
+          ...s,
+          quantities: { ...s.quantities, [dishId]: newQty },
+        }
+      }),
+    )
   }
 
   const onSubmit = (dishesParam?: SelectedDishes[]) => {
@@ -102,9 +136,12 @@ const CMAndNDLayout = ({ title, variant }: CMAndNDLayoutProps) => {
   const removeDishesFromSelected = (dishId: number, category: FamilyType) => {
     const updatedSelectedDishes = selectedDishes.map((s) => {
       if (s.name === category) {
+        const quantities = { ...s.quantities }
+        delete quantities[dishId]
         return {
           ...s,
           dishes: s.dishes.filter((d) => d !== dishId),
+          quantities,
         }
       }
       return s
@@ -194,6 +231,8 @@ const CMAndNDLayout = ({ title, variant }: CMAndNDLayoutProps) => {
                           variant={variant}
                           id={dish?.id || 0}
                           name={dish?.name || ''}
+                          quantity={s.quantities[d] ?? 1}
+                          onQuantityChange={handleQuantityChange}
                         />
                       )
                     })}

@@ -1,6 +1,5 @@
 'use client'
 
-import Image from 'next/image'
 import { useState } from 'react'
 
 export function ImageComponent({
@@ -17,15 +16,30 @@ export function ImageComponent({
   className?: string
 }) {
   const [imgSrc, setImgSrc] = useState(src)
+  const [isLoading, setIsLoading] = useState(true)
 
   return (
-    <Image
-      src={imgSrc}
-      alt={alt}
-      width={width}
-      height={height}
-      className={className}
-      onError={() => setImgSrc('/images/card-reference-image.png')}
-    />
+    <div className="relative inline-block">
+      {isLoading && (
+        <div
+          className="bg-gray-200 animate-pulse rounded-2xl"
+          style={{ width, height }}
+        />
+      )}
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src={imgSrc}
+        alt={alt}
+        width={width}
+        height={height}
+        loading="lazy"
+        className={`${className ?? ''} ${isLoading ? 'absolute inset-0 opacity-0' : 'opacity-100'} transition-opacity duration-300`}
+        onError={() => {
+          setImgSrc('/images/card-reference-image.png')
+          setIsLoading(false)
+        }}
+        onLoad={() => setIsLoading(false)}
+      />
+    </div>
   )
 }

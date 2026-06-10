@@ -8,10 +8,37 @@ import PastaIcon from '@/../../public/svgs/pasta-navbar-icon.svg'
 import SuggestedIcon from '@/../../public/svgs/suggested-navbar-icon.svg'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
+import { useEffect, useRef, useState } from 'react'
 
 export const FloatingMenu = () => {
   const path = usePathname()
   const route = path.split('/')[1]
+  const [isVisible, setIsVisible] = useState(true)
+  const lastScrollY = useRef(0)
+
+  // Show menu on route change, hide on scroll down
+  useEffect(() => {
+    setIsVisible(true)
+    lastScrollY.current = 0
+  }, [path])
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY
+      const delta = currentScrollY - lastScrollY.current
+
+      if (delta > 10) {
+        setIsVisible(false)
+      } else if (delta < -5) {
+        setIsVisible(true)
+      }
+
+      lastScrollY.current = currentScrollY
+    }
+
+    window.addEventListener('scroll', handleScroll, { passive: true })
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
 
   const routes = [
     {
@@ -52,7 +79,11 @@ export const FloatingMenu = () => {
     },
   ]
   return (
-    <div className="fixed bottom-5 z-1 w-full px-14 flex justify-center">
+    <div
+      className={`fixed z-1 w-full px-14 flex justify-center transition-all duration-300 ${
+        isVisible ? 'bottom-5' : '-bottom-20'
+      }`}
+    >
       <div className="flex gap-5 w-full items-center justify-center p-4 bg-white/10 text-black backdrop-blur-md rounded-2xl shadow-xl border border-white/20">
         {routes
           .filter((r) => r.name !== route)

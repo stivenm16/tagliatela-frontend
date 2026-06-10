@@ -9,11 +9,21 @@ export const mapCategoryToGroup = (category: FieldDishes): OptionGroup => ({
     })),
   })
 
+  export interface NormalizedDish {
+    id: number
+    quantity: number
+  }
+
+  export interface NormalizedFamily {
+    name: FamilyType
+    dishes: NormalizedDish[]
+  }
+
   export const normalizeForSubmit = (
     selected: SelectedDishes[],
     fields: Field[],
-  ): SelectedDishes[] => {
-    const result: SelectedDishes[] = []
+  ): NormalizedFamily[] => {
+    const result: NormalizedFamily[] = []
   
     fields.forEach((field) => {
       if (!field.isGrouped) {
@@ -21,7 +31,10 @@ export const mapCategoryToGroup = (category: FieldDishes): OptionGroup => ({
   
         result.push({
           name: field.name,
-          dishes: found?.dishes || [],
+          dishes: (found?.dishes || []).map((id) => ({
+            id,
+            quantity: found?.quantities[id] ?? 1,
+          })),
         })
         return
       }
@@ -29,10 +42,8 @@ export const mapCategoryToGroup = (category: FieldDishes): OptionGroup => ({
       field.groups.forEach((group) => {
         const groupIds = group.options.map((o) => o.id)
   
-        const selectedIds =
-          selected
-            .find((s) => s.name === group.label)
-            ?.dishes || []
+        const found = selected.find((s) => s.name === group.label)
+        const selectedIds = found?.dishes || []
   
         // Ensure only valid IDs for that group
         const filtered = selectedIds.filter((id) =>
@@ -41,7 +52,10 @@ export const mapCategoryToGroup = (category: FieldDishes): OptionGroup => ({
   
         result.push({
           name: group.label as FamilyType,
-          dishes: filtered,
+          dishes: filtered.map((id) => ({
+            id,
+            quantity: found?.quantities[id] ?? 1,
+          })),
         })
       })
     })
@@ -99,10 +113,17 @@ export const mapSelectedFromDB = (
 ): SelectedDishes[] => {
   return initial.map((s) => {
     const fieldFromDB = dbData.find((f) => f.name === s.name)
+    const dbDishes = fieldFromDB?.dishes ?? []
+    const quantities: Record<number, number> = {}
+
+    dbDishes.forEach((d: any) => {
+      quantities[d.id] = d.quantity ?? 1
+    })
 
     return {
       name: s.name,
-      dishes: fieldFromDB ? fieldFromDB.dishes.map((d) => d.id) : [],
+      dishes: dbDishes.map((d) => d.id),
+      quantities,
     }
   })
 }

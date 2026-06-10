@@ -14,8 +14,9 @@ const CloseButton = ({
   return (
     <button
       onClick={onClick}
-      className={`absolute -top-${size ? 10 : 2}  
-      }  text-white rounded-full size-${
+      className={`absolute z-10 ${
+        size ? '-top-10' : '-top-2'
+      } text-white rounded-full size-${
         size ?? 8
       } flex items-center justify-center`}
       style={{

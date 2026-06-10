@@ -139,8 +139,8 @@ const DishCard = ({
             src={imgSrc}
             alt={item.name}
             width={210}
-            height={50}
-            className="rounded-2xl overflow-hidden"
+            height={150}
+            className="rounded-2xl overflow-hidden object-cover"
           />
         ) : (
           <div className="w-[210px] h-[150px] bg-gray-200 animate-pulse rounded-2xl" />

@@ -43,4 +43,5 @@ export type Option = {
   export interface SelectedDishes {
     name: FamilyType
     dishes: number[]
+    quantities: Record<number, number>
   }

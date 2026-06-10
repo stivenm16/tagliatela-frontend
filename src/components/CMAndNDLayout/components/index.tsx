@@ -2,59 +2,64 @@ import CloseButton from '@/components/buttons/AlertCloseButton'
 import { ImageComponent } from '@/components/ImageComponent'
 import { FamilyType } from '@/types/global'
 import { getDishImage } from '@/utils/getImage'
-import { MinusIcon } from 'lucide-react'
+import { MinusIcon, PlusIcon } from 'lucide-react'
 import { CMAndNDLayoutProps } from '../types'
 
-const SideDishesCard = ({
-  onClick,
+const QuantityControl = ({
+  quantity,
+  onIncrease,
+  onDecrease,
   variant,
-  name,
 }: {
-  onClick: () => void
-  variant?: CMAndNDLayoutProps['variant']
-  name: string
+  quantity: number
+  onIncrease: () => void
+  onDecrease: () => void
+  variant: CMAndNDLayoutProps['variant']
 }) => {
+  const btnColor =
+    variant === 'no-disponibles'
+      ? 'var(--not-available-main)'
+      : 'var(--checkmeeting-main)'
+
   return (
-    <div className="flex w-full my-2 justify-between gap-2 px-2">
+    <div className="flex items-center gap-2 mt-1">
       <button
-        onClick={onClick}
-        className={`  
-        }  text-white rounded-full size-8 flex items-center justify-center`}
-        style={{
-          backgroundColor:
-            variant === 'no-disponibles'
-              ? 'var(--not-available-main)'
-              : 'var(--checkmeeting-main)',
-        }}
+        onClick={onDecrease}
+        className="text-white rounded-full size-7 flex items-center justify-center text-sm font-bold"
+        style={{ backgroundColor: btnColor }}
       >
-        <MinusIcon />
+        <MinusIcon size={14} />
       </button>
-      <h2
-        className="flex self-center mr-auto ml-2 text-md uppercase font-semibold"
-        style={{
-          color:
-            variant === 'check-meeting'
-              ? 'var(--pasta-main)'
-              : 'var(--suggested-main)',
-        }}
+      <span className="text-white font-bold text-lg min-w-[1.5rem] text-center">
+        {quantity}
+      </span>
+      <button
+        onClick={onIncrease}
+        className="text-white rounded-full size-7 flex items-center justify-center text-sm font-bold"
+        style={{ backgroundColor: btnColor }}
       >
-        {name}
-      </h2>
+        <PlusIcon size={14} />
+      </button>
     </div>
   )
 }
+
 export const SelectedDishCard = ({
   name,
   category,
   variant,
   id,
   removeDish,
+  quantity,
+  onQuantityChange,
 }: {
   name: string
   category: FamilyType
   variant: CMAndNDLayoutProps['variant']
   id: number
   removeDish: (dishId: number, category: FamilyType) => void
+  quantity?: number
+  onQuantityChange?: (category: FamilyType, dishId: number, delta: number) => void
 }) => {
   const imgSrc = getDishImage({
     dishName: name,
@@ -62,47 +67,92 @@ export const SelectedDishCard = ({
     family: category === FamilyType.SALSAS ? 'sauces' : 'dishes',
   })
 
-  return (
-    <div className="flex flex-col w-full h-full relative  justify-center items-center gap-2">
-      {category.toLowerCase() === 'guarniciones' ||
-      category.toLowerCase() === 'vinagretas' ? (
-        <div className="flex w-full">
-          <SideDishesCard
-            onClick={() => removeDish(id, category)}
-            variant={variant}
-            name={name}
-          />
-        </div>
-      ) : (
-        <>
-          <div className="relative my-1">
-            <CloseButton
-              onClick={() => removeDish(id, category)}
-              variant={variant}
-              icon={<MinusIcon />}
-            />
-            {!!imgSrc ? (
-              <ImageComponent
-                src={imgSrc}
-                alt={name}
-                className="object-cover size-40 rounded-xl shadow-lg"
-              />
-            ) : null}
-          </div>
+  const showQuantity = variant === 'check-meeting' && onQuantityChange
+  const accentColor =
+    variant === 'check-meeting' ? 'var(--checkmeeting-main)' : 'var(--not-available-main)'
 
-          <h2
-            className="text-center text-md uppercase font-semibold mb-2"
-            style={{
-              color:
-                variant === 'check-meeting'
-                  ? 'var(--pasta-main)'
-                  : 'var(--suggested-main)',
-            }}
+  if (category.toLowerCase() === 'guarniciones' || category.toLowerCase() === 'vinagretas') {
+    return (
+      <div className="flex w-full items-center justify-between px-2 my-1">
+        <button
+          onClick={() => removeDish(id, category)}
+          className="text-white rounded-full size-7 flex items-center justify-center"
+          style={{ backgroundColor: accentColor }}
+        >
+          <MinusIcon size={14} />
+        </button>
+        <h2
+          className="text-md uppercase font-semibold mx-2"
+          style={{
+            color: variant === 'check-meeting' ? 'var(--pasta-main)' : 'var(--suggested-main)',
+          }}
+        >
+          {name}
+        </h2>
+        {showQuantity && (
+          <QuantityControl
+            quantity={quantity ?? 1}
+            onIncrease={() => onQuantityChange(category, id, 1)}
+            onDecrease={() => onQuantityChange(category, id, -1)}
+            variant={variant}
+          />
+        )}
+      </div>
+    )
+  }
+
+  return (
+    <div className="flex flex-col items-center gap-1 w-full">
+      {/* Image container with X badge at top-right and quantity at bottom-right */}
+      <div className="relative w-fit">
+        {/* X badge - uses z-index to stay above image */}
+        <CloseButton
+          onClick={() => removeDish(id, category)}
+          variant={variant}
+          icon={<MinusIcon />}
+        />
+        {!!imgSrc ? (
+          <ImageComponent
+            src={imgSrc}
+            alt={name}
+            className="object-cover size-36 rounded-xl shadow-lg"
+          />
+        ) : null}
+
+        {/* Quantity bar overlaid at bottom of image */}
+        {showQuantity && (
+          <div
+            className="absolute bottom-0 left-0 right-0 flex items-center justify-center gap-3 py-1.5 rounded-b-xl"
+            style={{ backgroundColor: accentColor }}
           >
-            {name}
-          </h2>
-        </>
-      )}
+            <button
+              onClick={() => onQuantityChange(category, id, -1)}
+              className="text-white rounded-full size-6 flex items-center justify-center bg-black/20 hover:bg-black/30"
+            >
+              <MinusIcon size={12} />
+            </button>
+            <span className="text-white font-bold text-sm min-w-[1.2rem] text-center">
+              {quantity ?? 1}
+            </span>
+            <button
+              onClick={() => onQuantityChange(category, id, 1)}
+              className="text-white rounded-full size-6 flex items-center justify-center bg-black/20 hover:bg-black/30"
+            >
+              <PlusIcon size={12} />
+            </button>
+          </div>
+        )}
+      </div>
+
+      {/* Dish name below */}
+      <h2
+        className="text-center text-sm uppercase font-semibold mt-1 px-1"
+        style={{
+          color: variant === 'check-meeting' ? 'var(--pasta-main)' : 'var(--suggested-main)',
+        }}
+      >
+        {name}
+      </h2>
     </div>
   )
 }
