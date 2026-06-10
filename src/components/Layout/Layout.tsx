@@ -2,7 +2,7 @@
 
 import { usePathname } from 'next/navigation'
 import { useEffect } from 'react'
-import { FloatingMenu } from '../FloatingMenu'
+import { HamburgerMenu } from '../HamburgerMenu'
 import { Header } from '../Header/Header'
 import { FilterProvider } from './context/FilterContext'
 
@@ -17,7 +17,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         <div className="w-full h-16 bg-red-400" />
         <Header />
         <div className="mt-10">{children}</div>
-        <FloatingMenu />
+        <HamburgerMenu />
       </div>
     </FilterProvider>
   )
