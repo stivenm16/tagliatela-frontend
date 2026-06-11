@@ -1,5 +1,6 @@
 import CloseButton from '@/components/buttons/AlertCloseButton'
 import { ImageComponent } from '@/components/ImageComponent'
+import featureFlags from '@/lib/featureFlags'
 import { FamilyType } from '@/types/global'
 import { getDishImage } from '@/utils/getImage'
 import { MinusIcon, PlusIcon } from 'lucide-react'
@@ -67,7 +68,7 @@ export const SelectedDishCard = ({
     family: category === FamilyType.SALSAS ? 'sauces' : 'dishes',
   })
 
-  const showQuantity = variant === 'check-meeting' && onQuantityChange
+  const showQuantity = variant === 'check-meeting' && onQuantityChange && featureFlags.checkMeetingQuantity
   const accentColor =
     variant === 'check-meeting' ? 'var(--checkmeeting-main)' : 'var(--not-available-main)'
 
