@@ -17,7 +17,7 @@ import {
   extractUniqueFilterData,
   matchesFilter,
 } from '@/utils/functions'
-import React, { JSX, useCallback, useEffect, useMemo, useState } from 'react'
+import React, { JSX, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import DishCard from './DishCard'
 
 const MemoizedDishCard = React.memo(DishCard)
@@ -197,6 +197,49 @@ const Page = () => {
     }))
   }, [filteredDishes])
 
+  // Lazy render: initially only render first family, observe rest
+  const [visibleFamilies, setVisibleFamilies] = useState<Set<string>>(() =>
+    new Set(familySections.length > 0 ? [familySections[0].family] : []),
+  )
+  const sectionRefs = useRef<Map<string, HTMLDivElement>>(new Map())
+
+  useEffect(() => {
+    const observers: IntersectionObserver[] = []
+    const refs = sectionRefs.current
+
+    familySections.forEach(({ family }) => {
+      if (visibleFamilies.has(family)) return
+      const el = refs.get(family)
+      if (!el) return
+
+      const observer = new IntersectionObserver(
+        ([entry]) => {
+          if (entry.isIntersecting) {
+            setVisibleFamilies((prev) => new Set([...prev, family]))
+            observer.disconnect()
+          }
+        },
+        { rootMargin: '200px' },
+      )
+      observer.observe(el)
+      observers.push(observer)
+    })
+
+    return () => observers.forEach((o) => o.disconnect())
+  }, [familySections, visibleFamilies])
+
+  // Update visible families when sections change (e.g. after filter)
+  useEffect(() => {
+    if (familySections.length > 0) {
+      setVisibleFamilies((prev) => {
+        const next = new Set(prev)
+        // Always keep first family visible
+        next.add(familySections[0].family)
+        return next
+      })
+    }
+  }, [familySections])
+
   return (
     <div className="">
       {isLoading ? (
@@ -230,14 +273,23 @@ const Page = () => {
                 No hay platos que coincidan con los filtros seleccionados
               </div>
             )}
-            {familySections.map(({ family, dishes }) => (
-              <div key={family}>
+            {familySections.map(({ family, dishes }) => {
+              const isVisible = visibleFamilies.has(family)
+              return (
+              <div
+                key={family}
+                ref={(el) => {
+                  if (el) sectionRefs.current.set(family, el)
+                  else sectionRefs.current.delete(family)
+                }}
+              >
                 <h2
                   className="text-suggested-main font-bold text-2xl uppercase mb-4 ml-2"
                   style={{ color: 'var(--suggested-main)' }}
                 >
                   {family}
                 </h2>
+                {isVisible && (
                 <div className="grid grid-cols-[repeat(auto-fill,minmax(14.5rem,1fr))] gap-x-2 gap-y-5">
                   {dishes
                     .sort(
@@ -245,14 +297,8 @@ const Page = () => {
                         (b.isRecommended ? 1 : 0) - (a.isRecommended ? 1 : 0),
                     )
                     .map((item) => (
-                      <div
-                        key={item.id}
-                        style={{
-                          contentVisibility: 'auto',
-                          containIntrinsicSize: 'auto 28rem',
-                        }}
-                      >
                       <Card
+                        key={item.id}
                         modalContent={
                           <GeneralDialogContent
                             title={item.name}
@@ -385,11 +431,14 @@ const Page = () => {
                             setOpenTooltipId={setOpenTooltipId}
                           />
                       </Card>
-                      </div>
                     ))}
                 </div>
+                )}
+                {!isVisible && (
+                  <div className="h-72" />
+                )}
               </div>
-            ))}
+            )})}
           </div>
         </>
       )}
