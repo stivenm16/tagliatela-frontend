@@ -233,4 +233,4 @@ const DishCard = ({
   )
 }
 
-export default DishCard
+export default React.memo(DishCard)

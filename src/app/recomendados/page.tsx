@@ -9,7 +9,7 @@ import GeneralDialogContent from '@/components/Dialog/GeneralDialog'
 import OverlayPopup from '@/components/Dialog/OverlayPopup'
 import { useFilters } from '@/components/Layout/context/FilterContext'
 import { Skeleton } from '@/components/ui/skeleton'
-import useIsLandscape from '@/hooks/useIsLandscape'
+
 import axiosInstance from '@/lib/axios'
 import { EntityT } from '@/types/global'
 import {
@@ -17,8 +17,10 @@ import {
   extractUniqueFilterData,
   matchesFilter,
 } from '@/utils/functions'
-import { JSX, useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import React, { JSX, useCallback, useEffect, useMemo, useState } from 'react'
 import DishCard from './DishCard'
+
+const MemoizedDishCard = React.memo(DishCard)
 
 export interface Ingredient extends EntityT {
   name: string
@@ -101,10 +103,6 @@ const Page = () => {
   const [alertMessage, setAlertMessage] =
     useState<JSX.Element>(suggestionsMessage)
 
-  const [isVerticalScroll, setIsVerticalScroll] = useState(false)
-  const gridRef = useRef<HTMLDivElement>(null)
-  const isLandscape = useIsLandscape()
-
   const { filters, updateFilter } = useFilters()
 
   const getContent = useCallback(async () => {
@@ -181,41 +179,6 @@ const Page = () => {
       })
   }, [getContent])
 
-  useEffect(() => {
-    const el = gridRef.current
-    if (!el) return
-
-    const updateScrollDirection = () => {
-      const hasVertical = el.scrollHeight > el.clientHeight
-      const hasHorizontal = el.scrollWidth > el.clientWidth
-
-      if (hasVertical && !hasHorizontal) {
-        setIsVerticalScroll(true)
-      } else if (hasHorizontal && !hasVertical) {
-        setIsVerticalScroll(false)
-      } else if (hasVertical && hasHorizontal) {
-        setIsVerticalScroll(true) // or false, depending on what “dominant” means in your case
-      } else {
-        setIsVerticalScroll(false)
-      }
-    }
-
-    updateScrollDirection()
-
-    const resizeObserver = new ResizeObserver(updateScrollDirection)
-    resizeObserver.observe(el)
-
-    const mutationObserver = new MutationObserver(updateScrollDirection)
-    mutationObserver.observe(el, { childList: true, subtree: true })
-
-    window.addEventListener('resize', updateScrollDirection)
-
-    return () => {
-      resizeObserver.disconnect()
-      mutationObserver.disconnect()
-      window.removeEventListener('resize', updateScrollDirection)
-    }
-  }, [filteredDishes])
   const onCloseDialog = () => {
     setOpen(false)
     setAlertMessage(suggestionsMessage)
@@ -261,7 +224,7 @@ const Page = () => {
               <CloseButton onClick={onCloseDialog} />
             </div>
           </OverlayPopup>
-          <div className="flex flex-col gap-10 px-4 pb-48 overflow-y-auto" style={{ height: 'calc(100vh - 12rem)' }} ref={gridRef}>
+          <div className="flex flex-col gap-10 px-4 pb-48 overflow-y-auto" style={{ height: 'calc(100vh - 12rem)' }}>
             {familySections.length === 0 && !isLoading && (
               <div className="text-center text-text-muted mt-20 text-lg font-semibold">
                 No hay platos que coincidan con los filtros seleccionados
@@ -410,11 +373,11 @@ const Page = () => {
                         isSuggested={item.isRecommended}
                         hasPairing={item.pairing_wine.length > 0}
                       >
-                        <DishCard
-                          item={item}
-                          openTooltipId={openTooltipId}
-                          setOpenTooltipId={setOpenTooltipId}
-                        />
+                          <MemoizedDishCard
+                            item={item}
+                            openTooltipId={openTooltipId}
+                            setOpenTooltipId={setOpenTooltipId}
+                          />
                       </Card>
                     ))}
                 </div>
