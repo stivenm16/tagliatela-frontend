@@ -13,10 +13,10 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   }, [pathname])
   return (
     <FilterProvider>
-      <div className="flex flex-col min-h-screen bg-surface-2">
-        <div className="w-full h-16 bg-red-400" />
+      <div className="flex flex-col h-screen bg-surface-2 overflow-hidden">
+        <div className="w-full h-16 bg-red-400 shrink-0" />
         <Header />
-        <div className="mt-10">{children}</div>
+        <div className="flex-1 min-h-0">{children}</div>
         <HamburgerMenu />
       </div>
     </FilterProvider>

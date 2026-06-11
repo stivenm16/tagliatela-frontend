@@ -35,11 +35,7 @@ const Page = () => {
   }
 
   return (
-    <div
-      className={`overflow-y-scroll pb-56 pt-3 flex flex-col ${
-        sauces && sauces.length > 5 ? 'h-screen' : ''
-      }`}
-    >
+    <div className="pb-56 pt-3 flex flex-col h-full overflow-y-auto">
       <AlertSauces />
       {isLoading && !sauces ? (
         <div className="grid grid-cols-[repeat(auto-fill,minmax(14.5rem,1fr))] gap-x-2 px-4 gap-y-5 py-10 pt-6">

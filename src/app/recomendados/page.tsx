@@ -99,7 +99,7 @@ const Page = () => {
   const [dishes, setDishes] = useState<Dish[]>([])
   const [openTooltipId, setOpenTooltipId] = useState<string | null>(null)
   const [isLoading, setIsLoading] = useState(true)
-  const [open, setOpen] = useState(true)
+  const [open, setOpen] = useState(false)
   const [alertMessage, setAlertMessage] =
     useState<JSX.Element>(suggestionsMessage)
 
@@ -241,9 +241,9 @@ const Page = () => {
   }, [familySections])
 
   return (
-    <div className="">
+    <div className="flex-1 min-h-0 overflow-y-auto">
       {isLoading ? (
-        <div className="grid grid-cols-[repeat(auto-fill,minmax(14.5rem,1fr))] gap-x-2 px-4 gap-y-5 py-10 pt-6">
+        <div className="grid grid-cols-[repeat(auto-fill,minmax(14.5rem,1fr))] gap-x-2 px-4 gap-y-5 pt-10 pb-28">
           <Skeleton className="h-72 w-[220px] bg-white/50" />
           <Skeleton className="h-72 w-[220px] bg-white/50" />
           <Skeleton className="h-72 w-[220px] bg-white/50" />
@@ -267,7 +267,7 @@ const Page = () => {
               <CloseButton onClick={onCloseDialog} />
             </div>
           </OverlayPopup>
-          <div className="flex flex-col gap-10 px-4 pb-28">
+          <div className="flex flex-col gap-10 px-4 pb-28 pt-10">
             {familySections.length === 0 && !isLoading && (
               <div className="text-center text-text-muted mt-20 text-lg font-semibold">
                 No hay platos que coincidan con los filtros seleccionados

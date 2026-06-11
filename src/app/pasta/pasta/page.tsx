@@ -171,7 +171,7 @@ const Page = () => {
   }, [pastas, filters])
 
   return (
-    <div className="px-[30px]">
+    <div className="px-[30px] pt-8 h-full overflow-y-auto">
       <AlertSauces />
 
       <>

@@ -4,7 +4,7 @@ import Layout from '@/components/Layout/Layout'
 const Page = () => {
   return (
     <Layout>
-      <div className="mt-6">
+      <div className="pt-8 h-full flex flex-col">
         <CMAndNDLayout
           title="Recomendaciones del día"
           variant="check-meeting"

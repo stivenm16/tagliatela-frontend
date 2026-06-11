@@ -77,7 +77,7 @@ const Page = () => {
     getContent()
   }, [])
   return (
-    <div className="w-full h-screen overflow-y-auto pb-[20rem]">
+    <div className="w-full h-full overflow-y-auto pb-[20rem] pt-10">
       <div
         className={`flex justify-center flex-wrap gap-x-2 ${
           isLandscape ? 'px-12' : 'px-10'

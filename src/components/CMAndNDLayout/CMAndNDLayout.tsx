@@ -159,16 +159,17 @@ const CMAndNDLayout = ({ title, variant }: CMAndNDLayoutProps) => {
       ? 'bg-checkmeeting-main'
       : 'bg-not-available-main'
   return (
-    <div className="w-full flex flex-col">
-      <div className="flex relative px-10 ">
-        <div className="w-[60%] flex flex-col items-center">
+    <div className="flex-1 flex flex-col">
+        <div className="flex-1 flex relative px-10 pt-4">
+        {/* Left column: selected dishes */}
+        <div className="w-1/3 flex flex-col items-center">
           <span
-            className={`uppercase ${textColorClass} font-bold text-xl text-center`}
+            className={`uppercase ${textColorClass} font-bold text-xl text-center shrink-0`}
           >
             Seleccionados
           </span>
 
-          <div className="flex gap-24 mt-4">
+          <div className="flex gap-24 mt-4 shrink-0">
             <div
               onClick={() => {
                 setSelectedDishes(() => {
@@ -187,15 +188,15 @@ const CMAndNDLayout = ({ title, variant }: CMAndNDLayoutProps) => {
               <SaveIcon />
             </div>
           </div>
-          <div
-            className="flex flex-col mt-2 w-full mb-2 pb-4"
-          >
+
+          {/* Scrollable dishes list */}
+          <div className="flex flex-col mt-2 w-full max-h-[calc(100vh-14rem)] overflow-y-auto pb-4">
             {isLoading ? (
-              <div className="h-full">
+              <div className="">
                 {Array.from({ length: 4 }).map((_, i) => (
                   <div
                     key={i}
-                    className=" animate-pulse size-48 rounded-md mx-auto my-2 mb-4 bg-white/40"
+                    className="animate-pulse size-48 rounded-md mx-auto my-2 mb-4 bg-white/40"
                   />
                 ))}
               </div>
@@ -206,7 +207,7 @@ const CMAndNDLayout = ({ title, variant }: CMAndNDLayoutProps) => {
                 <div key={i} className="flex flex-col items-center gap-3 px-2">
                   {s.dishes.length > 0 && (
                     <h2
-                      className={`text-center uppercase font-bold  text-lg ${textColorClass}`}
+                      className={`text-center uppercase font-bold text-lg ${textColorClass}`}
                     >
                       {s.name}
                     </h2>
@@ -240,46 +241,44 @@ const CMAndNDLayout = ({ title, variant }: CMAndNDLayoutProps) => {
             })}
           </div>
         </div>
-        <div
-          className={`border-r border-checkmeeting-main  ${
-            isLandscape ? 'h-[30rem]' : 'h-[45rem]'
-          }`}
-        />
-        <div
-          className={`w-full flex flex-col ${
-            isLandscape ? 'gap-3' : 'gap-6'
-          } items-center`}
-        >
+
+        {/* Vertical divider — capped to match scroll area max height */}
+        <div className="border-r border-checkmeeting-main shrink-0 max-h-[calc(100vh-8rem)]" />
+
+        {/* Right column: selectors */}
+        <div className="flex-1 pl-4 overflow-y-visible">
           {fields.length > 0 ? (
-            fields.map((field, i) => (
-              <CustomMultiSelect
-                label={field.name}
-                options={
-                  field.isGrouped
-                    ? field.groups
-                    : field.dishes.map((d) => ({
-                        id: d.id,
-                        name: d.name,
-                      }))
-                }
-                key={i}
-                variant={variant}
-                selectedIndices={
-                  field.isGrouped
-                    ? field.groups.flatMap((group: OptionGroup) => {
-                        const found = selectedDishes.find(
-                          (s) => s.name === group.label,
-                        )
-                        return found?.dishes || []
-                      })
-                    : selectedDishes.find((s) => s.name === field.name)
-                        ?.dishes || []
-                }
-                onChange={(selectedOptions) => {
-                  handleOnChange(field, selectedOptions)
-                }}
-              />
-            ))
+            <div className={`flex flex-col ${isLandscape ? 'gap-3' : 'gap-6'} items-center`}>
+              {fields.map((field, i) => (
+                <CustomMultiSelect
+                  label={field.name}
+                  options={
+                    field.isGrouped
+                      ? field.groups
+                      : field.dishes.map((d) => ({
+                          id: d.id,
+                          name: d.name,
+                        }))
+                  }
+                  key={i}
+                  variant={variant}
+                  selectedIndices={
+                    field.isGrouped
+                      ? field.groups.flatMap((group: OptionGroup) => {
+                          const found = selectedDishes.find(
+                            (s) => s.name === group.label,
+                          )
+                          return found?.dishes || []
+                        })
+                      : selectedDishes.find((s) => s.name === field.name)
+                          ?.dishes || []
+                  }
+                  onChange={(selectedOptions) => {
+                    handleOnChange(field, selectedOptions)
+                  }}
+                />
+              ))}
+            </div>
           ) : (
             <Skeletons variant={variant} />
           )}
