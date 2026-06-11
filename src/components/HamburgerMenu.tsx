@@ -155,6 +155,7 @@ export const HamburgerMenu = () => {
         style={{
           backgroundColor: '#ffffff',
           boxShadow: '-8px 0 40px rgba(0,0,0,0.12)',
+          willChange: 'transform',
         }}
       >
         {/* Header with accent */}

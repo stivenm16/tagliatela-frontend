@@ -245,8 +245,14 @@ const Page = () => {
                         (b.isRecommended ? 1 : 0) - (a.isRecommended ? 1 : 0),
                     )
                     .map((item) => (
-                      <Card
+                      <div
                         key={item.id}
+                        style={{
+                          contentVisibility: 'auto',
+                          containIntrinsicSize: 'auto 28rem',
+                        }}
+                      >
+                      <Card
                         modalContent={
                           <GeneralDialogContent
                             title={item.name}
@@ -379,6 +385,7 @@ const Page = () => {
                             setOpenTooltipId={setOpenTooltipId}
                           />
                       </Card>
+                      </div>
                     ))}
                 </div>
               </div>

@@ -170,7 +170,7 @@ const Card = ({
                           <div className="absolute inset-0 rounded-3xl ring-4 ring-checkmeeting-main pointer-events-none" />
                         )}
 
-                        {activeBack?.content}
+                        {flipState.isFlipped && activeBack?.content}
                       </div>
 
                       {/* Flip back button */}
