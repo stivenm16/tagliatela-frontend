@@ -16,7 +16,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       <div className="flex flex-col h-screen bg-surface-2 overflow-hidden">
         <div className="w-full h-16 bg-red-400 shrink-0" />
         <Header />
-        <div className="flex-1 min-h-0">{children}</div>
+        <div className="flex-1 min-h-0 flex flex-col">{children}</div>
         <HamburgerMenu />
       </div>
     </FilterProvider>
