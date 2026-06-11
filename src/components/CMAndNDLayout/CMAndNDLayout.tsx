@@ -190,7 +190,7 @@ const CMAndNDLayout = ({ title, variant }: CMAndNDLayoutProps) => {
           <div
             className={`flex flex-col mt-2 ${
               isLandscape ? 'h-[30rem]' : 'h-[45rem]'
-            } pb-20 overflow-y-auto  w-full mb-2`}
+            } pb-4 overflow-y-auto  w-full mb-2`}
           >
             {isLoading ? (
               <div className="h-full">

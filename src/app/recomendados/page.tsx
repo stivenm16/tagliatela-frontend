@@ -267,7 +267,7 @@ const Page = () => {
               <CloseButton onClick={onCloseDialog} />
             </div>
           </OverlayPopup>
-          <div className="flex flex-col gap-10 px-4 pb-48 overflow-y-auto" style={{ height: 'calc(100vh - 12rem)' }}>
+          <div className="flex flex-col gap-10 px-4 pb-4 overflow-y-auto" style={{ height: 'calc(100vh - 12rem)' }}>
             {familySections.length === 0 && !isLoading && (
               <div className="text-center text-text-muted mt-20 text-lg font-semibold">
                 No hay platos que coincidan con los filtros seleccionados
