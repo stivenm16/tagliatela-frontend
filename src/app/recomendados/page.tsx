@@ -17,6 +17,7 @@ import {
   extractUniqueFilterData,
   matchesFilter,
 } from '@/utils/functions'
+import { Loader2Icon } from 'lucide-react'
 import React, { JSX, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import DishCard from './DishCard'
 
@@ -197,50 +198,43 @@ const Page = () => {
     }))
   }, [filteredDishes])
 
-  // Lazy render: initially only render first family, observe rest
-  const [visibleFamilies, setVisibleFamilies] = useState<Set<string>>(() =>
-    new Set(familySections.length > 0 ? [familySections[0].family] : []),
-  )
+  // Lazy render: sequential section loading with spinner
+  const [loadedCount, setLoadedCount] = useState(1)
+  const [isLoadingNext, setIsLoadingNext] = useState(false)
   const sectionRefs = useRef<Map<string, HTMLDivElement>>(new Map())
 
+  // Reset when sections change (e.g. after filter)
   useEffect(() => {
-    const observers: IntersectionObserver[] = []
-    const refs = sectionRefs.current
-
-    familySections.forEach(({ family }) => {
-      if (visibleFamilies.has(family)) return
-      const el = refs.get(family)
-      if (!el) return
-
-      const observer = new IntersectionObserver(
-        ([entry]) => {
-          if (entry.isIntersecting) {
-            requestAnimationFrame(() => {
-              setVisibleFamilies((prev) => new Set([...prev, family]))
-              observer.disconnect()
-            })
-          }
-        },
-        { rootMargin: '600px' },
-      )
-      observer.observe(el)
-      observers.push(observer)
-    })
-
-    return () => observers.forEach((o) => o.disconnect())
-  }, [familySections, visibleFamilies])
-
-  // Update visible families when sections change (e.g. after filter)
-  useEffect(() => {
-    if (familySections.length > 0) {
-      setVisibleFamilies((prev) => {
-        const next = new Set(prev)
-        // Always keep first family visible
-        next.add(familySections[0].family)
-        return next
-      })
-    }
+    setLoadedCount(1)
+    setIsLoadingNext(false)
   }, [familySections])
+
+  // Observe only the next unloaded section
+  useEffect(() => {
+    if (loadedCount >= familySections.length) return
+    if (isLoadingNext) return
+
+    const nextFamily = familySections[loadedCount].family
+    const el = sectionRefs.current.get(nextFamily)
+    if (!el) return
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsLoadingNext(true)
+          setTimeout(() => {
+            requestAnimationFrame(() => {
+              setLoadedCount((prev) => prev + 1)
+              setIsLoadingNext(false)
+            })
+          }, 400)
+        }
+      },
+      { rootMargin: '600px' },
+    )
+    observer.observe(el)
+    return () => observer.disconnect()
+  }, [loadedCount, familySections, isLoadingNext])
 
   return (
     <div className="flex-1 min-h-0 overflow-y-auto">
@@ -275,173 +269,185 @@ const Page = () => {
                 No hay platos que coincidan con los filtros seleccionados
               </div>
             )}
-            {familySections.map(({ family, dishes }) => {
-              const isVisible = visibleFamilies.has(family)
+            {familySections.map(({ family, dishes }, index) => {
+              // Only render up to the next loading target — hide everything beyond
+              if (index > loadedCount) return null
+
+              const isFullyLoaded = index < loadedCount
+              const isLoadingCurrent = index === loadedCount && isLoadingNext
+              const isWaitingForObserver = index === loadedCount && !isLoadingNext
+
               return (
               <div
                 key={family}
-                ref={(el) => {
+                ref={isWaitingForObserver ? (el) => {
                   if (el) sectionRefs.current.set(family, el)
                   else sectionRefs.current.delete(family)
-                }}
+                } : undefined}
               >
-                <h2
-                  className="text-suggested-main font-bold text-2xl uppercase mb-4 ml-2"
-                  style={{ color: 'var(--suggested-main)' }}
-                >
-                  {family}
-                </h2>
-                {isVisible && (
-                <div className="grid grid-cols-[repeat(auto-fill,minmax(14.5rem,1fr))] gap-x-2 gap-y-5">
-                  {dishes
-                    .sort(
-                      (a, b) =>
-                        (b.isRecommended ? 1 : 0) - (a.isRecommended ? 1 : 0),
-                    )
-                    .map((item) => (
-                      <Card
-                        key={item.id}
-                        modalContent={
-                          <GeneralDialogContent
-                            title={item.name}
-                            description={item.description!}
-                            img={{
-                              name: item.name,
-                              type: item.type,
-                            }}
-                          />
-                        }
-                        height="28rem"
-                        width="14.5rem"
-                        backgroundCard="bg-neutral-50"
-                        flipContentOptions={[
-                          {
-                            content: (
-                              <div
-                                className="p-4 text-white w-[12rem] flex flex-col mx-auto"
-                                onClick={(e) => {
-                                  e.stopPropagation()
-                                  e.preventDefault()
+                {isFullyLoaded && (
+                  <>
+                    <h2
+                      className="text-suggested-main font-bold text-2xl uppercase mb-4 ml-2"
+                      style={{ color: 'var(--suggested-main)' }}
+                    >
+                      {family}
+                    </h2>
+                    <div className="grid grid-cols-[repeat(auto-fill,minmax(14.5rem,1fr))] gap-x-2 gap-y-5">
+                      {dishes
+                        .sort(
+                          (a, b) =>
+                            (b.isRecommended ? 1 : 0) - (a.isRecommended ? 1 : 0),
+                        )
+                        .map((item) => (
+                          <Card
+                            key={item.id}
+                            modalContent={
+                              <GeneralDialogContent
+                                title={item.name}
+                                description={item.description!}
+                                img={{
+                                  name: item.name,
+                                  type: item.type,
                                 }}
-                              >
-                                <h2 className="text-xl font-semibold my-4 text-center">
-                                  {item.name}
-                                </h2>
-                                <ul className="flex flex-col gap-1 w-44 overflow-y-auto pr-2 mx-auto justify-center">
-                                  {item.pairing_wine &&
-                                  item.pairing_wine.length > 0
-                                    ? item.pairing_wine.map((ingredient) => (
-                                        <div key={ingredient.id}>
-                                          {ingredient.origin ? (
-                                            <ClickableItem
-                                              title={ingredient.name}
-                                              description={
-                                                ingredient.description!
-                                              }
-                                              ingredient={ingredient}
-                                              origin={ingredient.origin}
-                                              lightIcon={false}
-                                              customDialog={
-                                                <div className="bg-white w-full p-5 h-full flex justify-center items-center rounded-xl">
-                                                  <WineDialogContent
-                                                    title={ingredient.name}
-                                                    img={
-                                                      '/images/vini-reference-image.png'
-                                                    }
-                                                    origin={ingredient.origin}
-                                                    description={
-                                                      ingredient.description
-                                                    }
-                                                    pairing={ingredient.dishes.map(
-                                                      (d) => d.name,
-                                                    )}
-                                                  />
+                              />
+                            }
+                            height="28rem"
+                            width="14.5rem"
+                            backgroundCard="bg-neutral-50"
+                            flipContentOptions={[
+                              {
+                                content: (
+                                  <div
+                                    className="p-4 text-white w-[12rem] flex flex-col mx-auto"
+                                    onClick={(e) => {
+                                      e.stopPropagation()
+                                      e.preventDefault()
+                                    }}
+                                  >
+                                    <h2 className="text-xl font-semibold my-4 text-center">
+                                      {item.name}
+                                    </h2>
+                                    <ul className="flex flex-col gap-1 w-44 overflow-y-auto pr-2 mx-auto justify-center">
+                                      {item.pairing_wine &&
+                                      item.pairing_wine.length > 0
+                                        ? item.pairing_wine.map((ingredient) => (
+                                            <div key={ingredient.id}>
+                                              {ingredient.origin ? (
+                                                <ClickableItem
+                                                  title={ingredient.name}
+                                                  description={
+                                                    ingredient.description!
+                                                  }
+                                                  ingredient={ingredient}
+                                                  origin={ingredient.origin}
+                                                  lightIcon={false}
+                                                  customDialog={
+                                                    <div className="bg-white w-full p-5 h-full flex justify-center items-center rounded-xl">
+                                                      <WineDialogContent
+                                                        title={ingredient.name}
+                                                        img={
+                                                          '/images/vini-reference-image.png'
+                                                        }
+                                                        origin={ingredient.origin}
+                                                        description={
+                                                          ingredient.description
+                                                        }
+                                                        pairing={ingredient.dishes.map(
+                                                          (d) => d.name,
+                                                        )}
+                                                      />
+                                                    </div>
+                                                  }
+                                                />
+                                              ) : (
+                                                <div className="flex gap-2 items-center">
+                                                  <div className="size-2 rounded-full bg-white ml-[5px] text-sm" />
+                                                  <span className="ml-3">
+                                                    {ingredient.name}
+                                                  </span>
                                                 </div>
-                                              }
-                                            />
-                                          ) : (
-                                            <div className="flex gap-2 items-center">
-                                              <div className="size-2 rounded-full bg-white ml-[5px] text-sm" />
-                                              <span className="ml-3">
-                                                {ingredient.name}
-                                              </span>
+                                              )}
                                             </div>
-                                          )}
-                                        </div>
-                                      ))
-                                    : null}
-                                </ul>
-                              </div>
-                            ),
-                            icon: BeveragesIcon,
-                            label: 'Bebidas',
-                            color: 'bg-pasta-main',
-                            iconWidth: 15,
-                          },
-                          {
-                            content: (
-                              <div
-                                className="p-4 text-white w-[12rem] flex flex-col mx-auto"
-                                onClick={(e) => {
-                                  e.stopPropagation()
-                                  e.preventDefault()
-                                }}
-                              >
-                                <h2 className="text-xl font-semibold my-4 text-center">
-                                  {item.name}
-                                </h2>
-                                <ul className="flex flex-col gap-1 w-44 overflow-y-auto pr-2 mx-auto max-h-74">
-                                  {item.ingredients.length > 0
-                                    ? item.ingredients.map((ingredient) => (
-                                        <div key={ingredient.id}>
-                                          {ingredient?.imageUrl ? (
-                                            <ClickableItem
-                                              title={ingredient.name}
-                                              description={
-                                                ingredient.description!
-                                              }
-                                              ingredient={ingredient}
-                                              origin="Italiano"
-                                              lightIcon={false}
-                                            />
-                                          ) : (
-                                            <div className="flex gap-2 items-center">
-                                              <div className="size-2 rounded-full bg-white ml-[5px]" />
-                                              <span className="ml-3 text-sm">
-                                                {ingredient.name}
-                                              </span>
+                                          ))
+                                        : null}
+                                    </ul>
+                                  </div>
+                                ),
+                                icon: BeveragesIcon,
+                                label: 'Bebidas',
+                                color: 'bg-pasta-main',
+                                iconWidth: 15,
+                              },
+                              {
+                                content: (
+                                  <div
+                                    className="p-4 text-white w-[12rem] flex flex-col mx-auto"
+                                    onClick={(e) => {
+                                      e.stopPropagation()
+                                      e.preventDefault()
+                                    }}
+                                  >
+                                    <h2 className="text-xl font-semibold my-4 text-center">
+                                      {item.name}
+                                    </h2>
+                                    <ul className="flex flex-col gap-1 w-44 overflow-y-auto pr-2 mx-auto max-h-74">
+                                      {item.ingredients.length > 0
+                                        ? item.ingredients.map((ingredient) => (
+                                            <div key={ingredient.id}>
+                                              {ingredient?.imageUrl ? (
+                                                <ClickableItem
+                                                  title={ingredient.name}
+                                                  description={
+                                                    ingredient.description!
+                                                  }
+                                                  ingredient={ingredient}
+                                                  origin="Italiano"
+                                                  lightIcon={false}
+                                                />
+                                              ) : (
+                                                <div className="flex gap-2 items-center">
+                                                  <div className="size-2 rounded-full bg-white ml-[5px]" />
+                                                  <span className="ml-3 text-sm">
+                                                    {ingredient.name}
+                                                  </span>
+                                                </div>
+                                              )}
                                             </div>
-                                          )}
-                                        </div>
-                                      ))
-                                    : null}
-                                </ul>
-                              </div>
-                            ),
-                            icon: IngredientsIcon,
-                            label: 'Ingredientes',
-                            color: 'bg-italian-main',
-                            iconWidth: 24,
-                          },
-                        ]}
-                        isSuggested={item.isRecommended}
-                        hasPairing={item.pairing_wine.length > 0}
-                      >
-                          <MemoizedDishCard
-                            item={item}
-                            openTooltipId={openTooltipId}
-                            setOpenTooltipId={setOpenTooltipId}
-                          />
-                      </Card>
-                    ))}
-                </div>
+                                          ))
+                                        : null}
+                                    </ul>
+                                  </div>
+                                ),
+                                icon: IngredientsIcon,
+                                label: 'Ingredientes',
+                                color: 'bg-italian-main',
+                                iconWidth: 24,
+                              },
+                            ]}
+                            isSuggested={item.isRecommended}
+                            hasPairing={item.pairing_wine.length > 0}
+                          >
+                              <MemoizedDishCard
+                                item={item}
+                                openTooltipId={openTooltipId}
+                                setOpenTooltipId={setOpenTooltipId}
+                              />
+                          </Card>
+                        ))}
+                    </div>
+                  </>
                 )}
-                {!isVisible && (
-                  <div className="grid grid-cols-[repeat(auto-fill,minmax(14.5rem,1fr))] gap-x-2 gap-y-5">
-                    {dishes.map((_, i) => (
-                      <Skeleton key={i} className="h-[28rem] w-[14.5rem] bg-white/50 rounded-3xl" />
-                    ))}
+                {isLoadingCurrent && (
+                  <div className="h-[60vh] flex flex-col items-center justify-center gap-6">
+                    <Loader2Icon className="animate-spin size-12 text-suggested-main" />
+                    <span className="text-suggested-main font-semibold text-lg">
+                      Cargando más platos...
+                    </span>
                   </div>
+                )}
+                {isWaitingForObserver && (
+                  <div className="h-16" />
                 )}
               </div>
             )})}
