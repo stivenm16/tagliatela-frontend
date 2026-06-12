@@ -215,11 +215,13 @@ const Page = () => {
       const observer = new IntersectionObserver(
         ([entry]) => {
           if (entry.isIntersecting) {
-            setVisibleFamilies((prev) => new Set([...prev, family]))
-            observer.disconnect()
+            requestAnimationFrame(() => {
+              setVisibleFamilies((prev) => new Set([...prev, family]))
+              observer.disconnect()
+            })
           }
         },
-        { rootMargin: '200px' },
+        { rootMargin: '600px' },
       )
       observer.observe(el)
       observers.push(observer)
@@ -435,7 +437,11 @@ const Page = () => {
                 </div>
                 )}
                 {!isVisible && (
-                  <div className="h-72" />
+                  <div className="grid grid-cols-[repeat(auto-fill,minmax(14.5rem,1fr))] gap-x-2 gap-y-5">
+                    {dishes.map((_, i) => (
+                      <Skeleton key={i} className="h-[28rem] w-[14.5rem] bg-white/50 rounded-3xl" />
+                    ))}
+                  </div>
                 )}
               </div>
             )})}
