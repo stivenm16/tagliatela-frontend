@@ -5,8 +5,11 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
+    "prebuild": "npx tsx scripts/validate-images.ts",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "test:images": "npx tsx __tests__/normalizeImageName.test.ts",
+    "validate:images": "npx tsx scripts/validate-images.ts"
   },
   "dependencies": {
     "@floating-ui/react": "^0.27.13",

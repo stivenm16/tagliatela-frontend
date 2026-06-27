@@ -1,3 +1,5 @@
+import { toCamelCase, toSlug } from './normalizeImageName'
+
 type Variant =
   | '148,5x148,5'
   | '200x200'
@@ -5,6 +7,7 @@ type Variant =
   | '200x320'
   | '240x440'
   | '188x188'
+  | '96x96'
 
 interface GetDishImageParams {
   dishName: string
@@ -15,14 +18,6 @@ interface GetDishImageParams {
 
 const DEFAULT_IMAGE = '/images/card-reference-image.png'
 
-const normalizeDishName = (value: string) =>
-  value
-    .split(' ')
-    .map(
-      word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()
-    )
-    .join('')
-
 export const getDishImage = ({
   dishName,
   category,
@@ -31,7 +26,8 @@ export const getDishImage = ({
 }: GetDishImageParams): string => {
   if (!dishName || !category || !family) return DEFAULT_IMAGE
 
-  const normalized = normalizeDishName(dishName)
+  const slugDir = toSlug(dishName)
+  const camelName = toCamelCase(dishName)
 
-  return `/images/${family}/${category.toLowerCase()}/${dishName}/${category.toUpperCase()}_${normalized}_${variant}.png`
+  return `/images/${family}/${category.toLowerCase()}/${slugDir}/${category.toUpperCase()}_${camelName}_${variant}.png`
 }
