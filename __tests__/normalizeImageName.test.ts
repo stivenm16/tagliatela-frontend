@@ -2,8 +2,6 @@
  * Unit tests for normalizeImageName helpers.
  *
  * Run:  npx tsx __tests__/normalizeImageName.test.ts
- *
- * Uses Node.js built-in assert for zero-dependency testing.
  */
 
 import assert from 'node:assert'
@@ -77,8 +75,12 @@ test('removes smart quotes and backticks', () => {
   equal(stripAccents("café 'special'"), 'cafe special')
 })
 
-test('handles uppercase accents', () => {
+test('handles uppercase accents (Á, É, Í, Ó, Ú, Ñ)', () => {
   equal(stripAccents('ÁÉÍÓÚÑ'), 'AEIOUN')
+})
+
+test('handles Ü uppercase', () => {
+  equal(stripAccents('ÜBER'), 'UBER')
 })
 
 test('does not modify plain ASCII', () => {
@@ -87,6 +89,10 @@ test('does not modify plain ASCII', () => {
 
 test('handles empty string', () => {
   equal(stripAccents(''), '')
+})
+
+test('handles only accents string', () => {
+  equal(stripAccents('áéíóú'), 'aeiou')
 })
 
 test('handles mixed text with multiple accent types', () => {
@@ -118,6 +124,14 @@ test('handles names starting with numbers', () => {
   equal(toSlug('4 Formaggi'), '4-formaggi')
 })
 
+test('handles "4 stagioni"', () => {
+  equal(toSlug('4 stagioni'), '4-stagioni')
+})
+
+test('handles "7 formaggo"', () => {
+  equal(toSlug('7 formaggo'), '7-formaggo')
+})
+
 test('removes trailing spaces before slugifying', () => {
   equal(toSlug('Gnocco '), 'gnocco')
 })
@@ -126,13 +140,37 @@ test('handles single-word names', () => {
   equal(toSlug('Ravioli'), 'ravioli')
 })
 
+test('handles "Croccantino"', () => {
+  equal(toSlug('Croccantino'), 'croccantino')
+})
+
 test('handles name with apostrophe', () => {
   equal(toSlug("Pesto d'oliva"), 'pesto-doliva')
+})
+
+test('handles "Pesto Di Mojo Picón"', () => {
+  equal(toSlug('Pesto Di Mojo Picón'), 'pesto-di-mojo-picon')
+})
+
+test('handles "Mozzarella di búfala"', () => {
+  equal(toSlug('Mozzarella di búfala'), 'mozzarella-di-bufala')
 })
 
 test('kebab-case is all lowercase ASCII', () => {
   const slug = toSlug('Mozzarella di Búfala')
   equal(/^[a-z0-9]+(-[a-z0-9]+)*$/.test(slug), true)
+})
+
+test('handles empty string', () => {
+  equal(toSlug(''), '')
+})
+
+test('handles only spaces', () => {
+  equal(toSlug('   '), '')
+})
+
+test('handles only accents', () => {
+  equal(toSlug('áéíóú'), 'aeiou')
 })
 
 test('produces deterministic output', () => {
@@ -163,8 +201,28 @@ test('capitalizes single-word names', () => {
   equal(toCamelCase('ravioli'), 'Ravioli')
 })
 
+test('handles "Croccantino"', () => {
+  equal(toCamelCase('Croccantino'), 'Croccantino')
+})
+
 test('handles names with accents and spaces', () => {
   equal(toCamelCase('Carpaccio di baccalà'), 'CarpaccioDiBaccala')
+})
+
+test('handles "Pesto Di Mojo Picón"', () => {
+  equal(toCamelCase('Pesto Di Mojo Picón'), 'PestoDiMojoPicon')
+})
+
+test('handles "Mozzarella di búfala"', () => {
+  equal(toCamelCase('Mozzarella di búfala'), 'MozzarellaDiBufala')
+})
+
+test('handles "4 stagioni"', () => {
+  equal(toCamelCase('4 stagioni'), '4Stagioni')
+})
+
+test('handles "7 formaggo"', () => {
+  equal(toCamelCase('7 formaggo'), '7Formaggo')
 })
 
 test('handles names with only number prefix', () => {
@@ -177,18 +235,25 @@ test('produces deterministic output', () => {
   equal(a, b)
 })
 
+test('handles empty string', () => {
+  equal(toCamelCase(''), '')
+})
+
+test('handles only spaces', () => {
+  equal(toCamelCase('   '), '')
+})
+
 test('output contains only word chars (no spaces, no accents)', () => {
   const camel = toCamelCase('Mozzarella di búfala')
   equal(/^[A-Za-z0-9]+$/.test(camel), true)
 })
 
 /* ------------------------------------------------------------------ */
-/*  Integration: full getDishImage path generation                     */
+/*  Integration: full getDishImage path simulation                     */
 /* ------------------------------------------------------------------ */
 
 console.log('\n📋 Integration (getDishImage path simulation)')
 
-// Simulate what getDishImage would produce
 function expectedPath(
   dishName: string,
   category: string,
@@ -197,17 +262,19 @@ function expectedPath(
 ): string {
   const slugDir = toSlug(dishName)
   const camelName = toCamelCase(dishName)
-  return `public/images/${family}/${category.toLowerCase()}/${slugDir}/${category.toUpperCase()}_${camelName}_${variant}.png`
+  const slugCat = toSlug(category)
+  const catPrefix = slugCat.toUpperCase().replace(/-/g, '_')
+  return `public/images/${family}/${slugCat}/${slugDir}/${catPrefix}_${camelName}_${variant}.png`
 }
 
 test('Garganelli path has no special characters', () => {
-  const p = expectedPath('Garganelli al´uovo', 'tradizionale', 'pastas', '148,5x148,5')
-  equal(p, 'public/images/pastas/tradizionale/garganelli-aluovo/TRADIZIONALE_GarganelliAluovo_148,5x148,5.png')
+  const p = expectedPath('Garganelli al´uovo', 'tradizionale', 'pastas', '148x148')
+  equal(p, 'public/images/pastas/tradizionale/garganelli-aluovo/TRADIZIONALE_GarganelliAluovo_148x148.png')
 })
 
 test('Tortellone caprese path has no spaces', () => {
-  const p = expectedPath('Tortellone caprese', 'ripiena', 'pastas', '148,5x148,5')
-  equal(p, 'public/images/pastas/ripiena/tortellone-caprese/RIPIENA_TortelloneCaprese_148,5x148,5.png')
+  const p = expectedPath('Tortellone caprese', 'ripiena', 'pastas', '148x148')
+  equal(p, 'public/images/pastas/ripiena/tortellone-caprese/RIPIENA_TortelloneCaprese_148x148.png')
 })
 
 test('Ragù antico path strips accent', () => {
@@ -216,13 +283,13 @@ test('Ragù antico path strips accent', () => {
 })
 
 test('Insalata César path strips accent', () => {
-  const p = expectedPath('Insalata César', 'insalate', 'dishes', '148,5x148,5')
-  equal(p, 'public/images/dishes/insalate/insalata-cesar/INSALATE_InsalataCesar_148,5x148,5.png')
+  const p = expectedPath('Insalata César', 'insalate', 'dishes', '148x148')
+  equal(p, 'public/images/dishes/insalate/insalata-cesar/INSALATE_InsalataCesar_148x148.png')
 })
 
-test('LE PIZZE category preserves spaces in filename prefix', () => {
+test('LE PIZZE category is kebab-cased in dir, underscore-prefixed in filename', () => {
   const p = expectedPath('Ibérica', 'le pizze', 'dishes', '200x200')
-  equal(p, 'public/images/dishes/le pizze/iberica/LE PIZZE_Iberica_200x200.png')
+  equal(p, 'public/images/dishes/le-pizze/iberica/LE_PIZZE_Iberica_200x200.png')
 })
 
 test('Sangría path strips all accents', () => {
@@ -233,6 +300,27 @@ test('Sangría path strips all accents', () => {
 test('DOP Mozzarella di búfala path strips accent', () => {
   const p = expectedPath('Mozzarella di búfala', 'quesos', 'DOP', '188x188')
   equal(p, 'public/images/DOP/quesos/mozzarella-di-bufala/QUESOS_MozzarellaDiBufala_188x188.png')
+})
+
+test('URL has no spaces anywhere', () => {
+  const p = expectedPath('Pizza al prosciutto', 'le pizze', 'dishes', '148x148')
+  equal(p.includes(' '), false)
+})
+
+test('URL has no commas anywhere', () => {
+  const p = expectedPath('Lasagna', 'piatti principali', 'dishes', '148x148')
+  equal(p.includes(','), false)
+})
+
+test('URL has no accent characters', () => {
+  const p = expectedPath('Carpaccio di baccalà', 'cuore felice', 'dishes', '200x200')
+  equal(/[áéíóúàèìòùäëïöüñçÁÉÍÓÚÃ]/.test(p), false)
+})
+
+test('URL has no apostrophe/smart quote chars', () => {
+  const p = expectedPath("Garganelli al´uovo", 'tradizionale', 'pastas', '96x96')
+  equal(p.includes('´'), false)
+  equal(p.includes("'"), false)
 })
 
 /* ------------------------------------------------------------------ */

@@ -1,7 +1,7 @@
 import { toCamelCase, toSlug } from './normalizeImageName'
 
 type Variant =
-  | '148,5x148,5'
+  | '148x148'
   | '200x200'
   | '424x400'
   | '200x320'
@@ -22,12 +22,14 @@ export const getDishImage = ({
   dishName,
   category,
   family,
-  variant = '148,5x148,5',
+  variant = '148x148',
 }: GetDishImageParams): string => {
   if (!dishName || !category || !family) return DEFAULT_IMAGE
 
   const slugDir = toSlug(dishName)
   const camelName = toCamelCase(dishName)
+  const slugCat = toSlug(category)
+  const catPrefix = slugCat.toUpperCase().replace(/-/g, '_')
 
-  return `/images/${family}/${category.toLowerCase()}/${slugDir}/${category.toUpperCase()}_${camelName}_${variant}.png`
+  return `/images/${family}/${slugCat}/${slugDir}/${catPrefix}_${camelName}_${variant}.png`
 }

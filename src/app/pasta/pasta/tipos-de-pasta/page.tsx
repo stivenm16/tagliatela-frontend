@@ -33,7 +33,7 @@ const Page = () => {
     dishName: pasta?.name as string,
     category: pasta?.type.split(' ')[1].toLowerCase() as string,
     family: 'pastas',
-    variant: '148,5x148,5',
+    variant: '148x148',
   })
   const saucesFitlered = useMemo(() => {
     return (

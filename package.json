@@ -8,7 +8,9 @@
     "prebuild": "npx tsx scripts/validate-images.ts",
     "start": "next start",
     "lint": "next lint",
+    "test": "npx tsx __tests__/normalizeImageName.test.ts && npx tsx __tests__/getImage.test.ts",
     "test:images": "npx tsx __tests__/normalizeImageName.test.ts",
+    "test:getImage": "npx tsx __tests__/getImage.test.ts",
     "validate:images": "npx tsx scripts/validate-images.ts"
   },
   "dependencies": {

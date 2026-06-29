@@ -53,7 +53,7 @@ const PastaSauceComponent = ({
     dishName: currentPasta?.name as string,
     category: currentPasta?.type.split(' ')[1].toLowerCase() as string,
     family: 'pastas',
-    variant: '148,5x148,5',
+    variant: '148x148',
   })
 
   return (

@@ -102,15 +102,17 @@ function getDishImagePath(
 ): string {
   const slugDir = toSlug(dishName)
   const camelName = toCamelCase(dishName)
+  const slugCat = toSlug(category)
+  const catPrefix = slugCat.toUpperCase().replace(/-/g, '_')
   return path.join(
     __dirname,
     '..',
     'public',
     'images',
     family,
-    category.toLowerCase(),
+    slugCat,
     slugDir,
-    `${category.toUpperCase()}_${camelName}_${variant}.png`,
+    `${catPrefix}_${camelName}_${variant}.png`,
   )
 }
 
@@ -146,7 +148,7 @@ const ALL_GROUPS: EntityGroup[] = [
     `,
     family: 'pastas',
     category: 'tradizionale',
-    variants: ['148,5x148,5', '96x96'],
+    variants: ['148x148', '96x96'],
   },
   {
     label: 'Pasta Ripiena',
@@ -160,7 +162,7 @@ const ALL_GROUPS: EntityGroup[] = [
     `,
     family: 'pastas',
     category: 'ripiena',
-    variants: ['148,5x148,5', '96x96'],
+    variants: ['148x148', '96x96'],
   },
 
   // ── Sauces ──────────────────────────────────────────────────────
@@ -184,7 +186,7 @@ const ALL_GROUPS: EntityGroup[] = [
     `,
     family: 'dishes',
     category: 'aperitivi',
-    variants: ['148,5x148,5', '200x200', '424x400'],
+    variants: ['148x148', '200x200', '424x400'],
   },
   {
     label: 'Dishes - ANTIPASTI',
@@ -197,7 +199,7 @@ const ALL_GROUPS: EntityGroup[] = [
     `,
     family: 'dishes',
     category: 'antipasti',
-    variants: ['148,5x148,5', '200x200', '424x400'],
+    variants: ['148x148', '200x200', '424x400'],
   },
   {
     label: 'Dishes - CUORE FELICE',
@@ -210,7 +212,7 @@ const ALL_GROUPS: EntityGroup[] = [
     `,
     family: 'dishes',
     category: 'cuore felice',
-    variants: ['148,5x148,5', '200x200', '424x400'],
+    variants: ['148x148', '200x200', '424x400'],
   },
   {
     label: 'Dishes - INSALATE',
@@ -223,7 +225,7 @@ const ALL_GROUPS: EntityGroup[] = [
     `,
     family: 'dishes',
     category: 'insalate',
-    variants: ['148,5x148,5', '200x200', '424x400'],
+    variants: ['148x148', '200x200', '424x400'],
   },
   {
     label: 'Dishes - PIATTI PRINCIPALI',
@@ -236,7 +238,7 @@ const ALL_GROUPS: EntityGroup[] = [
     `,
     family: 'dishes',
     category: 'piatti principali',
-    variants: ['148,5x148,5', '200x200', '424x400'],
+    variants: ['148x148', '200x200', '424x400'],
   },
   {
     label: 'Dishes - LE PIZZE',
@@ -249,7 +251,7 @@ const ALL_GROUPS: EntityGroup[] = [
     `,
     family: 'dishes',
     category: 'le pizze',
-    variants: ['148,5x148,5', '200x200', '424x400'],
+    variants: ['148x148', '200x200', '424x400'],
     skip: (row) => {
       // Soft-deleted pizzas (migration 002, 003)
       const deleted = [38, 57, 58, 59, 60, 61, 67] // Campagnola + Pinsas + Pizza Gustosa
@@ -267,7 +269,7 @@ const ALL_GROUPS: EntityGroup[] = [
     `,
     family: 'dishes',
     category: 'postres',
-    variants: ['148,5x148,5', '200x200', '424x400'],
+    variants: ['148x148', '200x200', '424x400'],
   },
 
   // ── Beverages ───────────────────────────────────────────────────

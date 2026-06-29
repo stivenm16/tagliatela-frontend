@@ -1,0 +1,166 @@
+{
+  "generatedAt": "2026-06-29T19:37:54.171Z",
+  "schemaVersion": 1,
+  "dbHost": "unknown",
+  "totalItems": 0,
+  "groups": [
+    {
+      "label": "Pasta Tradizionale",
+      "family": "pastas",
+      "category": "tradizionale",
+      "variants": [
+        "148x148",
+        "96x96"
+      ],
+      "items": []
+    },
+    {
+      "label": "Pasta Ripiena",
+      "family": "pastas",
+      "category": "ripiena",
+      "variants": [
+        "148x148",
+        "96x96"
+      ],
+      "items": []
+    },
+    {
+      "label": "Sauces",
+      "family": "sauces",
+      "category": "salsas",
+      "variants": [
+        "200x200",
+        "424x400"
+      ],
+      "items": []
+    },
+    {
+      "label": "Dishes - APERITIVI",
+      "family": "dishes",
+      "category": "aperitivi",
+      "variants": [
+        "148x148",
+        "200x200",
+        "424x400"
+      ],
+      "items": []
+    },
+    {
+      "label": "Dishes - ANTIPASTI",
+      "family": "dishes",
+      "category": "antipasti",
+      "variants": [
+        "148x148",
+        "200x200",
+        "424x400"
+      ],
+      "items": []
+    },
+    {
+      "label": "Dishes - CUORE FELICE",
+      "family": "dishes",
+      "category": "cuore felice",
+      "variants": [
+        "148x148",
+        "200x200",
+        "424x400"
+      ],
+      "items": []
+    },
+    {
+      "label": "Dishes - INSALATE",
+      "family": "dishes",
+      "category": "insalate",
+      "variants": [
+        "148x148",
+        "200x200",
+        "424x400"
+      ],
+      "items": []
+    },
+    {
+      "label": "Dishes - PIATTI PRINCIPALI",
+      "family": "dishes",
+      "category": "piatti principali",
+      "variants": [
+        "148x148",
+        "200x200",
+        "424x400"
+      ],
+      "items": []
+    },
+    {
+      "label": "Dishes - LE PIZZE",
+      "family": "dishes",
+      "category": "le pizze",
+      "variants": [
+        "148x148",
+        "200x200",
+        "424x400"
+      ],
+      "items": []
+    },
+    {
+      "label": "Dishes - POSTRES",
+      "family": "dishes",
+      "category": "postres",
+      "variants": [
+        "148x148",
+        "200x200",
+        "424x400"
+      ],
+      "items": []
+    },
+    {
+      "label": "Cocktails",
+      "family": "beverages",
+      "category": "cocteles",
+      "variants": [
+        "200x320",
+        "240x440"
+      ],
+      "items": []
+    },
+    {
+      "label": "Sangrias",
+      "family": "beverages",
+      "category": "sangrias",
+      "variants": [
+        "200x320",
+        "240x440"
+      ],
+      "items": []
+    },
+    {
+      "label": "DOP - Quesos",
+      "family": "DOP",
+      "category": "quesos",
+      "variants": [
+        "188x188",
+        "424x400"
+      ],
+      "items": []
+    },
+    {
+      "label": "DOP - Embutidos",
+      "family": "DOP",
+      "category": "embutidos",
+      "variants": [
+        "188x188",
+        "424x400"
+      ],
+      "items": []
+    },
+    {
+      "label": "DOP - Otros",
+      "family": "DOP",
+      "category": "otros",
+      "variants": [
+        "188x188",
+        "424x400"
+      ],
+      "items": []
+    }
+  ],
+  "_note": "STUB MANIFEST — DB not available: .env not found"
+}
