@@ -16,10 +16,10 @@ export function UnavailableOverlay({
   }
 
   return (
-    <div className="relative inline-block grayscale opacity-60">
+    <div className="relative w-full h-full">
       {children}
-      <div className="absolute inset-0 flex items-center justify-center rounded-2xl">
-        <span className="px-3 py-1 bg-white/90 text-red-700 font-bold uppercase tracking-wider text-xs rounded-lg shadow">
+      <div className="absolute inset-0 bg-white/60 rounded-2xl flex items-center justify-center pointer-events-none">
+        <span className="text-pasta-main font-bold uppercase tracking-wider text-sm">
           No disponible
         </span>
       </div>

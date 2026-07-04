@@ -130,13 +130,13 @@ const DishCard = ({
   })
 
   return (
-    <div className="flex flex-col items-center gap-2 p-4 h-full w-full ">
-      <h2 className="capitalize text-center font-bold text-xl h-16 self-center flex items-center">
-        {item.name}
-      </h2>
-      <div className="relative overflow-visible">
-        {!!imgSrc ? (
-          <UnavailableOverlay isAvailable={item.isAvailable}>
+    <UnavailableOverlay isAvailable={item.isAvailable}>
+      <div className="flex flex-col items-center gap-2 p-4 h-full w-full ">
+        <h2 className="capitalize text-center font-bold text-xl h-16 self-center flex items-center">
+          {item.name}
+        </h2>
+        <div className="relative overflow-visible">
+          {!!imgSrc ? (
             <ImageComponent
               src={imgSrc}
               alt={item.name}
@@ -144,95 +144,95 @@ const DishCard = ({
               height={150}
               className="rounded-2xl overflow-hidden object-cover"
             />
-          </UnavailableOverlay>
-        ) : (
-          <div className="w-[210px] h-[150px] bg-gray-200 animate-pulse rounded-2xl" />
-        )}
-        {item.type.toLowerCase() === 'insalate' &&
-        item.vinaigrettes.length > 0 ? (
-          <div
-            className="bg-suggested-main  rounded-tl-full text-center h-8 flex items-center text-[13px] justify-start pl-4 text-white uppercase absolute w-full bottom-0"
-            onClick={(e) => {
-              e.stopPropagation()
-            }}
-          >
-            <InfoWithPortal
-              content={
-                <div className="text-pasta-main capitalize">
-                  Vinagretas:{' '}
-                  <span className="text-white lowercase">
-                    {item.vinaigrettes.map((v) => v.name).join(', ')}
-                  </span>
-                </div>
-              }
-              label="Vinagretas"
-              id={item.id.toString()}
-              openId={openTooltipId}
-              setOpenId={setOpenTooltipId}
-            />
-          </div>
-        ) : null}
-        {item?.flavorsIceCream.length > 0 ? (
-          <div
-            className="bg-suggested-main  rounded-tl-full text-center h-8 flex items-center text-[13px] justify-start pl-4 text-white uppercase absolute w-full bottom-0"
-            onClick={(e) => {
-              e.stopPropagation()
-            }}
-          >
-            <InfoWithPortal
-              content={
-                <div className="text-pasta-main capitalize">
-                  Helados:{' '}
-                  <span className="text-white lowercase">
-                    {item.flavorsIceCream.map((v) => v.name).join(', ')}
-                  </span>
-                </div>
-              }
-              label="Sabores de helado"
-              id={item.id.toString()}
-              openId={openTooltipId}
-              setOpenId={setOpenTooltipId}
-            />
-          </div>
-        ) : null}
+          ) : (
+            <div className="w-[210px] h-[150px] bg-gray-200 animate-pulse rounded-2xl" />
+          )}
+          {item.type.toLowerCase() === 'insalate' &&
+          item.vinaigrettes.length > 0 ? (
+            <div
+              className="bg-suggested-main  rounded-tl-full text-center h-8 flex items-center text-[13px] justify-start pl-4 text-white uppercase absolute w-full bottom-0"
+              onClick={(e) => {
+                e.stopPropagation()
+              }}
+            >
+              <InfoWithPortal
+                content={
+                  <div className="text-pasta-main capitalize">
+                    Vinagretas:{' '}
+                    <span className="text-white lowercase">
+                      {item.vinaigrettes.map((v) => v.name).join(', ')}
+                    </span>
+                  </div>
+                }
+                label="Vinagretas"
+                id={item.id.toString()}
+                openId={openTooltipId}
+                setOpenId={setOpenTooltipId}
+              />
+            </div>
+          ) : null}
+          {item?.flavorsIceCream.length > 0 ? (
+            <div
+              className="bg-suggested-main  rounded-tl-full text-center h-8 flex items-center text-[13px] justify-start pl-4 text-white uppercase absolute w-full bottom-0"
+              onClick={(e) => {
+                e.stopPropagation()
+              }}
+            >
+              <InfoWithPortal
+                content={
+                  <div className="text-pasta-main capitalize">
+                    Helados:{' '}
+                    <span className="text-white lowercase">
+                      {item.flavorsIceCream.map((v) => v.name).join(', ')}
+                    </span>
+                  </div>
+                }
+                label="Sabores de helado"
+                id={item.id.toString()}
+                openId={openTooltipId}
+                setOpenId={setOpenTooltipId}
+              />
+            </div>
+          ) : null}
 
-        {item.name.toLowerCase() === 'entrecot' ? (
-          <div
-            className="bg-suggested-main  rounded-tl-full text-center h-8 flex items-center text-[13px] justify-start pl-4 text-white uppercase absolute w-full bottom-0"
-            onClick={(e) => {
-              e.stopPropagation()
-            }}
-          >
-            <InfoWithPortal
-              label="Salsas y Guarniciones"
-              content={
-                <div className="flex flex-col gap-2 p-2 ">
-                  <div className="text-pasta-main capitalize">
-                    Salsas:{' '}
-                    <span className="text-white lowercase">
-                      Regio Emilia y Queso Azul
-                    </span>
+          {item.name.toLowerCase() === 'entrecot' ? (
+            <div
+              className="bg-suggested-main  rounded-tl-full text-center h-8 flex items-center text-[13px] justify-start pl-4 text-white uppercase absolute w-full bottom-0"
+              onClick={(e) => {
+                e.stopPropagation()
+              }}
+            >
+              <InfoWithPortal
+                label="Salsas y Guarniciones"
+                content={
+                  <div className="flex flex-col gap-2 p-2 ">
+                    <div className="text-pasta-main capitalize">
+                      Salsas:{' '}
+                      <span className="text-white lowercase">
+                        Regio Emilia y Queso Azul
+                      </span>
+                    </div>
+                    <div className="text-pasta-main capitalize">
+                      Guarniciones:{' '}
+                      <span className="text-white lowercase">
+                        {item.side_dishes.map((s) => s.name).join(', ')}
+                      </span>
+                    </div>
                   </div>
-                  <div className="text-pasta-main capitalize">
-                    Guarniciones:{' '}
-                    <span className="text-white lowercase">
-                      {item.side_dishes.map((s) => s.name).join(', ')}
-                    </span>
-                  </div>
-                </div>
-              }
-              yAxis={105}
-              id={item.id.toString()}
-              openId={openTooltipId}
-              setOpenId={setOpenTooltipId}
-            />
-          </div>
-        ) : null}
+                }
+                yAxis={105}
+                id={item.id.toString()}
+                openId={openTooltipId}
+                setOpenId={setOpenTooltipId}
+              />
+            </div>
+          ) : null}
+        </div>
+        <h2 className="font-medium text-sm text-center">
+          {item.description!.slice(0, 80)}...
+        </h2>
       </div>
-      <h2 className="font-medium text-sm text-center">
-        {item.description!.slice(0, 80)}...
-      </h2>
-    </div>
+    </UnavailableOverlay>
   )
 }
 
