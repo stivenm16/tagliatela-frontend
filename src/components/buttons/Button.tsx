@@ -1,3 +1,4 @@
+import { cn } from '@/lib/utils'
 import React from 'react'
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
@@ -12,13 +13,16 @@ export const Button: React.FC<ButtonProps> = ({
   isSelected = false,
   mainColor = 'bg-checkmeeting-main',
   activedColor = 'bg-news-main',
+  className,
   ...props
 }) => {
   return (
     <button
-      className={`${
-        isSelected ? activedColor : mainColor
-      } uppercase py-2 px-4 rounded-md text-white`}
+      className={cn(
+        'uppercase py-2 px-4 rounded-md text-white',
+        isSelected ? activedColor : mainColor,
+        className,
+      )}
       {...props}
     >
       {label}
