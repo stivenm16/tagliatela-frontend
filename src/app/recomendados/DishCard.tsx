@@ -1,5 +1,6 @@
 import InfoIcon from '@/../../public/svgs/info-icon.svg'
 import { ImageComponent } from '@/components/ImageComponent'
+import { UnavailableOverlay } from '@/components/UnavailableOverlay'
 import { getDishImage } from '@/utils/getImage'
 import React, { JSX, useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
@@ -135,13 +136,15 @@ const DishCard = ({
       </h2>
       <div className="relative overflow-visible">
         {!!imgSrc ? (
-          <ImageComponent
-            src={imgSrc}
-            alt={item.name}
-            width={210}
-            height={150}
-            className="rounded-2xl overflow-hidden object-cover"
-          />
+          <UnavailableOverlay isAvailable={item.isAvailable}>
+            <ImageComponent
+              src={imgSrc}
+              alt={item.name}
+              width={210}
+              height={150}
+              className="rounded-2xl overflow-hidden object-cover"
+            />
+          </UnavailableOverlay>
         ) : (
           <div className="w-[210px] h-[150px] bg-gray-200 animate-pulse rounded-2xl" />
         )}

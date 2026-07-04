@@ -8,6 +8,7 @@ export interface Sauce {
   title: string
   name: string
   description: string
+  isAvailable: boolean
   isNew: boolean
   highlightedContent: string
   isSuggested: boolean

@@ -65,6 +65,7 @@ const Page = () => {
                     highlightedContent: '',
                     isSuggested: sauce.isSuggested,
                     isNew: sauce.isNew,
+                    isAvailable: sauce.isAvailable,
                   }))
                 : []
             }

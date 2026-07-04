@@ -108,6 +108,7 @@ const Page = () => {
 
   const getContent = useCallback(async () => {
     const response = await axiosInstance.get(`dish/search`, {
+      params: { includeUnavailable: true },
       withCredentials: true,
     })
 
@@ -295,10 +296,17 @@ const Page = () => {
                     </h2>
                     <div className="grid grid-cols-[repeat(auto-fill,minmax(14.5rem,1fr))] gap-x-2 gap-y-5">
                       {dishes
-                        .sort(
-                          (a, b) =>
-                            (b.isRecommended ? 1 : 0) - (a.isRecommended ? 1 : 0),
-                        )
+                        .sort((a, b) => {
+                          const aAvailable = a.isAvailable ? 1 : 0
+                          const bAvailable = b.isAvailable ? 1 : 0
+                          if (aAvailable !== bAvailable) {
+                            return bAvailable - aAvailable
+                          }
+                          return (
+                            (b.isRecommended ? 1 : 0) -
+                            (a.isRecommended ? 1 : 0)
+                          )
+                        })
                         .map((item) => (
                           <Card
                             key={item.id}

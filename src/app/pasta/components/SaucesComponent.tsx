@@ -10,6 +10,7 @@ import {
   DialogTrigger,
 } from '@/components/Dialog/Dialog'
 import { ImageComponent } from '@/components/ImageComponent'
+import { UnavailableOverlay } from '@/components/UnavailableOverlay'
 import { useFilters } from '@/components/Layout/context/FilterContext'
 import { Skeleton } from '@/components/ui/skeleton'
 import useIsLandscape from '@/hooks/useIsLandscape'
@@ -272,13 +273,15 @@ const SauceComponent = ({
               <StarIcon className="absolute -top-3 -left-3" />
             )}
             {sauce.isNew && <NewDishFloatingButton />}
-            <ImageComponent
-              src={imgSrc || '/images/pasta-placeholder.png'}
-              alt={sauce.title}
-              className={`size-40 rounded-xl  shadow-lg ${
-                sauce.isSuggested ? 'bg-checkmeeting-main p-1' : ''
-              } `}
-            />
+            <UnavailableOverlay isAvailable={sauce.isAvailable}>
+              <ImageComponent
+                src={imgSrc || '/images/pasta-placeholder.png'}
+                alt={sauce.title}
+                className={`size-40 rounded-xl  shadow-lg ${
+                  sauce.isSuggested ? 'bg-checkmeeting-main p-1' : ''
+                } `}
+              />
+            </UnavailableOverlay>
             <h2 className="text-center uppercase w-40 ">{sauce.title}</h2>
           </div>
         </div>
@@ -392,16 +395,18 @@ const SaucesComponent = ({ sauces, selectedPasta }: SaucesComponentProps) => {
   const saucesFitlered = useMemo(() => {
     return (
       saucesToRender &&
-      saucesToRender.filter((sauce) => {
-        const { filters: filterSauce } = sauce as any
-        return (
-          matchesFilter(filterSauce?.diets, filters.diet) &&
-          excludesAllergen(filterSauce?.allergens, filters.allergen) &&
-          matchesFilter(filterSauce?.flavors, filters.flavour) &&
-          matchesFilter(filterSauce?.ingredients, filters.ingredients) &&
-          matchesFilter(filterSauce?.base, filters.basePasta)
-        )
-      })
+      [...saucesToRender]
+        .sort((a, b) => Number(b.isAvailable) - Number(a.isAvailable))
+        .filter((sauce) => {
+          const { filters: filterSauce } = sauce as any
+          return (
+            matchesFilter(filterSauce?.diets, filters.diet) &&
+            excludesAllergen(filterSauce?.allergens, filters.allergen) &&
+            matchesFilter(filterSauce?.flavors, filters.flavour) &&
+            matchesFilter(filterSauce?.ingredients, filters.ingredients) &&
+            matchesFilter(filterSauce?.base, filters.basePasta)
+          )
+        })
     )
   }, [saucesToRender, filters])
 
