@@ -19,8 +19,10 @@ export function UnavailableOverlay({
     <div className="relative w-full h-full">
       {children}
       <div className="absolute inset-0 bg-white/60 rounded-2xl flex items-center justify-center pointer-events-none">
-        <span className="text-pasta-main font-bold uppercase tracking-wider text-sm">
-          No disponible
+        <span className="text-pasta-main font-bold uppercase tracking-wider text-sm text-center leading-tight">
+          No
+          <br />
+          disponible
         </span>
       </div>
     </div>

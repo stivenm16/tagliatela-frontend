@@ -323,6 +323,7 @@ const Page = () => {
                             height="28rem"
                             width="14.5rem"
                             backgroundCard="bg-neutral-50"
+                            isAvailable={item.isAvailable}
                             flipContentOptions={[
                               {
                                 content: (

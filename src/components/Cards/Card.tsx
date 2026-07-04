@@ -24,6 +24,7 @@ interface CardProps {
   isModalAvailable?: boolean
   isSuggested?: boolean
   hasPairing?: boolean
+  isAvailable?: boolean
 }
 
 interface FlippedState {
@@ -41,7 +42,9 @@ const Card = ({
   classNameModal,
   isSuggested = false,
   hasPairing = false,
+  isAvailable = true,
 }: CardProps) => {
+  const isUnavailable = isAvailable === false
   const [flipState, setFlipState] = useState<FlippedState>({
     isFlipped: false,
     activeId: null,
@@ -67,6 +70,127 @@ const Card = ({
     height: Number(height.split('rem')[0]) + 0.4,
     width: Number(width.split('rem')[0]) + 0.4,
   }
+
+  const cardInner = (
+    <div
+      className="relative text-pasta-main shadow-xl shadow-black/20 rounded-3xl w-full h-full"
+      style={{ height, width }}
+    >
+      {/* Rotating wrapper */}
+      <div
+        className="transition-transform duration-500 relative w-full h-full"
+        style={{
+          transformStyle: 'preserve-3d',
+          transform: flipState.isFlipped
+            ? 'rotateY(180deg)'
+            : 'rotateY(0deg)',
+        }}
+      >
+        {/* Front */}
+        <div
+          className={`absolute inset-0 backface-hidden rounded-3xl ${
+            flipState.isFlipped
+              ? 'pointer-events-none'
+              : 'pointer-events-auto'
+          }`}
+        >
+          <div
+            className={`w-full h-full ${backgroundCard} rounded-3xl relative`}
+          >
+            {/* 🔴 Suggested border layer goes here */}
+            {isSuggested && (
+              <div className="absolute inset-0 rounded-3xl ring-4 ring-checkmeeting-main">
+                {/* Optional star */}
+                <StarIcon className="absolute -top-3 -left-3" />
+              </div>
+            )}
+
+            <div className="h-full relative z-10">
+              {children}
+
+              {flipContentOptions && (
+                <div className="absolute bottom-6 left-0 flex  gap-10 w-full ">
+                  <div className="flex mx-auto gap-20">
+                    {flipContentOptions.map((item, i) => {
+                      if (!hasPairing && i === 0) return null
+                      return (
+                        <button
+                          key={item.label}
+                          className={`${
+                            isUnavailable
+                              ? 'bg-gray-400'
+                              : item.color
+                          } size-10 flex justify-center items-center p-2 rounded-full`}
+                          onClick={
+                            isUnavailable
+                              ? undefined
+                              : (e) => toggleFlip(e, item.label)
+                          }
+                          disabled={isUnavailable}
+                        >
+                          <item.icon
+                            className={`${
+                              item.iconWidth ?? 'w-[15px]'
+                            } `}
+                          />
+                        </button>
+                      )
+                    })}
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+
+        {/* Back */}
+        {isFlippable && (
+          <div
+            className={`absolute inset-0 backface-hidden rounded-3xl ${
+              flipState.isFlipped
+                ? 'pointer-events-auto'
+                : 'pointer-events-none'
+            }`}
+            style={{ transform: 'rotateY(180deg)' }}
+          >
+            <div
+              className={`w-full h-full ${
+                activeBack?.color ?? 'bg-gray-200'
+              } rounded-3xl flex relative`}
+              onClick={(e) => e.preventDefault()}
+            >
+              {/* 🔴 Match suggested border on back too */}
+              {isSuggested && (
+                <div className="absolute inset-0 rounded-3xl ring-4 ring-checkmeeting-main pointer-events-none" />
+              )}
+
+              {flipState.isFlipped && activeBack?.content}
+            </div>
+
+            {/* Flip back button */}
+            {flipState.isFlipped && (
+              <div className="absolute bottom-6 flex gap-10 justify-center items-center  w-full">
+                <button
+                  className="size-10 flex justify-center items-center p-2 rounded-full"
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    setFlipState({ isFlipped: false, activeId: null })
+                  }}
+                >
+                  {activeBack?.icon ? (
+                    <activeBack.icon />
+                  ) : (
+                    <FlipIcon />
+                  )}
+                </button>
+              </div>
+            )}
+          </div>
+        )}
+      </div>
+    </div>
+  )
+
   return (
     <>
       <div className="z-[0]">
@@ -86,116 +210,13 @@ const Card = ({
             }}
             className="relative flex items-center justify-center rounded-3xl"
           >
-            <DialogTrigger>
-              <div
-                className="relative text-pasta-main shadow-xl shadow-black/20 rounded-3xl w-full h-full"
-                style={{ height, width }}
-              >
-                {/* Rotating wrapper */}
-                <div
-                  className="transition-transform duration-500 relative w-full h-full"
-                  style={{
-                    transformStyle: 'preserve-3d',
-                    transform: flipState.isFlipped
-                      ? 'rotateY(180deg)'
-                      : 'rotateY(0deg)',
-                  }}
-                >
-                  {/* Front */}
-                  <div
-                    className={`absolute inset-0 backface-hidden rounded-3xl ${
-                      flipState.isFlipped
-                        ? 'pointer-events-none'
-                        : 'pointer-events-auto'
-                    }`}
-                  >
-                    <div
-                      className={`w-full h-full ${backgroundCard} rounded-3xl relative`}
-                    >
-                      {/* 🔴 Suggested border layer goes here */}
-                      {isSuggested && (
-                        <div className="absolute inset-0 rounded-3xl ring-4 ring-checkmeeting-main">
-                          {/* Optional star */}
-                          <StarIcon className="absolute -top-3 -left-3" />
-                        </div>
-                      )}
-
-                      <div className="h-full relative z-10">
-                        {children}
-
-                        {flipContentOptions && (
-                          <div className="absolute bottom-6 left-0 flex  gap-10 w-full ">
-                            <div className="flex mx-auto gap-20">
-                              {flipContentOptions.map((item, i) => {
-                                if (!hasPairing && i === 0) return null
-                                return (
-                                  <button
-                                    key={item.label}
-                                    className={`${item.color} size-10 flex justify-center items-center p-2 rounded-full`}
-                                    onClick={(e) => toggleFlip(e, item.label)}
-                                  >
-                                    <item.icon
-                                      className={`${
-                                        item.iconWidth ?? 'w-[15px]'
-                                      } `}
-                                    />
-                                  </button>
-                                )
-                              })}
-                            </div>
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Back */}
-                  {isFlippable && (
-                    <div
-                      className={`absolute inset-0 backface-hidden rounded-3xl ${
-                        flipState.isFlipped
-                          ? 'pointer-events-auto'
-                          : 'pointer-events-none'
-                      }`}
-                      style={{ transform: 'rotateY(180deg)' }}
-                    >
-                      <div
-                        className={`w-full h-full ${
-                          activeBack?.color ?? 'bg-gray-200'
-                        } rounded-3xl flex relative`}
-                        onClick={(e) => e.preventDefault()}
-                      >
-                        {/* 🔴 Match suggested border on back too */}
-                        {isSuggested && (
-                          <div className="absolute inset-0 rounded-3xl ring-4 ring-checkmeeting-main pointer-events-none" />
-                        )}
-
-                        {flipState.isFlipped && activeBack?.content}
-                      </div>
-
-                      {/* Flip back button */}
-                      {flipState.isFlipped && (
-                        <div className="absolute bottom-6 flex gap-10 justify-center items-center  w-full">
-                          <button
-                            className="size-10 flex justify-center items-center p-2 rounded-full"
-                            onClick={(e) => {
-                              e.stopPropagation()
-                              setFlipState({ isFlipped: false, activeId: null })
-                            }}
-                          >
-                            {activeBack?.icon ? (
-                              <activeBack.icon />
-                            ) : (
-                              <FlipIcon />
-                            )}
-                          </button>
-                        </div>
-                      )}
-                    </div>
-                  )}
-                </div>
+            {isUnavailable ? (
+              <div className="relative flex items-center justify-center rounded-3xl">
+                {cardInner}
               </div>
-            </DialogTrigger>
+            ) : (
+              <DialogTrigger>{cardInner}</DialogTrigger>
+            )}
           </div>
         </CardDialog>
       </div>

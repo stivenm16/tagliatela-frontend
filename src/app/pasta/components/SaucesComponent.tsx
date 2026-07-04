@@ -264,7 +264,7 @@ const SauceComponent = ({
           )}
         </Card>
       </DialogContent>
-      <DialogTrigger onClick={(e) => handleSauceSelection(sauce.id)}>
+      {sauce.isAvailable === false ? (
         <UnavailableOverlay isAvailable={sauce.isAvailable}>
           <div
             key={sauce.id}
@@ -284,7 +284,29 @@ const SauceComponent = ({
             <h2 className="text-center uppercase w-40 ">{sauce.title}</h2>
           </div>
         </UnavailableOverlay>
-      </DialogTrigger>
+      ) : (
+        <DialogTrigger onClick={(e) => handleSauceSelection(sauce.id)}>
+          <UnavailableOverlay isAvailable={sauce.isAvailable}>
+            <div
+              key={sauce.id}
+              className={`flex flex-col w-full h-full gap-3 relative rounded-xl`}
+            >
+              {sauce.isSuggested && (
+                <StarIcon className="absolute -top-3 -left-3" />
+              )}
+              {sauce.isNew && <NewDishFloatingButton />}
+              <ImageComponent
+                src={imgSrc || '/images/pasta-placeholder.png'}
+                alt={sauce.title}
+                className={`size-40 rounded-xl  shadow-lg ${
+                  sauce.isSuggested ? 'bg-checkmeeting-main p-1' : ''
+                } `}
+              />
+              <h2 className="text-center uppercase w-40 ">{sauce.title}</h2>
+            </div>
+          </UnavailableOverlay>
+        </DialogTrigger>
+      )}
     </Dialog>
   )
 }
