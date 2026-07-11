@@ -30,6 +30,16 @@ const CMAndNDLayout = ({ title, variant }: CMAndNDLayoutProps) => {
 
   const isLandscape = useIsLandscape()
 
+  const flatQuantities = selectedDishes.reduce<Record<number, number>>(
+    (acc, category) => {
+      Object.entries(category.quantities).forEach(([id, qty]) => {
+        acc[Number(id)] = qty
+      })
+      return acc
+    },
+    {},
+  )
+
   useEffect(() => {
     Promise.all([getSelectedDishesFromDB(variant), getContent(variant)])
       .then(([selectedDishesData, fieldsData]) => {
@@ -104,7 +114,7 @@ const CMAndNDLayout = ({ title, variant }: CMAndNDLayoutProps) => {
     setSelectedDishes((prev) =>
       prev.map((s) => {
         if (s.name !== category) return s
-        const current = s.quantities[dishId] ?? 1
+        const current = s.quantities[dishId] ?? 0
         const newQty = Math.max(0, current + delta)
         if (newQty === 0) {
           // Remove dish if quantity reaches 0
@@ -113,8 +123,13 @@ const CMAndNDLayout = ({ title, variant }: CMAndNDLayoutProps) => {
           delete newQuantities[dishId]
           return { ...s, dishes: newDishes, quantities: newQuantities }
         }
+        // Add dish to selected list when increasing from 0
+        const newDishes = s.dishes.includes(dishId)
+          ? s.dishes
+          : [...s.dishes, dishId]
         return {
           ...s,
+          dishes: newDishes,
           quantities: { ...s.quantities, [dishId]: newQty },
         }
       }),
@@ -212,14 +227,7 @@ const CMAndNDLayout = ({ title, variant }: CMAndNDLayoutProps) => {
                       {s.name}
                     </h2>
                   )}
-                  <div
-                    className={`${
-                      s.name.toLowerCase() === 'guarniciones' ||
-                      s.name.toLowerCase() === 'vinagretas'
-                        ? 'bg-black/10 shadow-lg rounded-xl '
-                        : null
-                    } flex flex-col w-full `}
-                  >
+                  <div className="flex flex-col w-full">
                     {s.dishes.map((d, index) => {
                       const dish = findDishById(d, s.name, fields)
                       return (
@@ -231,7 +239,6 @@ const CMAndNDLayout = ({ title, variant }: CMAndNDLayoutProps) => {
                           id={dish?.id || 0}
                           name={dish?.name || ''}
                           quantity={s.quantities[d] ?? 1}
-                          onQuantityChange={handleQuantityChange}
                         />
                       )
                     })}
@@ -276,6 +283,8 @@ const CMAndNDLayout = ({ title, variant }: CMAndNDLayoutProps) => {
                   onChange={(selectedOptions) => {
                     handleOnChange(field, selectedOptions)
                   }}
+                  quantities={flatQuantities}
+                  onQuantityChange={handleQuantityChange}
                 />
               ))}
             </div>

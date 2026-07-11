@@ -1,7 +1,7 @@
 'use client'
 
 import { FamilyType } from '@/types/global'
-import { ChevronDown } from 'lucide-react'
+import { ChevronDown, MinusIcon, PlusIcon } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
 
 type Option = {
@@ -20,6 +20,12 @@ interface CustomMultiSelectProps {
   selectedIndices?: number[]
   onChange: (newSelected: number[]) => void
   variant?: 'check-meeting' | 'no-disponibles'
+  quantities?: Record<number, number>
+  onQuantityChange?: (
+    category: FamilyType,
+    dishId: number,
+    delta: number,
+  ) => void
 }
 
 const isGrouped = (
@@ -34,6 +40,8 @@ export const CustomMultiSelect: React.FC<CustomMultiSelectProps> = ({
   selectedIndices = [],
   onChange,
   variant,
+  quantities,
+  onQuantityChange,
 }) => {
   const [open, setOpen] = useState(false)
   const wrapperRef = useRef<HTMLDivElement>(null)
@@ -91,22 +99,84 @@ export const CustomMultiSelect: React.FC<CustomMultiSelectProps> = ({
     return label
   }
 
-  const renderOption = (option: Option) => (
-    <li
-      key={option.id}
-      className="flex items-center cursor-pointer"
-      onClick={() => toggleSelection(option.id)}
-    >
-      <span
-        className={`inline-block h-4 w-4 rounded-sm border-2 mr-3 transition-all duration-200 ${
-          selectedIndices.includes(option.id)
-            ? 'bg-[#5B0D31] border-[#5B0D31]'
-            : 'border-[#5B0D31]'
-        }`}
+  const renderCheckMeetingControl = (
+    option: Option,
+    category: FamilyType,
+  ) => {
+    const quantity = quantities?.[option.id] ?? 0
+
+    if (quantity > 0) {
+      return (
+        <div className="flex items-center gap-2 w-24 shrink-0">
+          <button
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation()
+              onQuantityChange?.(category, option.id, -1)
+            }}
+            className="bg-checkmeeting-main text-white rounded-full size-6 flex items-center justify-center"
+          >
+            <MinusIcon size={14} />
+          </button>
+          <span className="text-checkmeeting-main font-bold min-w-[1.5rem] text-center">
+            {quantity}
+          </span>
+          <button
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation()
+              onQuantityChange?.(category, option.id, 1)
+            }}
+            className="bg-checkmeeting-main text-white rounded-full size-6 flex items-center justify-center"
+          >
+            <PlusIcon size={14} />
+          </button>
+        </div>
+      )
+    }
+
+    return (
+      <button
+        type="button"
+        onClick={(e) => {
+          e.stopPropagation()
+          onQuantityChange?.(category, option.id, 1)
+        }}
+        className="bg-gray-300 rounded-full size-6 shrink-0"
       />
-      <span className="text-[#5B0D31] uppercase">{option.name}</span>
-    </li>
-  )
+    )
+  }
+
+  const renderOption = (option: Option, category: FamilyType) => {
+    if (variant === 'check-meeting') {
+      return (
+        <li
+          key={option.id}
+          className="flex items-center cursor-pointer"
+        >
+          {renderCheckMeetingControl(option, category)}
+          <span className="text-[#5B0D31] uppercase">{option.name}</span>
+        </li>
+      )
+    }
+
+    return (
+      <li
+        key={option.id}
+        className="flex items-center cursor-pointer"
+        onClick={() => toggleSelection(option.id)}
+      >
+        <span
+          className={`inline-block h-4 w-4 rounded-sm border-2 mr-3 transition-all duration-200 ${
+            selectedIndices.includes(option.id)
+              ? 'bg-[#5B0D31] border-[#5B0D31]'
+              : 'border-[#5B0D31]'
+          }`}
+        />
+        <span className="text-[#5B0D31] uppercase">{option.name}</span>
+      </li>
+    )
+  }
   return (
     <div ref={wrapperRef} className="relative w-64 text-sm font-medium">
       <button
@@ -150,11 +220,15 @@ export const CustomMultiSelect: React.FC<CustomMultiSelectProps> = ({
 
                     {/* Section options */}
                     <ul className="space-y-3">
-                      {group.options.map(renderOption)}
+                      {group.options.map((option) =>
+                        renderOption(option, group.label as FamilyType),
+                      )}
                     </ul>
                   </div>
                 ))
-              : options.map(renderOption)}
+              : options.map((option) =>
+                  renderOption(option, label as FamilyType),
+                )}
           </ul>
         </ul>
       </div>
