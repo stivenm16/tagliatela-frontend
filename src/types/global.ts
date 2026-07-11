@@ -50,4 +50,5 @@ export enum FamilyType  {
   SALSAS = "SALSAS",
   GUARNICIONES = "GUARNICIONES",
   VINAGRETAS = "VINAGRETAS",
+  BAMBINI = "BAMBINI",
 }

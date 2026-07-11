@@ -48,4 +48,5 @@ export const initialState: SelectedDishes[] = [
       quantities: {},
     },
     { name: FamilyType.VINAGRETAS, dishes: [], quantities: {} },
+    { name: FamilyType.BAMBINI, dishes: [], quantities: {} },
   ]

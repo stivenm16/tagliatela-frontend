@@ -3,6 +3,7 @@ import AntipastiIcon from '@/../../public/svgs/filters/family/antipasti-icon.svg
 import AperitiviIcon from '@/../../public/svgs/filters/family/aperitivi-icon.svg'
 import HeartIcon from '@/../../public/svgs/filters/family/cuore-felici-icon.svg'
 import DessertsIcon from '@/../../public/svgs/filters/family/desserts-icon.svg'
+import BambiniIcon from '@/../../public/svgs/filters/family/bambini.svg'
 import MainDishesIcon from '@/../../public/svgs/filters/family/main-dishes-icon.svg'
 import PizzaIcon from '@/../../public/svgs/filters/family/pizza-icon.svg'
 import SaladsIcon from '@/../../public/svgs/filters/family/salads-icon.svg'
@@ -267,5 +268,11 @@ export const allergensFilters: FilterItem[] = [
       label: 'Postres',
       icon: DessertsIcon,
       selectedColorIcon: '#E75E83',
+    },
+    {
+      id: 'bambini',
+      label: 'Bambini',
+      icon: BambiniIcon,
+      selectedColorIcon: '#78C3DA',
     },
   ]
