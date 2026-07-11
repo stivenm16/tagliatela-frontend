@@ -10,7 +10,7 @@ const featureFlags = {
    * de la sección CheckMeeting.
    * DB: recommended_quantity column ya existe, solo ocultamos la UI.
    */
-  checkMeetingQuantity: false,
+  checkMeetingQuantity: true,
 
   /**
    * Muestra el plato "Pizza Gustosa di Prosciutto Cotto" (id 67).
