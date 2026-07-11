@@ -81,6 +81,7 @@ const FAMILY_ORDER = [
   'PIATTI PRINCIPALI',
   'LE PIZZE',
   'POSTRES',
+  'BAMBINI',
 ]
 
 const normalizeFamily = (name: string) =>
