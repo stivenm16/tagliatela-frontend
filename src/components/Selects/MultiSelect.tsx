@@ -104,46 +104,40 @@ export const CustomMultiSelect: React.FC<CustomMultiSelectProps> = ({
     category: FamilyType,
   ) => {
     const quantity = quantities?.[option.id] ?? 0
-
-    if (quantity > 0) {
-      return (
-        <div className="flex items-center gap-2 w-24 shrink-0">
-          <button
-            type="button"
-            onClick={(e) => {
-              e.stopPropagation()
-              onQuantityChange?.(category, option.id, -1)
-            }}
-            className="bg-checkmeeting-main text-white rounded-full size-6 flex items-center justify-center"
-          >
-            <MinusIcon size={14} />
-          </button>
-          <span className="text-checkmeeting-main font-bold min-w-[1.5rem] text-center">
-            {quantity}
-          </span>
-          <button
-            type="button"
-            onClick={(e) => {
-              e.stopPropagation()
-              onQuantityChange?.(category, option.id, 1)
-            }}
-            className="bg-checkmeeting-main text-white rounded-full size-6 flex items-center justify-center"
-          >
-            <PlusIcon size={14} />
-          </button>
-        </div>
-      )
-    }
+    const isActive = quantity > 0
+    const btnClass = isActive
+      ? 'bg-checkmeeting-main text-white'
+      : 'bg-gray-300 text-white'
 
     return (
-      <button
-        type="button"
-        onClick={(e) => {
-          e.stopPropagation()
-          onQuantityChange?.(category, option.id, 1)
-        }}
-        className="bg-gray-300 rounded-full size-6 shrink-0"
-      />
+      <div className="flex items-center gap-1.5 w-14 shrink-0">
+        <button
+          type="button"
+          disabled={!isActive}
+          onClick={(e) => {
+            e.stopPropagation()
+            if (isActive) onQuantityChange?.(category, option.id, -1)
+          }}
+          className={`${btnClass} rounded-full size-5 flex items-center justify-center disabled:opacity-60`}
+        >
+          <MinusIcon size={12} />
+        </button>
+        {isActive && (
+          <span className="text-checkmeeting-main font-bold text-xs min-w-[1rem] text-center">
+            {quantity}
+          </span>
+        )}
+        <button
+          type="button"
+          onClick={(e) => {
+            e.stopPropagation()
+            onQuantityChange?.(category, option.id, 1)
+          }}
+          className={`${btnClass} rounded-full size-5 flex items-center justify-center`}
+        >
+          <PlusIcon size={12} />
+        </button>
+      </div>
     )
   }
 

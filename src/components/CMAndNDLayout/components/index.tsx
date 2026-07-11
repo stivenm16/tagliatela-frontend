@@ -33,32 +33,31 @@ export const SelectedDishCard = ({
 
   return (
     <div className="flex flex-col items-center gap-1 w-full">
-      <div className="flex items-center justify-center gap-2 w-full">
-        {/* Image with quantity pill at top-left */}
-        <div className="relative w-fit">
-          {showQuantity && (
-            <span className="absolute top-2 left-2 z-10 bg-white/70 backdrop-blur-sm rounded-full px-2 py-0.5 text-xs font-bold text-checkmeeting-main">
-              {quantity ?? 1}
-            </span>
-          )}
-          {!!imgSrc ? (
-            <ImageComponent
-              src={imgSrc}
-              alt={name}
-              className="object-cover size-36 rounded-xl shadow-lg"
-            />
-          ) : null}
-        </div>
+      {/* Image with quantity pill at top-left and remove button at top-right */}
+      <div className="relative w-fit">
+        {showQuantity && (
+          <span className="absolute top-2 left-2 z-10 bg-white/70 backdrop-blur-sm rounded-full px-2 py-0.5 text-xs font-bold text-checkmeeting-main">
+            {quantity ?? 1}
+          </span>
+        )}
 
-        {/* Remove button */}
+        {/* Remove button - top-right inside the image */}
         <button
           type="button"
           onClick={() => removeDish(id, category)}
-          className="text-white rounded-full size-8 flex items-center justify-center"
+          className="absolute top-2 right-2 z-10 text-white rounded-full size-7 flex items-center justify-center shadow-md"
           style={{ backgroundColor: accentColor }}
         >
-          <MinusIcon size={16} />
+          <MinusIcon size={14} />
         </button>
+
+        {!!imgSrc ? (
+          <ImageComponent
+            src={imgSrc}
+            alt={name}
+            className="object-cover size-36 rounded-xl shadow-lg"
+          />
+        ) : null}
       </div>
 
       {/* Dish name below */}
