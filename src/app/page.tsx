@@ -1,8 +1,6 @@
 'use client'
 
 import Logo from '@/components/Icons/LOGO.svg'
-import { FloatingActions } from '@/components/home/FloatingActions'
-import { HomeCategoryColumns } from '@/components/home/HomeCategoryColumns'
 import { HomeHeroCards } from '@/components/home/HomeHeroCards'
 import { HomeWidgets } from '@/components/home/HomeWidgets'
 
@@ -14,17 +12,14 @@ export default function Home() {
       </header>
 
       <main className="flex-1 flex flex-col gap-8">
-        <section className="flex flex-col xl:flex-row gap-8 items-start justify-center">
+        <section className="flex justify-center">
           <HomeHeroCards />
-          <HomeCategoryColumns />
         </section>
 
         <section className="flex justify-center pb-20">
           <HomeWidgets />
         </section>
       </main>
-
-      <FloatingActions />
     </div>
   )
 }

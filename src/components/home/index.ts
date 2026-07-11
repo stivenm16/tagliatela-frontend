@@ -1,7 +1,5 @@
 export * from './CheckMeetingWidget'
 export * from './constants'
-export * from './FloatingActions'
-export * from './HomeCategoryColumns'
 export * from './HomeHeroCards'
 export * from './HomeWidgets'
 export * from './NoDisponiblesWidget'
