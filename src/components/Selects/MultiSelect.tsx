@@ -110,7 +110,7 @@ export const CustomMultiSelect: React.FC<CustomMultiSelectProps> = ({
       : 'bg-gray-300 text-white'
 
     return (
-      <div className="flex items-center gap-1.5 w-16 shrink-0">
+      <div className="flex items-center gap-1.5 w-20 shrink-0 mr-3">
         <button
           type="button"
           disabled={!isActive}
@@ -123,7 +123,7 @@ export const CustomMultiSelect: React.FC<CustomMultiSelectProps> = ({
           <MinusIcon size={12} />
         </button>
         <span
-          className={`font-bold text-xs min-w-[1rem] text-center ${
+          className={`font-bold text-xs min-w-[1.25rem] text-center ${
             isActive ? 'text-checkmeeting-main' : 'text-transparent'
           }`}
         >
@@ -174,7 +174,7 @@ export const CustomMultiSelect: React.FC<CustomMultiSelectProps> = ({
     )
   }
   return (
-    <div ref={wrapperRef} className="relative w-72 text-sm font-medium">
+    <div ref={wrapperRef} className="relative w-80 text-sm font-medium">
       <button
         onClick={() => setOpen((prev) => !prev)}
         className={`flex items-center justify-between w-full rounded-3xl ${variantCheked()} px-6 py-2 text-white shadow-md transition-all duration-200`}
