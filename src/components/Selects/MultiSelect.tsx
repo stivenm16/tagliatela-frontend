@@ -110,7 +110,7 @@ export const CustomMultiSelect: React.FC<CustomMultiSelectProps> = ({
       : 'bg-gray-300 text-white'
 
     return (
-      <div className="flex items-center gap-1.5 w-14 shrink-0">
+      <div className="flex items-center gap-1.5 w-16 shrink-0">
         <button
           type="button"
           disabled={!isActive}
@@ -118,22 +118,24 @@ export const CustomMultiSelect: React.FC<CustomMultiSelectProps> = ({
             e.stopPropagation()
             if (isActive) onQuantityChange?.(category, option.id, -1)
           }}
-          className={`${btnClass} rounded-full size-5 flex items-center justify-center disabled:opacity-60`}
+          className={`${btnClass} rounded-full w-5 h-5 shrink-0 flex items-center justify-center disabled:opacity-60`}
         >
           <MinusIcon size={12} />
         </button>
-        {isActive && (
-          <span className="text-checkmeeting-main font-bold text-xs min-w-[1rem] text-center">
-            {quantity}
-          </span>
-        )}
+        <span
+          className={`font-bold text-xs min-w-[1rem] text-center ${
+            isActive ? 'text-checkmeeting-main' : 'text-transparent'
+          }`}
+        >
+          {quantity || '0'}
+        </span>
         <button
           type="button"
           onClick={(e) => {
             e.stopPropagation()
             onQuantityChange?.(category, option.id, 1)
           }}
-          className={`${btnClass} rounded-full size-5 flex items-center justify-center`}
+          className={`${btnClass} rounded-full w-5 h-5 shrink-0 flex items-center justify-center`}
         >
           <PlusIcon size={12} />
         </button>
@@ -172,7 +174,7 @@ export const CustomMultiSelect: React.FC<CustomMultiSelectProps> = ({
     )
   }
   return (
-    <div ref={wrapperRef} className="relative w-64 text-sm font-medium">
+    <div ref={wrapperRef} className="relative w-72 text-sm font-medium">
       <button
         onClick={() => setOpen((prev) => !prev)}
         className={`flex items-center justify-between w-full rounded-3xl ${variantCheked()} px-6 py-2 text-white shadow-md transition-all duration-200`}
