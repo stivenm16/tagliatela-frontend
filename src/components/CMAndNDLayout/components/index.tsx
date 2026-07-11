@@ -36,7 +36,7 @@ export const SelectedDishCard = ({
       {/* Image with quantity pill at top-left and remove button at top-right */}
       <div className="relative w-fit">
         {showQuantity && (
-          <span className="absolute top-2 left-2 z-10 bg-white/70 backdrop-blur-sm rounded-full px-2 py-0.5 text-xs font-bold text-checkmeeting-main">
+          <span className="absolute top-2 left-2 z-10 bg-white/40 backdrop-blur-md rounded-lg px-2 py-0.5 text-xs font-bold text-checkmeeting-main">
             {quantity ?? 1}
           </span>
         )}
