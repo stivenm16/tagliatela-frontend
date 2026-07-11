@@ -10,6 +10,14 @@ const RECOMENDAR_IMAGE = getDishImage({
   variant: '200x200',
 })
 
+const PASTAS_IMAGE = '/images/pastas/ripiena/tortellini/RIPIENA_Tortellini_148x148.png'
+
+const getCardImage = (label: string, defaultImage: string): string => {
+  if (label === 'RECOMENDAR') return RECOMENDAR_IMAGE
+  if (label === 'PASTAS') return PASTAS_IMAGE
+  return defaultImage
+}
+
 export const HomeHeroCards = () => {
   return (
     <div className="flex flex-wrap justify-center gap-3 lg:flex-nowrap">
@@ -19,7 +27,7 @@ export const HomeHeroCards = () => {
             key={card.href}
             label={card.label}
             href={card.href}
-            image={card.label === 'RECOMENDAR' ? RECOMENDAR_IMAGE : card.image}
+            image={getCardImage(card.label, card.image)}
             alt={card.alt}
             colorClass={card.colorClass}
           />
